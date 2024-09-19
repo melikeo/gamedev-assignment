@@ -743,7 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   introMusicSource: {fileID: 871272076}
   backgroundMusicSource: {fileID: 871272078}
-  introMusicClip: {fileID: 8300000, guid: 2062ba39811a8174e829d343e05dd56c, type: 3}
+  introMusicClip: {fileID: 8300000, guid: 529becd70293a6c4cb4d17ecbd0d4969, type: 3}
   backgroundMusicClip: {fileID: 8300000, guid: 17f90d3e3f2bb7347800ac735193ba4a, type: 3}
 --- !u!82 &871272076
 AudioSource:
