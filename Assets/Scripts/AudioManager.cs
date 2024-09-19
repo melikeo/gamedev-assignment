@@ -1,26 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioSource audioSource;
-    public AudioClip introMusic;
-    public AudioClip ghostsNormalMusic;
+    //variables for AudioSource Input Fields and AudioClip Input fields
+    public AudioSource introMusicSource;
+    public AudioSource backgroundMusicSource;
+    public AudioClip introMusicClip;
+    public AudioClip backgroundMusicClip;
 
     private void Start()
-    {        
-        StartCoroutine(PlayMusic());
+    {
+        introMusicSource.clip = introMusicClip;
+        backgroundMusicSource.clip = backgroundMusicClip;
+                
+        introMusicSource.Play(); //start playing intro music
+                
+        Invoke("PlayBackgroundMusic", introMusicSource.clip.length); //switch to background music after intro
     }
 
-    IEnumerator PlayMusic()
-    {        
-        audioSource.clip = introMusic;
-        audioSource.Play(); //play intro music
-                
-        yield return new WaitForSeconds(audioSource.clip.length); //waits for intro music to finish
-                
-        audioSource.clip = ghostsNormalMusic;
-        audioSource.Play(); //plays normal state ghosts (normal background) music
+    private void PlayBackgroundMusic()
+    {
+        introMusicSource.Stop();
+        backgroundMusicSource.Play();
     }
 }
