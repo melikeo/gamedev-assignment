@@ -1,31 +1,31 @@
 fileFormatVersion: 2
-guid: 6ab6a892218112d4bae023b8ae741ce8
+guid: eaeafbc656e71f647a28e715c432c671
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2888702599017259654
-    second: normalState_ghost1_0
+      213: 8363447081466677243
+    second: 32_pacstudent_0
   - first:
-      213: 1747912792952128415
-    second: normalState_ghost1_1
+      213: -638832445837333199
+    second: 32_pacstudent_1
   - first:
-      213: 4376615775333230610
-    second: normalState_ghost1_2
+      213: 2715384158770205064
+    second: 32_pacstudent_2
   - first:
-      213: 3017072452944802830
-    second: normalState_ghost1_3
+      213: 7430975500947995691
+    second: 32_pacstudent_3
   - first:
-      213: 8952992220598295917
-    second: normalState_ghost1_4
+      213: -6300988925940822190
+    second: 32_pacstudent_4
   - first:
-      213: -4106532990806236789
-    second: normalState_ghost1_5
+      213: 8956653701675241386
+    second: 32_pacstudent_5
   - first:
-      213: 9141536932220599784
-    second: normalState_ghost1_6
+      213: -1421346143495413992
+    second: 32_pacstudent_6
   - first:
-      213: -488478293162567097
-    second: normalState_ghost1_7
+      213: 6322345757068261840
+    second: 32_pacstudent_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -121,13 +121,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: normalState_ghost1_0
+      name: 32_pacstudent_0
       rect:
         serializedVersion: 2
-        x: 24
-        y: 272
-        width: 76
-        height: 108
+        x: 4
+        y: 39
+        width: 24
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,20 +135,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 682eb2475bbb61820800000000000000
-      internalID: 2888702599017259654
+      spriteID: bf749942fcee01470800000000000000
+      internalID: 8363447081466677243
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: normalState_ghost1_1
+      name: 32_pacstudent_1
       rect:
         serializedVersion: 2
-        x: 152
-        y: 272
-        width: 76
-        height: 108
+        x: 36
+        y: 39
+        width: 24
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f93c542ac65d14810800000000000000
-      internalID: 1747912792952128415
+      spriteID: 13d2fd276496227f0800000000000000
+      internalID: -638832445837333199
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: normalState_ghost1_2
+      name: 32_pacstudent_2
       rect:
         serializedVersion: 2
-        x: 280
-        y: 272
-        width: 76
-        height: 108
+        x: 68
+        y: 39
+        width: 24
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,20 +177,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 218ab1ffbdcdcbc30800000000000000
-      internalID: 4376615775333230610
+      spriteID: 8819834718bfea520800000000000000
+      internalID: 2715384158770205064
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: normalState_ghost1_3
+      name: 32_pacstudent_3
       rect:
         serializedVersion: 2
-        x: 24
-        y: 144
-        width: 76
-        height: 108
+        x: 100
+        y: 39
+        width: 24
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -198,20 +198,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e04346b296bced920800000000000000
-      internalID: 3017072452944802830
+      spriteID: b2cb2acd8d0202760800000000000000
+      internalID: 7430975500947995691
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: normalState_ghost1_4
+      name: 32_pacstudent_4
       rect:
         serializedVersion: 2
-        x: 152
-        y: 144
-        width: 76
-        height: 108
+        x: 7
+        y: 4
+        width: 18
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -219,20 +219,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d6dd8995dfa6f3c70800000000000000
-      internalID: 8952992220598295917
+      spriteID: 25f80a7b4f36e88a0800000000000000
+      internalID: -6300988925940822190
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: normalState_ghost1_5
+      name: 32_pacstudent_5
       rect:
         serializedVersion: 2
-        x: 280
-        y: 144
-        width: 76
-        height: 108
+        x: 39
+        y: 4
+        width: 18
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -240,20 +240,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b816290900aa207c0800000000000000
-      internalID: -4106532990806236789
+      spriteID: aaf4a88561d6c4c70800000000000000
+      internalID: 8956653701675241386
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: normalState_ghost1_6
+      name: 32_pacstudent_6
       rect:
         serializedVersion: 2
-        x: 28
-        y: 16
-        width: 76
-        height: 108
+        x: 71
+        y: 4
+        width: 18
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -261,20 +261,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8ed7f1ae7634dde70800000000000000
-      internalID: 9141536932220599784
+      spriteID: 81f951e863d564ce0800000000000000
+      internalID: -1421346143495413992
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: normalState_ghost1_7
+      name: 32_pacstudent_7
       rect:
         serializedVersion: 2
-        x: 156
-        y: 16
-        width: 76
-        height: 108
+        x: 103
+        y: 4
+        width: 18
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -282,8 +282,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 74a5e8794939839f0800000000000000
-      internalID: -488478293162567097
+      spriteID: 0d9704508fb7db750800000000000000
+      internalID: 6322345757068261840
       vertices: []
       indices: 
       edges: []
@@ -291,7 +291,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: f24bde8ed927b4043bfcbbc6274d15d2
+    spriteID: 580feb0ed2cb6574f9e303e024491739
     internalID: 0
     vertices: []
     indices: 
@@ -299,14 +299,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      normalState_ghost1_0: 2888702599017259654
-      normalState_ghost1_1: 1747912792952128415
-      normalState_ghost1_2: 4376615775333230610
-      normalState_ghost1_3: 3017072452944802830
-      normalState_ghost1_4: 8952992220598295917
-      normalState_ghost1_5: -4106532990806236789
-      normalState_ghost1_6: 9141536932220599784
-      normalState_ghost1_7: -488478293162567097
+      32_pacstudent_0: 8363447081466677243
+      32_pacstudent_1: -638832445837333199
+      32_pacstudent_2: 2715384158770205064
+      32_pacstudent_3: 7430975500947995691
+      32_pacstudent_4: -6300988925940822190
+      32_pacstudent_5: 8956653701675241386
+      32_pacstudent_6: -1421346143495413992
+      32_pacstudent_7: 6322345757068261840
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

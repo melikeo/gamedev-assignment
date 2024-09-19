@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ghost2_WalkingRight
+  m_Name: Pacstudent_WalkingDown
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,9 +21,9 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 8157644397687748125, guid: 30c4659faf77cd9479e5043208a0850e, type: 3}
+      value: {fileID: -6300988925940822190, guid: eaeafbc656e71f647a28e715c432c671, type: 3}
     - time: 0.1
-      value: {fileID: -8732600727476811639, guid: 30c4659faf77cd9479e5043208a0850e, type: 3}
+      value: {fileID: 8956653701675241386, guid: eaeafbc656e71f647a28e715c432c671, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,8 +46,8 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 8157644397687748125, guid: 30c4659faf77cd9479e5043208a0850e, type: 3}
-    - {fileID: -8732600727476811639, guid: 30c4659faf77cd9479e5043208a0850e, type: 3}
+    - {fileID: -6300988925940822190, guid: eaeafbc656e71f647a28e715c432c671, type: 3}
+    - {fileID: 8956653701675241386, guid: eaeafbc656e71f647a28e715c432c671, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
