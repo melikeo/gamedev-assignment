@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 202dce6048cf46a4abee8139899fc8a2
+guid: 9663dbcc1da0055498d0dff2488348d1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 910770250627644066
-    second: wallpieces-4.png_0
+      213: 2060488079448052792
+    second: wallpieces-1.png(1)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,14 +46,14 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
-  spriteExtrude: 1
+  spriteMode: 1
+  spriteExtrude: 0
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: wallpieces-4.png_0
+      name: wallpieces-1.png(1)_0
       rect:
         serializedVersion: 2
         x: 0
@@ -108,14 +108,14 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2aa77aca7b4b3ac00800000000000000
-      internalID: 910770250627644066
+      spriteID: 8349d67cdf2589c10800000000000000
+      internalID: 2060488079448052792
       vertices: []
       indices: 
       edges: []
@@ -123,14 +123,15 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: e974b64dbf5e5e34e89f94130d854aaa
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wallpieces-1.png(1)_0: 2060488079448052792
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
