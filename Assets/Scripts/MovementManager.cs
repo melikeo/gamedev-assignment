@@ -5,6 +5,7 @@ using UnityEngine;
 public class MovementManager : MonoBehaviour
 {
     [SerializeField] private GameObject pacStudent; // pacStudent GameObject
+    [SerializeField] private GameObject pacStudent2; //pacStudent2 GameObject to show Deathstate
     [SerializeField] private AudioClip movementAudioClip;
     private AudioSource audioSource;
     private int pacstudentIndex = 0; // target position
@@ -20,6 +21,7 @@ public class MovementManager : MonoBehaviour
     private float t = 0f;
 
     private Animator animator; // to get animator for parameters
+    private bool isDead = false;
 
     void Start()
     {
@@ -40,6 +42,11 @@ public class MovementManager : MonoBehaviour
 
     void Update()
     {
+        if (isDead)
+        {
+            animator.SetBool("isDead", true);
+            pacStudent2.SetActive(true);
+        }
         if (t < 1f)
         {
             t += Time.deltaTime * speed; //framerate independent
