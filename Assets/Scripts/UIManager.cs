@@ -20,4 +20,9 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene("SampleScene");
     }
+
+    public void LoadStartScreen()
+    {
+        SceneManager.LoadScene("StartScene");
+    }
 }
