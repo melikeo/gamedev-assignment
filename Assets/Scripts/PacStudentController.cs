@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PacStudentController : MonoBehaviour
 {
-    private Vector3Int currentGridPosition; // Current Pacstudent grid position
-    private Vector3Int targetGridPosition; // Target Pacstudent position
+    //using LERP to move Pacstudent from startposition to targetposition
 
-    // Start and end position for Pacstudents movements
+    private Vector3Int currentGridPosition; //current Pacstudent grid position
+    private Vector3Int targetGridPosition; //target Pacstudent position
+
+    //start and end position for pacstudents movements
     private Vector3 startPos;
     private Vector3 targetPos;
 
@@ -15,26 +17,31 @@ public class PacStudentController : MonoBehaviour
 
     private bool isMoving = false;
 
+    //storing last key player pressed
+    private KeyCode lastInput; // Store last input
     private Animator animator;
 
-    private float t = 0; // Interpolation value for Lerp
+    private float t = 0; //interpolation value for lerp
+
 
     private void Awake()
     {
-        // Set Pacstudent's initial position
+        //sets pacstudents position at start of the game
         startPos = transform.position;
         targetPos = transform.position;
 
-        // Grid positions of Pacstudent
+        //grid positions of pacstudent
         currentGridPosition = Vector3Int.FloorToInt(transform.position);
         targetGridPosition = currentGridPosition;
     }
 
+    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
     }
 
+    // Update is called once per frame
     void Update()
     {
         if (!isMoving)
@@ -43,88 +50,74 @@ public class PacStudentController : MonoBehaviour
         }
         else
         {
-            moveTowardsTarget(); // Move Pacstudent to target grid position
+            moveTowardsTarget(); //move pacstudent to target grid position after checkLastInput was done and set isMoving to true
         }
     }
 
     void checkLastInput()
     {
-        if (Input.GetKeyDown(KeyCode.W) && !isMoving) // Only register input when not moving
+        if (Input.GetKeyDown(KeyCode.W) && !isMoving)
         {
+            lastInput = KeyCode.W;
             setTargetPosition(Vector3Int.up);
         }
-        else if (Input.GetKeyDown(KeyCode.D) && !isMoving)
+
+        if (Input.GetKeyDown(KeyCode.D) && !isMoving)
         {
+            lastInput = KeyCode.D;
             setTargetPosition(Vector3Int.right);
         }
-        else if (Input.GetKeyDown(KeyCode.S) && !isMoving)
+        if (Input.GetKeyDown(KeyCode.S) && !isMoving)
         {
+            lastInput = KeyCode.S;
             setTargetPosition(Vector3Int.down);
         }
-        else if (Input.GetKeyDown(KeyCode.A) && !isMoving)
+        if (Input.GetKeyDown(KeyCode.A) && !isMoving)
         {
+            lastInput = KeyCode.A;
             setTargetPosition(Vector3Int.left);
         }
     }
 
     void setTargetPosition(Vector3Int direction)
     {
-        // Set target grid position based on direction
-        targetGridPosition = currentGridPosition + direction;
-        startPos = transform.position;
-        targetPos = new Vector3(targetGridPosition.x + 0.5f, targetGridPosition.y + 0.5f , transform.position.z);
-        t = 0; // Reset Lerp progress
-        isMoving = true; // Now moving
+        if (!isMoving)
+        {
+            //set target grid position to current grid position + lastInput direction
+            targetGridPosition = currentGridPosition + direction;
+            startPos = transform.position;
+            targetPos = new Vector3(targetGridPosition.x + 0.5f, targetGridPosition.y + 0.5f, transform.position.z); // 0.5f puts pacstudent in center of grid
+            t = 0;
+            isMoving = true;
 
-        updateAnimatorParam(direction);
+            updateAnimatorParam(direction);
+        }
     }
 
     void moveTowardsTarget()
     {
-        // Increment the Lerp progress based on moveSpeed
         t += Time.deltaTime * moveSpeed;
 
-        // LERP to move Pacstudent from startPos to targetPos
+        // LERP to move pacstudent from startPos to targetPos
         transform.position = Vector3.Lerp(startPos, targetPos, t);
 
-        // Check if the target position is reached
+        //check whether targetpos is reached
         if (Vector3.Distance(transform.position, targetPos) < 0.01f)
         {
-            transform.position = targetPos; // Snap to grid
-            currentGridPosition = targetGridPosition; // Update current grid position
-            isMoving = false; // Stop moving
+            transform.position = targetPos; //place pacstudent to targetpos            
+            currentGridPosition = targetGridPosition; //update currentGridPosition
+            isMoving = false; //finish movement (lerping)
         }
-
-        // Update the animator parameters based on movement direction
-        //Vector3 direction = (targetPos - startPos).normalized;
-        //updateAnimatorParam(direction);
     }
 
-    void updateAnimatorParam(Vector3 direction)
+    void updateAnimatorParam(Vector3Int direction)
     {
-        // Reset all animator parameters
         animator.SetBool("walkingUp", false);
         animator.SetBool("walkingDown", false);
         animator.SetBool("walkingLeft", false);
         animator.SetBool("walkingRight", false);
 
-        // Set the correct animation based on the movement direction
-        //if (direction.y > 0)
-        //{
-        //    animator.SetBool("walkingUp", true);
-        //}
-        //else if (direction.y < 0)
-        //{
-        //    animator.SetBool("walkingDown", true);
-        //}
-        //else if (direction.x > 0)
-        //{
-        //    animator.SetBool("walkingRight", true);
-        //}
-        //else if (direction.x < 0)
-        //{
-        //    animator.SetBool("walkingLeft", true);
-        //}
+        //change animator params
         if (direction == Vector3Int.up)
         {
             animator.SetBool("walkingUp", true);
