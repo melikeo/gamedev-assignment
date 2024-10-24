@@ -21,6 +21,9 @@ public class PacStudentController : MonoBehaviour
     private KeyCode lastInput; //store last input
     private Animator animator;
 
+    private KeyCode currentInput; //for walkable position from lastInput
+
+
     private float t = 0; //interpolation value for lerp
 
     private Vector3Int currentDirection; //stores current moving direction
@@ -58,8 +61,40 @@ public class PacStudentController : MonoBehaviour
 
         if (!isMoving)
         {
-            setTargetPosition(currentDirection); //continue moving in currentDirection
+            //setTargetPosition(currentDirection); //continue moving in currentDirection
+
+
+            // move to direction of lastInput
+            Vector3Int directionFromLastInput = getDirectionFromInput(lastInput);
+
+            // check if walkable
+            if (isWalkable(currentGridPosition + directionFromLastInput))
+            {
+                currentDirection = directionFromLastInput;
+                currentInput = lastInput;  // set currentInput to lastInput
+                setTargetPosition(currentDirection);
+            }
+            else
+            {
+                Vector3Int directionFromCurrentInput = getDirectionFromInput(currentInput); //if last input is blocked, continue movement
+
+                if (isWalkable(currentGridPosition + directionFromCurrentInput))
+                {
+                    currentDirection = directionFromCurrentInput;
+                    setTargetPosition(currentDirection);
+                }
+                else
+                {
+                    Debug.Log("PacStudent ist in beiden Richtungen blockiert.");
+                }
+            }
+
+
+
         }
+
+
+
         else
         {
             moveTowardsTarget(); //continue moving towards target
@@ -90,6 +125,17 @@ public class PacStudentController : MonoBehaviour
             currentDirection = Vector3Int.left;
         }
     }
+
+    Vector3Int getDirectionFromInput(KeyCode input)
+    {
+        if (input == KeyCode.W) return Vector3Int.up;
+        if (input == KeyCode.D) return Vector3Int.right;
+        if (input == KeyCode.S) return Vector3Int.down;
+        if (input == KeyCode.A) return Vector3Int.left;
+        return Vector3Int.zero;
+    }
+
+
 
     // check if given grid position is walkable
     bool isWalkable(Vector3Int gridPos)
