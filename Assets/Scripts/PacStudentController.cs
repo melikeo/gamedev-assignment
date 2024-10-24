@@ -63,7 +63,6 @@ public class PacStudentController : MonoBehaviour
         {
             //setTargetPosition(currentDirection); //continue moving in currentDirection
 
-
             // move to direction of lastInput
             Vector3Int directionFromLastInput = getDirectionFromInput(lastInput);
 
@@ -88,11 +87,7 @@ public class PacStudentController : MonoBehaviour
                     Debug.Log("PacStudent ist in beiden Richtungen blockiert.");
                 }
             }
-
-
-
         }
-
 
 
         else
@@ -134,8 +129,6 @@ public class PacStudentController : MonoBehaviour
         if (input == KeyCode.A) return Vector3Int.left;
         return Vector3Int.zero;
     }
-
-
 
     // check if given grid position is walkable
     bool isWalkable(Vector3Int gridPos)
