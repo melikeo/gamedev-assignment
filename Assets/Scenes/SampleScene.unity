@@ -4215,6 +4215,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
+  topLeftTilemap: {fileID: 511559288}
+  topRightTilemap: {fileID: 1545486786}
+  bottomLeftTilemap: {fileID: 1378761419}
+  bottomRightTilemap: {fileID: 1802065606}
+  wallTiles:
+  - {fileID: 11400000, guid: 5425fd4644dbad94a8c88ea4d54fa7df, type: 2}
+  - {fileID: 11400000, guid: a16c80633f5192343983d645eede6ec3, type: 2}
+  - {fileID: 11400000, guid: db070929a79cdc94795168168542835b, type: 2}
+  - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
+  - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
+  - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
+  - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
 --- !u!1 &1198173935
 GameObject:
   m_ObjectHideFlags: 0
@@ -4542,7 +4554,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1378761416}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -12, z: 0}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0

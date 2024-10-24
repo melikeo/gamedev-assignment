@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PacStudentController : MonoBehaviour
 {
@@ -23,24 +25,14 @@ public class PacStudentController : MonoBehaviour
 
     private Vector3Int currentDirection; //stores current moving direction
 
-    //levelMap to check for wall collision
-    private int[,] levelMap = {
-        {1,2,2,2,2,2,2,2,2,2,2,2,2,7},
-        {2,5,5,5,5,5,5,5,5,5,5,5,5,4},
-        {2,5,3,4,4,3,5,3,4,4,4,3,5,4},
-        {2,6,4,0,0,4,5,4,0,0,0,4,5,4},
-        {2,5,3,4,4,3,5,3,4,4,4,3,5,3},
-        {2,5,5,5,5,5,5,5,5,5,5,5,5,5},
-        {2,5,3,4,4,3,5,3,3,5,3,4,4,4},
-        {2,5,3,4,4,3,5,4,4,5,3,4,4,3},
-        {2,5,5,5,5,5,5,4,4,5,5,5,5,4},
-        {1,2,2,2,2,1,5,4,3,4,4,3,0,4},
-        {0,0,0,0,0,2,5,4,3,4,4,3,0,3},
-        {0,0,0,0,0,2,5,4,4,0,0,0,0,0},
-        {0,0,0,0,0,2,5,4,4,0,3,4,4,0},
-        {2,2,2,2,2,1,5,3,3,0,4,0,0,0},
-        {0,0,0,0,0,0,5,0,0,0,4,0,0,0},
-    };
+    // Tilemaps for each section of the map
+    [SerializeField] private Tilemap topLeftTilemap; // top-left section of the map
+    [SerializeField] private Tilemap topRightTilemap; // top-right section of the map
+    [SerializeField] private Tilemap bottomLeftTilemap; // bottom-left section of the map
+    [SerializeField] private Tilemap bottomRightTilemap; // bottom-right section of the map
+
+    //list of wall tiles that will be checked
+    [SerializeField] private TileBase[] wallTiles; // array of wall tiles
 
     private void Awake()
     {
@@ -51,8 +43,6 @@ public class PacStudentController : MonoBehaviour
         //grid positions of pacstudent
         currentGridPosition = Vector3Int.FloorToInt(transform.position);
         targetGridPosition = currentGridPosition;
-
-        //currentDirection = Vector3Int.right; // Default direction (right) - can be changed
     }
 
     // Start is called before the first frame update
@@ -78,7 +68,7 @@ public class PacStudentController : MonoBehaviour
 
     void checkLastInput()
     {
-        //check for input and set the new direction
+        //check for input and set the new direction (use of lastInput variable)
         if (Input.GetKeyDown(KeyCode.W))
         {
             lastInput = KeyCode.W;
@@ -101,18 +91,91 @@ public class PacStudentController : MonoBehaviour
         }
     }
 
+    // check if given grid position is walkable
+    bool isWalkable(Vector3Int gridPos)
+    {
+        // getting tile from appropriate tilemap without converting to world position
+        TileBase tileAtPosition = GetTileAtPosition(gridPos);
+
+        // if tile is null and is not in wallTiles array, it is walkable
+        return tileAtPosition == null || !wallTiles.Contains(tileAtPosition);
+    }
+
+    // get tile from the appropriate tilemap
+    TileBase GetTileAtPosition(Vector3Int gridPos)
+    {
+        // converting grid position to world position
+        Vector3 worldPosition = new Vector3(gridPos.x + 0.5f, gridPos.y + 0.5f, 0); //0.5 puts pacstudent in the center of grid
+
+        // get correct tilemap based on world position
+        Tilemap targetTilemap = GetTargetTilemap(worldPosition);
+
+        if (targetTilemap != null)
+        {
+            // convert world position to correct cell position for the specific tilemap
+            Vector3Int cellPosition = targetTilemap.WorldToCell(worldPosition);
+
+            Debug.Log($"Checking tile at world position: {worldPosition}, cell position: {cellPosition}, tilemap: {targetTilemap.name}");
+
+            return targetTilemap.GetTile(cellPosition);
+        }
+        return null;
+    }
+
+
+    // Determine tilemap based on grid position
+    Tilemap GetTargetTilemap(Vector3 worldPosition)
+    {
+        Debug.Log($"Current PacStudent position: {worldPosition}");
+
+        float leftBoundary = -6f;
+        float rightBoundary = -12f;
+        float topBoundary = -6f;
+        float bottomBoundary = -6f;
+
+        if (worldPosition.x < leftBoundary && worldPosition.y >= topBoundary)
+        {
+            Debug.Log("Using TopLeftTilemap");
+            return topLeftTilemap;
+        }
+        else if (worldPosition.x >= leftBoundary && worldPosition.y >= topBoundary)
+        {
+            Debug.Log("Using TopRightTilemap");
+            return topRightTilemap;
+        }
+        else if (worldPosition.x < leftBoundary && worldPosition.y < bottomBoundary)
+        {
+            Debug.Log("Using BottomLeftTilemap");
+            return bottomLeftTilemap;
+        }
+        else if (worldPosition.x >= rightBoundary && worldPosition.y < bottomBoundary)
+        {
+            Debug.Log("Using BottomRightTilemap");
+            return bottomRightTilemap;
+        }
+        return null;
+    }
+
     void setTargetPosition(Vector3Int direction)
     {
-        if (!isMoving)
+        Vector3Int newTargetPosition = currentGridPosition + direction;
+
+        if (isWalkable(newTargetPosition))
         {
-            //set target grid position based on current direction
-            targetGridPosition = currentGridPosition + direction;
+            // Set the target grid position based on current direction
+            targetGridPosition = newTargetPosition;
             startPos = transform.position;
             targetPos = new Vector3(targetGridPosition.x + 0.5f, targetGridPosition.y + 0.5f, transform.position.z); // 0.5f puts pacstudent in center of grid
             t = 0;
             isMoving = true;
 
-            updateAnimatorParam(direction); //update animation based on direction
+            updateAnimatorParam(direction); // Update animation based on direction
+        }
+        else
+        {
+            // pacstudent stops moving if new direction is blocked
+            isMoving = false;
+            Debug.Log($"Blocked at {newTargetPosition}");
         }
     }
 
@@ -123,7 +186,7 @@ public class PacStudentController : MonoBehaviour
         // LERP to move pacstudent from startPos to targetPos
         transform.position = Vector3.Lerp(startPos, targetPos, t);
 
-        // check whether target position is reached
+        // Check whether target position is reached
         if (Vector3.Distance(transform.position, targetPos) < 0.01f)
         {
             transform.position = targetPos; // set Pacstudent to target position
