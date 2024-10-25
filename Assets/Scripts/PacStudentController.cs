@@ -114,7 +114,6 @@ public class PacStudentController : MonoBehaviour
                 }
             }
         }
-
         else
         {
             moveTowardsTarget(); //continue moving towards target
