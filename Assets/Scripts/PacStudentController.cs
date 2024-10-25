@@ -37,6 +37,10 @@ public class PacStudentController : MonoBehaviour
     //list of wall tiles that will be checked
     [SerializeField] private TileBase[] wallTiles; // array of wall tiles
 
+    //add Dust Particle System Effect
+    [SerializeField] private ParticleSystem dustParticleEffect;
+    private ParticleSystem dustParticleInstance;
+
     private void Awake()
     {
         //sets pacstudents position at start of the game
@@ -52,6 +56,9 @@ public class PacStudentController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        dustParticleInstance = Instantiate(dustParticleEffect, transform.position, Quaternion.identity); //instantiate dust particle effect prefab as a gameobject
+        dustParticleInstance.transform.SetParent(transform); // set particle effect as a child of PacStudent GameObject
+        dustParticleInstance.Stop();
     }
 
     // Update is called once per frame
@@ -72,6 +79,9 @@ public class PacStudentController : MonoBehaviour
                 currentDirection = directionFromLastInput;
                 currentInput = lastInput;  // set currentInput to lastInput
                 setTargetPosition(currentDirection);
+
+                playDustParticleEffect();
+                //dustParticleEffect.Play();
             }
             else
             {
@@ -81,10 +91,18 @@ public class PacStudentController : MonoBehaviour
                 {
                     currentDirection = directionFromCurrentInput;
                     setTargetPosition(currentDirection);
+
+                    playDustParticleEffect();
+
+                    //dustParticleEffect.Play();
                 }
                 else
                 {
-                    Debug.Log("PacStudent ist in beiden Richtungen blockiert.");
+                    Debug.Log("PacStudent is blocked in both directions.");
+
+                    stopDustParticleEffect();
+
+                    //dustParticleEffect.Stop();
                 }
             }
         }
@@ -232,6 +250,18 @@ public class PacStudentController : MonoBehaviour
             currentGridPosition = targetGridPosition; // update currentGridPosition
             isMoving = false; // finish movement (lerping), ready for next move
         }
+    }
+
+    void playDustParticleEffect()
+    {
+        dustParticleInstance.Play();
+        Debug.Log("particle effect started");
+    }
+
+    void stopDustParticleEffect()
+    {
+        dustParticleInstance.Stop();
+        Debug.Log("particle effect Stopped");
     }
 
     void updateAnimatorParam(Vector3Int direction)

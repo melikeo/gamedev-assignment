@@ -4227,6 +4227,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
   - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
   - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
+  dustParticleEffect: {fileID: 3909486433331098032, guid: b012026a9bc8a59409e2fe31562ba3f0, type: 3}
 --- !u!1 &1198173935
 GameObject:
   m_ObjectHideFlags: 0
