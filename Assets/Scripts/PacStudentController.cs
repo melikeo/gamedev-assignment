@@ -196,7 +196,7 @@ public class PacStudentController : MonoBehaviour
         Debug.Log($"Current PacStudent position: {worldPosition}");
 
         float leftBoundary = -6f;
-        float rightBoundary = -12f;
+        float rightBoundary = -11f;
         float topBoundary = -6f;
         float bottomBoundary = -6f;
 
