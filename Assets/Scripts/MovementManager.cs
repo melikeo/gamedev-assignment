@@ -64,7 +64,7 @@ public class MovementManager : MonoBehaviour
         //    UpdateAnimation();
         //}
 
-        PlayMovementAudio();
+        //PlayMovementAudio();
     }
 
     private void PlayMovementAudio()

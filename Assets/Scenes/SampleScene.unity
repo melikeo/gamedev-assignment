@@ -4208,6 +4208,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
   - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
   dustParticleEffect: {fileID: 3909486433331098032, guid: b012026a9bc8a59409e2fe31562ba3f0, type: 3}
+  audioSource: {fileID: 0}
+  eatingPelletClip: {fileID: 8300000, guid: c9fd77736ffa5d343acdfc2b3d89dd5f, type: 3}
+  movingNotEatingClip: {fileID: 8300000, guid: 12e332af715c1ff49ad85ebe9323d6c3, type: 3}
+  pelletTile: {fileID: 11400000, guid: 95e9d64bdb5e1574db2f630c19bb9144, type: 2}
 --- !u!1 &1198173935
 GameObject:
   m_ObjectHideFlags: 0

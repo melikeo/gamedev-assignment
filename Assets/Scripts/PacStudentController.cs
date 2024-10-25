@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class PacStudentController : MonoBehaviour
 {
@@ -42,6 +44,14 @@ public class PacStudentController : MonoBehaviour
     private ParticleSystem dustParticleInstance;
     bool inputReceived = false;
 
+    //add audio
+    public AudioSource audioSource;
+
+    [SerializeField] AudioClip eatingPelletClip;
+    [SerializeField] AudioClip movingNotEatingClip;
+    [SerializeField] TileBase pelletTile; //to add pellet Tile to check
+    bool fieldHasPellet = false;
+
     private void Awake()
     {
         //sets pacstudents position at start of the game
@@ -55,6 +65,13 @@ public class PacStudentController : MonoBehaviour
         dustParticleInstance = Instantiate(dustParticleEffect, transform.position, Quaternion.identity); //instantiate dust particle effect prefab as a gameobject
         dustParticleInstance.transform.SetParent(transform); // set particle effect as a child of PacStudent GameObject
         dustParticleInstance.Stop();
+
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
     }
 
     // Start is called before the first frame update
@@ -237,6 +254,8 @@ public class PacStudentController : MonoBehaviour
             isMoving = true;
 
             updateAnimatorParam(direction); // Update animation based on direction
+
+            fieldHasPellet = checkForPellet(newTargetPosition);
         }
         else
         {
@@ -259,6 +278,18 @@ public class PacStudentController : MonoBehaviour
             transform.position = targetPos; // set Pacstudent to target position
             currentGridPosition = targetGridPosition; // update currentGridPosition
             isMoving = false; // finish movement (lerping), ready for next move
+
+            //add audio for moving or next field with pellet
+            if (fieldHasPellet)
+            {
+                audioSource.clip = eatingPelletClip;
+                audioSource.Play();
+            }
+            else
+            {
+                audioSource.clip = movingNotEatingClip;
+                audioSource.Play();
+            }
         }
     }
 
@@ -272,6 +303,16 @@ public class PacStudentController : MonoBehaviour
     {
         dustParticleInstance.Stop();
         Debug.Log("particle effect Stopped");
+    }
+
+    bool checkForPellet(Vector3Int position)
+    {
+        // Hole die Kachel an der Position
+        TileBase tileAtPosition = GetTileAtPosition(position);
+
+        // Überprüfe, ob die Kachel dem Pellet-Tile entspricht
+        return tileAtPosition == pelletTile;
+
     }
 
     void updateAnimatorParam(Vector3Int direction)

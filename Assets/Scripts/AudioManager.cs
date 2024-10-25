@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour
         introMusicSource.clip = introMusicClip;
         backgroundMusicSource.clip = backgroundMusicClip;
                 
-        introMusicSource.Play(); //start playing intro music
+        //introMusicSource.Play(); //start playing intro music
                 
         Invoke("PlayBackgroundMusic", introMusicSource.clip.length); //switch to background music after intro
     }
