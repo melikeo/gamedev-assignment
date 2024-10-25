@@ -40,6 +40,7 @@ public class PacStudentController : MonoBehaviour
     //add Dust Particle System Effect
     [SerializeField] private ParticleSystem dustParticleEffect;
     private ParticleSystem dustParticleInstance;
+    bool inputReceived = false;
 
     private void Awake()
     {
@@ -50,15 +51,16 @@ public class PacStudentController : MonoBehaviour
         //grid positions of pacstudent
         currentGridPosition = Vector3Int.FloorToInt(transform.position);
         targetGridPosition = currentGridPosition;
+
+        dustParticleInstance = Instantiate(dustParticleEffect, transform.position, Quaternion.identity); //instantiate dust particle effect prefab as a gameobject
+        dustParticleInstance.transform.SetParent(transform); // set particle effect as a child of PacStudent GameObject
+        dustParticleInstance.Stop();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        dustParticleInstance = Instantiate(dustParticleEffect, transform.position, Quaternion.identity); //instantiate dust particle effect prefab as a gameobject
-        dustParticleInstance.transform.SetParent(transform); // set particle effect as a child of PacStudent GameObject
-        dustParticleInstance.Stop();
     }
 
     // Update is called once per frame
@@ -80,7 +82,10 @@ public class PacStudentController : MonoBehaviour
                 currentInput = lastInput;  // set currentInput to lastInput
                 setTargetPosition(currentDirection);
 
-                playDustParticleEffect();
+                if (inputReceived)
+                {
+                    playDustParticleEffect();
+                }
                 //dustParticleEffect.Play();
             }
             else
@@ -92,7 +97,10 @@ public class PacStudentController : MonoBehaviour
                     currentDirection = directionFromCurrentInput;
                     setTargetPosition(currentDirection);
 
-                    playDustParticleEffect();
+                    if (inputReceived)
+                    {
+                        playDustParticleEffect();
+                    }
 
                     //dustParticleEffect.Play();
                 }
@@ -107,7 +115,6 @@ public class PacStudentController : MonoBehaviour
             }
         }
 
-
         else
         {
             moveTowardsTarget(); //continue moving towards target
@@ -121,21 +128,25 @@ public class PacStudentController : MonoBehaviour
         {
             lastInput = KeyCode.W;
             currentDirection = Vector3Int.up;
+            inputReceived = true;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
             lastInput = KeyCode.D;
             currentDirection = Vector3Int.right;
+            inputReceived = true;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
             lastInput = KeyCode.S;
             currentDirection = Vector3Int.down;
+            inputReceived = true;
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             lastInput = KeyCode.A;
             currentDirection = Vector3Int.left;
+            inputReceived = true;
         }
     }
 
