@@ -5,90 +5,85 @@ public class CherryController : MonoBehaviour
 {
     public GameObject cherryPrefab;
 
-    //private Vector3 spawnPosition; //where cherry will spawn (starting point)
-    private Vector3 targetPosition; //where cherry will move to
+    public float spawnDurationTime = 10.0f; // First cherry appears after 10 seconds
+    public float repeatRate = 10.0f; // Time between spawns
+    public float moveSpeed = 7f; // Default speed, can be changed in inspector
 
-    public float spawnDurationTime = 10.0f; //first cherry appears after 10 second
-    public float repeatRate = 10.0f;
-
-    public float moveSpeed = 7f; // default speed, can be changed in inspector
-
-    Vector3 cameraCenter = new Vector3(-6, -6, 0); //taking into account that camera center is not at 0,0,0
-
+    Vector3 cameraCenter = new Vector3(-6, -6, -1); // Taking into account that camera center is not at 0,0,0
 
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SpawnCherry", spawnDurationTime, repeatRate);        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        InvokeRepeating("SpawnCherry", spawnDurationTime, repeatRate);
     }
 
     Vector3 GetRandomSpawnPosition()
     {
-        //get camera sizes
+        // Get camera sizes
         float cameraHeight = Camera.main.orthographicSize;
         float cameraWidth = cameraHeight * Camera.main.aspect;
 
-        int side = Random.Range(0, 4); //choose value between 0 and 3 for random side to spawn from
+        int side = Random.Range(0, 4); // Choose value between 0 and 3 for random side to spawn from
 
-        switch (side)
+        switch (side) //additional 10 to be out of camera view
         {
-            case 0: return new Vector3(Random.Range(-cameraWidth, cameraWidth), cameraHeight + 1, -1);  // above screen //top
-            case 1: return new Vector3(Random.Range(-cameraWidth, cameraWidth), -cameraHeight - 1, -1); // below screen //bottom
-            case 2: return new Vector3(-cameraWidth - 1, Random.Range(-cameraHeight, cameraHeight), -1); // left from screen //left
-            case 3: return new Vector3(cameraWidth + 1, Random.Range(-cameraHeight, cameraHeight), -1); // right from screen //right
+            case 0: return new Vector3(Random.Range(-cameraWidth, cameraWidth), cameraHeight + 10, -1);  // Above screen // Top
+            case 1: return new Vector3(Random.Range(-cameraWidth, cameraWidth), -cameraHeight - 10, -1); // Below screen // Bottom
+            case 2: return new Vector3(-cameraWidth - 10, Random.Range(-cameraHeight, cameraHeight), -1); // Left from screen // Left
+            case 3: return new Vector3(cameraWidth + 10, Random.Range(-cameraHeight, cameraHeight), -1); // Right from screen // Right
             default: return Vector3.zero;
         }
     }
 
-
     void SpawnCherry()
     {
-        //create random location for cherry outside of camera
+        // Create random location for cherry outside of camera
         Vector3 spawnPosition = GetRandomSpawnPosition();
 
-        //instantiate cherry at a random location
+        // Instantiate cherry at a random location
         GameObject cherry = Instantiate(cherryPrefab, spawnPosition, Quaternion.identity);
-
-        // set target point for cherry movement (through camera center)
-        //targetPosition = GetTargetPosition(spawnPosition);   // on the other side
-        StartCoroutine(MoveCherry(cherry, spawnPosition)); // start movement with movement coroutine
-        //Debug.Log("Cherry spawned at: " + Time.time); // time of spawn
+        StartCoroutine(MoveCherry(cherry, spawnPosition)); // Start movement with coroutine
+        Debug.Log("Cherry spawned at: " + spawnPosition);
     }
 
-    IEnumerator MoveCherry(GameObject cherry, Vector3 spawnPosition) //to move cherry across the map (in 2 parts: first to center than to other side)
+    IEnumerator MoveCherry(GameObject cherry, Vector3 spawnPosition) // Move cherry across the map
     {
-        // move cherry to center
+        // Move cherry to center
         while (Vector3.Distance(cherry.transform.position, cameraCenter) > 0.1f)
         {
             cherry.transform.position = Vector3.MoveTowards(cherry.transform.position, cameraCenter, moveSpeed * Time.deltaTime);
-            yield return null;
+            yield return null; // wait for next frame
         }
+
         Vector3 targetPosition = GetTargetPosition(spawnPosition);
-        // Move cherry to targetPosition
+
+        // Move cherry to target position
         while (Vector3.Distance(cherry.transform.position, targetPosition) > 0.1f)
         {
             cherry.transform.position = Vector3.MoveTowards(cherry.transform.position, targetPosition, moveSpeed * Time.deltaTime);
             yield return null;
         }
 
-        // destroy cherry gameObject after target is reached
-        Destroy(cherry);
+        // Check if cherry has reached the target position
+        //if (HasReachedTarget(cherry.transform.position, targetPosition)){}
+        
+        Destroy(cherry); // Destroy cherry GameObject after reaching the target position
+            //Debug.Log("Cherry reached target and destroyed at position: " + cherry.transform.position);
+        
     }
 
-    // so that cherry goes through center
-    Vector3 GetTargetPosition (Vector3 startPosition)
+    // Calculate the target position for cherry
+    Vector3 GetTargetPosition(Vector3 startPosition)
     {
-        //Vector3 cameraCenter = new Vector3(-6, -6, 0); // adjust according to camera position
-
         // Calculate the opposite side of the start position, through the center (-6,-6,0)
-        float targetX = 2 * cameraCenter.x - startPosition.x; //gets x position for target pos
-        float targetY = 2 * cameraCenter.y - startPosition.y;  //gets y position for target pos
-        return new Vector3(targetX, targetY, 0);        
+        float targetX = 2 * cameraCenter.x - startPosition.x; // Get x position for target position
+        float targetY = 2 * cameraCenter.y - startPosition.y; // Get y position for target position
+        return new Vector3(targetX, targetY, -1);
+    }
+
+    // Check if cherry has reached the target position
+    bool HasReachedTarget(Vector3 currentPosition, Vector3 targetPosition)
+    {
+        return Vector3.Distance(currentPosition, targetPosition) <= 0.1f;
     }
 }
