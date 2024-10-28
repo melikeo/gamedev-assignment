@@ -15,7 +15,7 @@ public class PacStudentController : MonoBehaviour
     private Vector3 startPos;
     private Vector3 targetPos;
 
-    [SerializeField] private float pacstudentMoveSpeed = 2f; //default move speed
+    [SerializeField] private float pacstudentMoveSpeed = 4f; //default move speed
 
     private bool isMoving = false;
 
@@ -51,6 +51,7 @@ public class PacStudentController : MonoBehaviour
     [SerializeField] AudioClip movingNotEatingClip;
     [SerializeField] TileBase pelletTile; //to add pellet Tile to check
     bool fieldHasPellet = false;
+    bool fieldHasPowerPellet = false;
 
     private void Awake()
     {
@@ -252,15 +253,17 @@ public class PacStudentController : MonoBehaviour
             t = 0;
             isMoving = true;
 
-            updateAnimatorParam(direction); // Update animation based on direction
+            UpdateAnimatorParam(direction); // Update animation based on direction
 
-            fieldHasPellet = checkForPellet(newTargetPosition);
+            fieldHasPellet = CheckForPellet(newTargetPosition);
+            fieldHasPowerPellet = CheckForPowerPellet();
         }
         else
         {
             // pacstudent stops moving if new direction is blocked
             isMoving = false;
             //Debug.Log($"Blocked at {newTargetPosition}");
+            //audioSource.Stop();
         }
     }
 
@@ -279,7 +282,7 @@ public class PacStudentController : MonoBehaviour
             isMoving = false; // finish movement (lerping), ready for next move
 
             //add audio for moving or next field with pellet
-            if (fieldHasPellet)
+            if (fieldHasPellet || fieldHasPowerPellet)
             {
                 audioSource.clip = eatingPelletClip;
                 audioSource.Play();
@@ -306,7 +309,7 @@ public class PacStudentController : MonoBehaviour
         //Debug.Log("particle effect Stopped");
     }
 
-    bool checkForPellet(Vector3Int position)
+    bool CheckForPellet(Vector3Int position)
     {
         // get tile at position
         TileBase tileAtPosition = GetTileAtPosition(position);
@@ -315,7 +318,25 @@ public class PacStudentController : MonoBehaviour
         return tileAtPosition == pelletTile;
     }
 
-    void updateAnimatorParam(Vector3Int direction)
+    bool CheckForPowerPellet()
+    {
+        GameObject[] powerPellets = GameObject.FindGameObjectsWithTag("PowerPellet"); //check for powerpellet tag to find powerpellet gameobjects
+
+        for (int i = 0; i < powerPellets.Length; i++)
+        {
+            Vector3 pelletPosition = powerPellets[i].transform.position;
+
+            if (Vector3Int.FloorToInt(pelletPosition) == targetGridPosition)
+            {
+                //fieldHasPowerPellet = true;
+                //break; // break for if power pellet is found
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void UpdateAnimatorParam(Vector3Int direction)
     {
         // reset all animator params
         animator.SetBool("walkingUp", false);

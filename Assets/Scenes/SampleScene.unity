@@ -4194,7 +4194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719dfc21fbdba2e4c9876cc2b828a145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pacstudentMoveSpeed: 2
+  pacstudentMoveSpeed: 4
   topLeftTilemap: {fileID: 511559288}
   topRightTilemap: {fileID: 1545486786}
   bottomLeftTilemap: {fileID: 1378761419}
@@ -4210,8 +4210,9 @@ MonoBehaviour:
   dustParticleEffect: {fileID: 3909486433331098032, guid: b012026a9bc8a59409e2fe31562ba3f0, type: 3}
   audioSource: {fileID: 0}
   eatingPelletClip: {fileID: 8300000, guid: c9fd77736ffa5d343acdfc2b3d89dd5f, type: 3}
-  movingNotEatingClip: {fileID: 8300000, guid: 12e332af715c1ff49ad85ebe9323d6c3, type: 3}
+  movingNotEatingClip: {fileID: 8300000, guid: 7cd804faa03aea043804e5911fec2438, type: 3}
   pelletTile: {fileID: 11400000, guid: 95e9d64bdb5e1574db2f630c19bb9144, type: 2}
+  powerPelletTile: {fileID: 11400000, guid: 4d315f9c09745fe4da14a2f793941d27, type: 2}
 --- !u!1 &1198173935
 GameObject:
   m_ObjectHideFlags: 0
@@ -11043,9 +11044,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cherryPrefab: {fileID: 1893979786708596895, guid: a1d20a02d634acd468b45719c6c10042, type: 3}
-  spawnDurationTime: 10
+  spawnDurationTime: 0
   repeatRate: 10
-  moveSpeed: 7
+  moveSpeed: 6.5
 --- !u!4 &1834613511
 Transform:
   m_ObjectHideFlags: 0

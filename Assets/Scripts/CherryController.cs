@@ -13,7 +13,7 @@ public class CherryController : MonoBehaviour
     public float spawnDurationTime = 10.0f; //first cherry appears after 10 second
     public float repeatRate = 10.0f;
 
-    public float moveSpeed = 7f; // default speed, can be changed in inspector
+    public float moveSpeed = 6.5f; // default speed, can be changed in inspector
 
     Vector3 cameraCenter = new Vector3(-6, -6, 0); //taking into account that camera center is not at 0,0,0
 
