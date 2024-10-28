@@ -15,7 +15,7 @@ public class PacStudentController : MonoBehaviour
     private Vector3 startPos;
     private Vector3 targetPos;
 
-    [SerializeField] private float moveSpeed = 5f; //default move speed
+    [SerializeField] private float pacstudentMoveSpeed = 2f; //default move speed
 
     private bool isMoving = false;
 
@@ -63,15 +63,15 @@ public class PacStudentController : MonoBehaviour
         targetGridPosition = currentGridPosition;
 
         dustParticleInstance = Instantiate(dustParticleEffect, transform.position, Quaternion.identity); //instantiate dust particle effect prefab as a gameobject
-        dustParticleInstance.transform.SetParent(transform); // set particle effect as a child of PacStudent GameObject
+        dustParticleInstance.transform.SetParent(transform); // set particle effect as a child of PacStudent GameObject so it moves with pacstudent
         dustParticleInstance.Stop();
 
+        //get audiosource
         audioSource = gameObject.GetComponent<AudioSource>();
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-
     }
 
     // Start is called before the first frame update
@@ -83,7 +83,7 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        checkLastInput();  //always check for input
+        checkLastInput();  //always check for input //check for player input for moving with W, A, S, D keys to move pacstudent
 
         if (!isMoving)
         {
@@ -93,15 +93,15 @@ public class PacStudentController : MonoBehaviour
             Vector3Int directionFromLastInput = getDirectionFromInput(lastInput);
 
             // check if walkable
-            if (isWalkable(currentGridPosition + directionFromLastInput))
+            if (IsWalkable(currentGridPosition + directionFromLastInput))
             {
                 currentDirection = directionFromLastInput;
-                currentInput = lastInput;  // set currentInput to lastInput
-                setTargetPosition(currentDirection);
+                currentInput = lastInput;  // set currentInput to lastInput - if is walkable store lastInput in currentInput
+                SetTargetPosition(currentDirection);
 
                 if (inputReceived)
                 {
-                    playDustParticleEffect();
+                    PlayDustParticleEffect();
                 }
                 //dustParticleEffect.Play();
             }
@@ -109,23 +109,23 @@ public class PacStudentController : MonoBehaviour
             {
                 Vector3Int directionFromCurrentInput = getDirectionFromInput(currentInput); //if last input is blocked, continue movement
 
-                if (isWalkable(currentGridPosition + directionFromCurrentInput))
+                if (IsWalkable(currentGridPosition + directionFromCurrentInput))
                 {
                     currentDirection = directionFromCurrentInput;
-                    setTargetPosition(currentDirection);
+                    SetTargetPosition(currentDirection);
 
                     if (inputReceived)
                     {
-                        playDustParticleEffect();
+                        PlayDustParticleEffect();
                     }
 
                     //dustParticleEffect.Play();
                 }
                 else
                 {
-                    Debug.Log("PacStudent is blocked in both directions.");
+                    //Debug.Log("PacStudent is blocked in both directions.");
 
-                    stopDustParticleEffect();
+                    StopDustParticleEffect();
 
                     //dustParticleEffect.Stop();
                 }
@@ -133,7 +133,7 @@ public class PacStudentController : MonoBehaviour
         }
         else
         {
-            moveTowardsTarget(); //continue moving towards target
+            MoveTowardsTarget(); //continue moving towards target
         }
     }
 
@@ -176,7 +176,7 @@ public class PacStudentController : MonoBehaviour
     }
 
     // check if given grid position is walkable
-    bool isWalkable(Vector3Int gridPos)
+    bool IsWalkable(Vector3Int gridPos)
     {
         // getting tile from appropriate tilemap without converting to world position
         TileBase tileAtPosition = GetTileAtPosition(gridPos);
@@ -199,18 +199,17 @@ public class PacStudentController : MonoBehaviour
             // convert world position to correct cell position for the specific tilemap
             Vector3Int cellPosition = targetTilemap.WorldToCell(worldPosition);
 
-            Debug.Log($"Checking tile at world position: {worldPosition}, cell position: {cellPosition}, tilemap: {targetTilemap.name}");
+            //Debug.Log($"Checking tile at world position: {worldPosition}, cell position: {cellPosition}, tilemap: {targetTilemap.name}");
 
             return targetTilemap.GetTile(cellPosition);
         }
         return null;
     }
 
-
     // Determine tilemap based on grid position
     Tilemap GetTargetTilemap(Vector3 worldPosition)
     {
-        Debug.Log($"Current PacStudent position: {worldPosition}");
+        //Debug.Log($"Current PacStudent position: {worldPosition}");
 
         float leftBoundary = -6f;
         float rightBoundary = -11f;
@@ -219,32 +218,32 @@ public class PacStudentController : MonoBehaviour
 
         if (worldPosition.x < leftBoundary && worldPosition.y >= topBoundary)
         {
-            Debug.Log("Using TopLeftTilemap");
+            //Debug.Log("Using TopLeftTilemap");
             return topLeftTilemap;
         }
         else if (worldPosition.x >= leftBoundary && worldPosition.y >= topBoundary)
         {
-            Debug.Log("Using TopRightTilemap");
+            //Debug.Log("Using TopRightTilemap");
             return topRightTilemap;
         }
         else if (worldPosition.x < leftBoundary && worldPosition.y < bottomBoundary)
         {
-            Debug.Log("Using BottomLeftTilemap");
+            //Debug.Log("Using BottomLeftTilemap");
             return bottomLeftTilemap;
         }
         else if (worldPosition.x >= rightBoundary && worldPosition.y < bottomBoundary)
         {
-            Debug.Log("Using BottomRightTilemap");
+            //Debug.Log("Using BottomRightTilemap");
             return bottomRightTilemap;
         }
         return null;
     }
 
-    void setTargetPosition(Vector3Int direction)
+    void SetTargetPosition(Vector3Int direction)
     {
         Vector3Int newTargetPosition = currentGridPosition + direction;
 
-        if (isWalkable(newTargetPosition))
+        if (IsWalkable(newTargetPosition))
         {
             // Set the target grid position based on current direction
             targetGridPosition = newTargetPosition;
@@ -261,13 +260,13 @@ public class PacStudentController : MonoBehaviour
         {
             // pacstudent stops moving if new direction is blocked
             isMoving = false;
-            Debug.Log($"Blocked at {newTargetPosition}");
+            //Debug.Log($"Blocked at {newTargetPosition}");
         }
     }
 
-    void moveTowardsTarget()
+    void MoveTowardsTarget()
     {
-        t += Time.deltaTime * moveSpeed;
+        t += Time.deltaTime * pacstudentMoveSpeed;
 
         // LERP to move pacstudent from startPos to targetPos
         transform.position = Vector3.Lerp(startPos, targetPos, t);
@@ -284,35 +283,36 @@ public class PacStudentController : MonoBehaviour
             {
                 audioSource.clip = eatingPelletClip;
                 audioSource.Play();
+                Debug.Log("eating sound playing");
             }
             else
             {
                 audioSource.clip = movingNotEatingClip;
                 audioSource.Play();
+                Debug.Log("moving sound - not eating");
             }
         }
     }
 
-    void playDustParticleEffect()
+    void PlayDustParticleEffect()
     {
         dustParticleInstance.Play();
-        Debug.Log("particle effect started");
+        //Debug.Log("particle effect started");
     }
 
-    void stopDustParticleEffect()
+    void StopDustParticleEffect()
     {
         dustParticleInstance.Stop();
-        Debug.Log("particle effect Stopped");
+        //Debug.Log("particle effect Stopped");
     }
 
     bool checkForPellet(Vector3Int position)
     {
-        // Hole die Kachel an der Position
+        // get tile at position
         TileBase tileAtPosition = GetTileAtPosition(position);
 
-        // Überprüfe, ob die Kachel dem Pellet-Tile entspricht
+        // check if pellett tile
         return tileAtPosition == pelletTile;
-
     }
 
     void updateAnimatorParam(Vector3Int direction)

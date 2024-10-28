@@ -4194,7 +4194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719dfc21fbdba2e4c9876cc2b828a145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  pacstudentMoveSpeed: 2
   topLeftTilemap: {fileID: 511559288}
   topRightTilemap: {fileID: 1545486786}
   bottomLeftTilemap: {fileID: 1378761419}
@@ -11043,9 +11043,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cherryPrefab: {fileID: 1893979786708596895, guid: a1d20a02d634acd468b45719c6c10042, type: 3}
-  spawnDurationTime: 5
+  spawnDurationTime: 10
   repeatRate: 10
-  moveSpeed: 3
+  moveSpeed: 7
 --- !u!4 &1834613511
 Transform:
   m_ObjectHideFlags: 0
