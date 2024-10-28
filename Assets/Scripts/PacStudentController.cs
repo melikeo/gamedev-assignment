@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
 public class PacStudentController : MonoBehaviour
 {
@@ -176,14 +173,30 @@ public class PacStudentController : MonoBehaviour
         return Vector3Int.zero;
     }
 
-    // check if given grid position is walkable
+    // check if given grid position is walkable (no wall)
     bool IsWalkable(Vector3Int gridPos)
     {
         // getting tile from appropriate tilemap without converting to world position
         TileBase tileAtPosition = GetTileAtPosition(gridPos);
 
         // if tile is null and is not in wallTiles array, it is walkable
-        return tileAtPosition == null || !wallTiles.Contains(tileAtPosition);
+        if (tileAtPosition == null)
+        {
+            return true;
+        }
+
+        for (int i = 0; i < wallTiles.Length; i++)
+        {
+            if (wallTiles[i] == tileAtPosition)
+            {
+                return false; // tile is a wall -> not walkable
+            }
+        }
+
+        return true; //tile is empty or not a wall
+
+
+        //return tileAtPosition == null || !wallTiles.Contains(tileAtPosition);
     }
 
     // get tile from the appropriate tilemap
@@ -286,13 +299,13 @@ public class PacStudentController : MonoBehaviour
             {
                 audioSource.clip = eatingPelletClip;
                 audioSource.Play();
-                Debug.Log("eating sound playing");
+                //Debug.Log("eating sound playing");
             }
             else
             {
                 audioSource.clip = movingNotEatingClip;
                 audioSource.Play();
-                Debug.Log("moving sound - not eating");
+                //Debug.Log("moving sound - not eating");
             }
         }
     }
