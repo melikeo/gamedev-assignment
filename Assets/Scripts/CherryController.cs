@@ -43,33 +43,63 @@ public class CherryController : MonoBehaviour
         // Instantiate cherry at a random location
         GameObject cherry = Instantiate(cherryPrefab, spawnPosition, Quaternion.identity);
         StartCoroutine(MoveCherry(cherry, spawnPosition)); // Start movement with coroutine
-        Debug.Log("Cherry spawned at: " + spawnPosition);
+        //Debug.Log("Cherry spawned at: " + spawnPosition);
     }
 
     IEnumerator MoveCherry(GameObject cherry, Vector3 spawnPosition) // Move cherry across the map
     {
+        Vector3 startPos = spawnPosition;
+        Vector3 targetPos = cameraCenter; //first part: move to center
+
+        float t = 0; //t value for lerp
+
         // Move cherry to center
-        while (Vector3.Distance(cherry.transform.position, cameraCenter) > 0.1f)
-        {
-            cherry.transform.position = Vector3.MoveTowards(cherry.transform.position, cameraCenter, moveSpeed * Time.deltaTime);
-            yield return null; // wait for next frame
-        }
 
-        Vector3 targetPosition = GetTargetPosition(spawnPosition);
-
-        // Move cherry to target position
-        while (Vector3.Distance(cherry.transform.position, targetPosition) > 0.1f)
+        while( t < 1.0f )
         {
-            cherry.transform.position = Vector3.MoveTowards(cherry.transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            t += Time.deltaTime * (moveSpeed/Vector3.Distance(startPos, targetPos));
+            //cherry.transform.position = Vector3.Lerp(cherry.transform.position, cameraCenter, t); //LERP to center
+            cherry.transform.position = Vector3.Lerp(startPos, targetPos, t); // LERP to center
             yield return null;
         }
 
-        // Check if cherry has reached the target position
-        //if (HasReachedTarget(cherry.transform.position, targetPosition)){}
-        
+        //second part: move to target position
+        startPos= cameraCenter;
+        targetPos = GetTargetPosition(spawnPosition);
+
+        t = 0;
+
+        while ( t < 1.0f )
+        {
+            t += Time.deltaTime * (moveSpeed / Vector3.Distance(startPos, targetPos));
+            cherry.transform.position = Vector3.Lerp(startPos, targetPos, t); // LERP to target at diagonal
+            yield return null;
+        }
+
         Destroy(cherry); // Destroy cherry GameObject after reaching the target position
-            //Debug.Log("Cherry reached target and destroyed at position: " + cherry.transform.position);
-        
+        //Debug.Log("Cherry reached target and destroyed at position: " + cherry.transform.position);
+
+
+        //while (Vector3.Distance(cherry.transform.position, cameraCenter) > 0.1f)
+        //{
+
+        //    yield return null; // wait for next frame
+        //}
+
+
+        //Vector3 targetPosition = GetTargetPosition(spawnPosition);
+
+        //// Move cherry to target position
+        //while (Vector3.Distance(cherry.transform.position, targetPosition) > 0.1f)
+        //{
+        //    t += moveSpeed * Time.deltaTime;
+
+        //    cherry.transform.position = Vector3.Lerp(cherry.transform.position, targetPosition, t);
+        //    yield return null;
+        //}
+
+        // Check if cherry has reached the target position
+        //if (HasReachedTarget(cherry.transform.position, targetPosition)){}                
     }
 
     // Calculate the target position for cherry
