@@ -367,6 +367,25 @@ public class PacStudentController : MonoBehaviour
     {
         Debug.Log("Play wall collision");
         wallCollisionEffectInstance.transform.position = transform.position + (Vector3)currentDirection * 0.5f;
+        
+        //effect starting from wall collision point
+        if (currentDirection == Vector3Int.up)
+        {
+            wallCollisionEffectInstance.transform.rotation = Quaternion.Euler(-90, 90, 0);  // UP
+        }
+        else if (currentDirection == Vector3Int.down)
+        {
+            wallCollisionEffectInstance.transform.rotation = Quaternion.Euler(90, -90, 0);   // DOWN
+        }
+        else if (currentDirection == Vector3Int.left)
+        {
+            wallCollisionEffectInstance.transform.rotation = Quaternion.Euler(0, 0, 90);   // LEFT
+        }
+        else if (currentDirection == Vector3Int.right)
+        {
+            wallCollisionEffectInstance.transform.rotation = Quaternion.Euler(0, 90, 90);  // RIGHT
+        }
+
         if (!wallCollisionEffectInstance.isPlaying)
         {
             wallCollisionEffectInstance.Emit(5);
