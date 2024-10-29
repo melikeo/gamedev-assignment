@@ -6,7 +6,7 @@ public class CherryController : MonoBehaviour
     public GameObject cherryPrefab;
 
     public float spawnDurationTime = 10.0f; // First cherry appears after 10 seconds
-    public float repeatRate = 10.0f; // Time between spawns
+    public float repeatRate = 10.0f; // Time between spawns: every 10 seconds a cherry spawns
     public float moveSpeed = 7f; // Default speed, can be changed in inspector
 
     Vector3 cameraCenter = new Vector3(-6, -6, -1); // Taking into account that camera center is not at 0,0,0
@@ -23,7 +23,7 @@ public class CherryController : MonoBehaviour
         float cameraHeight = Camera.main.orthographicSize;
         float cameraWidth = cameraHeight * Camera.main.aspect;
 
-        int side = Random.Range(0, 4); // Choose value between 0 and 3 for random side to spawn from
+        int side = Random.Range(0, 4); // choose value between 0 and 3 for random side to spawn from
 
         switch (side) //additional 10 to be out of camera view
         {
@@ -39,14 +39,13 @@ public class CherryController : MonoBehaviour
     {
         // Create random location for cherry outside of camera
         Vector3 spawnPosition = GetRandomSpawnPosition();
-
-        // Instantiate cherry at a random location
-        GameObject cherry = Instantiate(cherryPrefab, spawnPosition, Quaternion.identity);
+        
+        GameObject cherry = Instantiate(cherryPrefab, spawnPosition, Quaternion.identity); // Instantiate cherry at a random location
         StartCoroutine(MoveCherry(cherry, spawnPosition)); // Start movement with coroutine
         //Debug.Log("Cherry spawned at: " + spawnPosition);
     }
 
-    IEnumerator MoveCherry(GameObject cherry, Vector3 spawnPosition) // Move cherry across the map
+    IEnumerator MoveCherry(GameObject cherry, Vector3 spawnPosition) // Move cherry across the map in 2 parts
     {
         Vector3 startPos = spawnPosition;
         Vector3 targetPos = cameraCenter; //first part: move to center
@@ -54,7 +53,6 @@ public class CherryController : MonoBehaviour
         float t = 0; //t value for lerp
 
         // Move cherry to center
-
         while( t < 1.0f )
         {
             t += Time.deltaTime * (moveSpeed/Vector3.Distance(startPos, targetPos));
@@ -79,13 +77,11 @@ public class CherryController : MonoBehaviour
         Destroy(cherry); // Destroy cherry GameObject after reaching the target position
         //Debug.Log("Cherry reached target and destroyed at position: " + cherry.transform.position);
 
-
         //while (Vector3.Distance(cherry.transform.position, cameraCenter) > 0.1f)
         //{
 
         //    yield return null; // wait for next frame
         //}
-
 
         //Vector3 targetPosition = GetTargetPosition(spawnPosition);
 
