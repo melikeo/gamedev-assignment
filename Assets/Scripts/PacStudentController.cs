@@ -50,6 +50,13 @@ public class PacStudentController : MonoBehaviour
     bool fieldHasPellet = false;
     bool fieldHasPowerPellet = false;
 
+    //wall collision
+    public ParticleSystem wallCollisionEffect;
+    private ParticleSystem wallCollisionEffectInstance;
+    bool hasCollidedWithWall = false;
+    [SerializeField] AudioClip wallCollisionSoundEffectClip;
+
+
     private void Awake()
     {
         //sets pacstudents position at start of the game
@@ -63,6 +70,11 @@ public class PacStudentController : MonoBehaviour
         dustParticleInstance = Instantiate(dustParticleEffect, transform.position, Quaternion.identity); //instantiate dust particle effect prefab as a gameobject
         dustParticleInstance.transform.SetParent(transform); // set particle effect as a child of PacStudent GameObject so it moves with pacstudent
         dustParticleInstance.Stop();
+
+        wallCollisionEffectInstance = Instantiate(wallCollisionEffect, transform.position, Quaternion.identity); //instantiate wall collision effect
+        wallCollisionEffectInstance.transform.SetParent(transform); //set wall collision effect as child of pacstudent to place it at pacstudent
+        wallCollisionEffectInstance.Stop(); //stop so it does not play automatically
+
 
         //get audiosource
         audioSource = gameObject.GetComponent<AudioSource>();
@@ -81,6 +93,7 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //wallCollisionEffectInstance.Play();
         checkLastInput();  //always check for input //check for player input for moving with W, A, S, D keys to move pacstudent
 
         if (!isMoving)
@@ -102,6 +115,10 @@ public class PacStudentController : MonoBehaviour
                     PlayDustParticleEffect();
                 }
                 //dustParticleEffect.Play();
+
+                StopWallCollisionEffect(); // stop effect in case it plays
+                hasCollidedWithWall = false;
+
             }
             else
             {
@@ -117,6 +134,9 @@ public class PacStudentController : MonoBehaviour
                         PlayDustParticleEffect();
                     }
 
+                    StopWallCollisionEffect();
+                    hasCollidedWithWall = false;
+
                     //dustParticleEffect.Play();
                 }
                 else
@@ -126,6 +146,15 @@ public class PacStudentController : MonoBehaviour
                     StopDustParticleEffect();
 
                     //dustParticleEffect.Stop();
+
+                    //wallCollisionEffectInstance.Play();
+                    Debug.Log("Wall collision effect should be playing");
+
+                    if (!hasCollidedWithWall)
+                    {
+                        PlayWallCollisionEffect();
+                        hasCollidedWithWall = true;
+                    }
                 }
             }
         }
@@ -259,6 +288,7 @@ public class PacStudentController : MonoBehaviour
 
         if (IsWalkable(newTargetPosition))
         {
+            //wallCollisionEffect.Stop();
             // Set the target grid position based on current direction
             targetGridPosition = newTargetPosition;
             startPos = transform.position;
@@ -270,6 +300,7 @@ public class PacStudentController : MonoBehaviour
 
             fieldHasPellet = CheckForPellet(newTargetPosition);
             fieldHasPowerPellet = CheckForPowerPellet();
+            //wallCollisionEffect.Play();
         }
         else
         {
@@ -277,7 +308,17 @@ public class PacStudentController : MonoBehaviour
             isMoving = false;
             //Debug.Log($"Blocked at {newTargetPosition}");
             //audioSource.Stop();
+            wallCollisionEffectInstance.transform.position = transform.position + (Vector3)currentDirection * 0.5f;
+            if (!wallCollisionEffectInstance.isPlaying)
+            {
+                //wallCollisionEffectInstance.Play();
+                //Debug.Log("Wall collision detected, effect played");                
+                PlayWallCollisionEffect();  // play effect on collision
+                
+                hasCollidedWithWall = true;
+            }
         }
+
     }
 
     void MoveTowardsTarget()
@@ -321,6 +362,29 @@ public class PacStudentController : MonoBehaviour
         dustParticleInstance.Stop();
         //Debug.Log("particle effect Stopped");
     }
+
+    void PlayWallCollisionEffect()
+    {
+        Debug.Log("Play wall collision");
+        wallCollisionEffectInstance.transform.position = transform.position + (Vector3)currentDirection * 0.5f;
+        if (!wallCollisionEffectInstance.isPlaying)
+        {
+            wallCollisionEffectInstance.Emit(5);
+            audioSource.clip = wallCollisionSoundEffectClip;
+            audioSource.Play();
+        }
+    }
+
+    void StopWallCollisionEffect()
+    {
+        Debug.Log("stop wall collision");
+        if (wallCollisionEffectInstance.isPlaying)
+        {
+            wallCollisionEffectInstance.Stop();
+        }
+    }
+
+
 
     bool CheckForPellet(Vector3Int position)
     {
