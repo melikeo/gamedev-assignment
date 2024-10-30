@@ -58,14 +58,17 @@ public class Collisions : MonoBehaviour
 
         if (collision.gameObject.CompareTag("PowerPellet"))
         {
-            Debug.Log("PowerPellet passed!");
+            //Debug.Log("PowerPellet passed!");
             score += 100;
             Destroy(collision.gameObject);
             UpdateScoreText();
         }
 
 
-        else { Debug.Log("no collision"); }
+        else 
+        { 
+            //Debug.Log("no collision");
+        }
     }
 
     void UpdateScoreText() //update high score

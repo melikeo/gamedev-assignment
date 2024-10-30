@@ -325,6 +325,13 @@ public class PacStudentController : MonoBehaviour
                 
                 hasCollidedWithWall = true;
             }
+            else if (wallCollisionEffectInstance.isPlaying)
+            {
+                StopWallCollisionEffect();            
+                PlayWallCollisionEffect();  // play effect on collision
+
+                hasCollidedWithWall = true;
+            }
         }
 
     }
@@ -396,7 +403,8 @@ public class PacStudentController : MonoBehaviour
 
         if (!wallCollisionEffectInstance.isPlaying)
         {
-            wallCollisionEffectInstance.Emit(5);
+            wallCollisionEffectInstance.Stop();
+            wallCollisionEffectInstance.Emit(15);
             audioSource.clip = wallCollisionSoundEffectClip;
             audioSource.Play();
         }
