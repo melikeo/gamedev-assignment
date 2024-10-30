@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Pacstudent
   - PowerPellet
+  - Pellet
+  - BonusCherry
   layers:
   - Default
   - TransparentFX
