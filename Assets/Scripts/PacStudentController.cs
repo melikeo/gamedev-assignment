@@ -306,7 +306,7 @@ public class PacStudentController : MonoBehaviour
 
             UpdateAnimatorParam(direction); // Update animation based on direction
 
-            fieldHasPellet = CheckForPellet(newTargetPosition);
+            fieldHasPellet = CheckForPellet();
             fieldHasPowerPellet = CheckForPowerPellet();
             //wallCollisionEffect.Play();
         }
@@ -413,13 +413,30 @@ public class PacStudentController : MonoBehaviour
 
 
 
-    bool CheckForPellet(Vector3Int position)
+    bool CheckForPellet()
     {
-        // get tile at position
-        TileBase tileAtPosition = GetTileAtPosition(position);
+        //change to gameobjects
+        //// get tile at position
+        //TileBase tileAtPosition = GetTileAtPosition(position);
 
-        // check if pellett tile
-        return tileAtPosition == pelletTile;
+        //// check if pellett tile
+        //return tileAtPosition == pelletTile;
+
+        GameObject[] normalPellets = GameObject.FindGameObjectsWithTag("Pellet"); //check for pellet tag to find pellet gameobjects
+
+        for (int i = 0; i < normalPellets.Length; i++)
+        {
+            Vector3 normalPelletPosition = normalPellets[i].transform.position;
+
+            if (Vector3Int.FloorToInt(normalPelletPosition) == targetGridPosition)
+            {
+                //fieldHasPowerPellet = true;
+                //break; // break for if power pellet is found
+                return true;
+            }
+        }
+        return false;
+
     }
 
     bool CheckForPowerPellet()
