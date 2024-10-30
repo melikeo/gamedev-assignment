@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,7 +13,7 @@ public class PacStudentController : MonoBehaviour
     private Vector3 startPos;
     private Vector3 targetPos;
 
-    [SerializeField] private float pacstudentMoveSpeed = 4f; //default move speed
+    [SerializeField] private float pacstudentMoveSpeed = 5f; //default move speed
 
     private bool isMoving = false;
 
@@ -50,11 +51,16 @@ public class PacStudentController : MonoBehaviour
     bool fieldHasPellet = false;
     bool fieldHasPowerPellet = false;
 
+    //----80%----
     //wall collision
     public ParticleSystem wallCollisionEffect;
     private ParticleSystem wallCollisionEffectInstance;
     bool hasCollidedWithWall = false;
     [SerializeField] AudioClip wallCollisionSoundEffectClip;
+
+    //teleporter (spawn positions)
+    [SerializeField] private Vector3 leftTunnelExitPosition; //take teleport position as input
+    [SerializeField] private Vector3 rightTunnelExitPosition;
 
 
     private void Awake()
@@ -93,6 +99,8 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        TeleportPacstudent();
+
         //wallCollisionEffectInstance.Play();
         checkLastInput();  //always check for input //check for player input for moving with W, A, S, D keys to move pacstudent
 
@@ -148,7 +156,7 @@ public class PacStudentController : MonoBehaviour
                     //dustParticleEffect.Stop();
 
                     //wallCollisionEffectInstance.Play();
-                    Debug.Log("Wall collision effect should be playing");
+                    //Debug.Log("Wall collision effect should be playing");
 
                     if (!hasCollidedWithWall)
                     {
@@ -365,13 +373,13 @@ public class PacStudentController : MonoBehaviour
 
     void PlayWallCollisionEffect()
     {
-        Debug.Log("Play wall collision");
+        //Debug.Log("Play wall collision");
         wallCollisionEffectInstance.transform.position = transform.position + (Vector3)currentDirection * 0.5f;
         
-        //effect starting from wall collision point
+        //rotation of effect to start from wall collision point
         if (currentDirection == Vector3Int.up)
         {
-            wallCollisionEffectInstance.transform.rotation = Quaternion.Euler(-90, 90, 0);  // UP
+            wallCollisionEffectInstance.transform.rotation = Quaternion.Euler(-90, 90, 0);  // pacstudent walking UP
         }
         else if (currentDirection == Vector3Int.down)
         {
@@ -396,7 +404,7 @@ public class PacStudentController : MonoBehaviour
 
     void StopWallCollisionEffect()
     {
-        Debug.Log("stop wall collision");
+        //Debug.Log("stop wall collision");
         if (wallCollisionEffectInstance.isPlaying)
         {
             wallCollisionEffectInstance.Stop();
@@ -430,6 +438,37 @@ public class PacStudentController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    // 80%
+    //teleport pacstudent when at the end of the tunnel
+    void TeleportPacstudent()
+    {
+        //if pacstudent is on the position on the left it gets teleported to the right
+
+        //entering LEFT tunnel
+        if (currentGridPosition == Vector3Int.FloorToInt(leftTunnelExitPosition))
+        {
+            //Vector3 newpos = new Vector3(6.0f, -5.5f, 0);
+            //transform.position = newpos;
+            Vector3 rightTunnelEntryPosition = new Vector3(rightTunnelExitPosition.x - 1, rightTunnelExitPosition.y, rightTunnelExitPosition.z);
+            transform.position = rightTunnelEntryPosition;
+            //Debug.Log("Teleport to right");
+            currentGridPosition = Vector3Int.FloorToInt(rightTunnelEntryPosition); //update currentGridPos
+            SetTargetPosition(currentDirection); //pacstudent continues movement to that direction
+        }
+
+        //entering RIGHT tunnel
+        else if (currentGridPosition == Vector3Int.FloorToInt(rightTunnelExitPosition))
+        {
+            //Vector3 newpos = new Vector3(6.0f, -5.5f, 0);
+            //transform.position = newpos;
+            Vector3 leftTunnelEntryPosition = new Vector3(leftTunnelExitPosition.x + 1, leftTunnelExitPosition.y, leftTunnelExitPosition.z);
+            transform.position = leftTunnelEntryPosition;
+            //Debug.Log("Teleport to left");
+            currentGridPosition = Vector3Int.FloorToInt(leftTunnelEntryPosition); //update currentGridPos
+            SetTargetPosition(currentDirection);
+        }
     }
 
     void UpdateAnimatorParam(Vector3Int direction)

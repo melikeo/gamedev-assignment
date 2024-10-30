@@ -4194,7 +4194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719dfc21fbdba2e4c9876cc2b828a145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pacstudentMoveSpeed: 4
+  pacstudentMoveSpeed: 5
   topLeftTilemap: {fileID: 511559288}
   topRightTilemap: {fileID: 1545486786}
   bottomLeftTilemap: {fileID: 1378761419}
@@ -4214,6 +4214,8 @@ MonoBehaviour:
   pelletTile: {fileID: 11400000, guid: 95e9d64bdb5e1574db2f630c19bb9144, type: 2}
   wallCollisionEffect: {fileID: 4876563743236962601, guid: 0004547850063574a9d526aba7c140ce, type: 3}
   wallCollisionSoundEffectClip: {fileID: 8300000, guid: ac3d9436e30af3c44be728f03f6bd852, type: 3}
+  leftTunnelExitPosition: {x: -20, y: -5.5, z: 0}
+  rightTunnelExitPosition: {x: 7, y: -5.5, z: 0}
 --- !u!1 &1198173935
 GameObject:
   m_ObjectHideFlags: 0
