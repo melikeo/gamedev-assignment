@@ -42,7 +42,7 @@ public class Collisions : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Pellet"))
         {
-            Debug.Log("Pellet passed!");
+            //Debug.Log("Pellet passed!");
             score += 10;
             Destroy(collision.gameObject);
             UpdateScoreText();
