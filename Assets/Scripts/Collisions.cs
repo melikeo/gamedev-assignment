@@ -12,7 +12,7 @@ public class Collisions : MonoBehaviour
     private int score = 0; //init score
     public TMP_Text scoreText; // UI text field for score
 
-    private bool GhostIsScared;
+    private bool ghostIsScared;
     public TMP_Text ghostTimerText;
     private float scaredTimer; //timer for 10 seconds
 
@@ -32,17 +32,17 @@ public class Collisions : MonoBehaviour
         UpdateScoreText();
         ghostTimerText.gameObject.SetActive(false);
 
-        foreach (var animator in ghostAnimators)
-        {
-            animator.SetBool("walkingUp", true); // setting initial state to true
-        }
+        //foreach (var animator in ghostAnimators)
+        //{
+        //    animator.SetBool("walkingUp", true); // setting initial state to true
+        //}
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GhostIsScared)
+        if(ghostIsScared)
         {
             StartGhostScaredTimer();
         }
@@ -95,6 +95,8 @@ public class Collisions : MonoBehaviour
         }
     }
 
+
+    // Ghost is walking -> Collision -> Pacstudent dies
     private void PacStudentDeathReaction()
     {
         // TODO:
@@ -121,11 +123,10 @@ public class Collisions : MonoBehaviour
 
         if (currentLives > 0)
         {
-            Debug.Log("weiter gehts");
-            
+            Debug.Log("weiter gehts");            
         }
 
-        else
+        else if (currentLives <= 0)
         {
             Debug.Log("game over");
         }
@@ -147,8 +148,7 @@ public class Collisions : MonoBehaviour
         else if (currentLives == 0)
         {
             Life1.SetActive(false);
-        }
-            
+        }            
     }
 
 
@@ -165,17 +165,30 @@ public class Collisions : MonoBehaviour
         scoreText.text = score.ToString();
     }
 
+
     void StartScaredState()
     {
-        GhostIsScared = true;
+        if (ghostIsScared)
+        {
+            //restart timer if ghost is already scared and new collision
+            scaredTimer = 10.0f;
+            ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();
+            return; //exit because ghost is already scared
+        }
+            
+
+        //ghostIsScared = true;
         scaredTimer = 10.0f;
         ghostTimerText.gameObject.SetActive(true);
+        ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();
 
         //set ghost animator state to "scared" (all ghosts)
         foreach (var animator in ghostAnimators)
         {
             animator.SetTrigger("TriggerScared");
         }
+        ghostIsScared = true;
+        Debug.Log("Ghosts are scared right now.");
     }
 
     void StartGhostScaredTimer()
@@ -189,27 +202,28 @@ public class Collisions : MonoBehaviour
             foreach (var animator in ghostAnimators)
             {
                 animator.SetTrigger("TriggerRecovering");
+                Debug.Log("Ghosts going into recovering state.");
             }
         }
         //after 10 seconds passed
-        else if (scaredTimer <= 0)
+        if (scaredTimer <= 0)
         {
             EndGhostScaredState();
         }
     }
 
+
     // ADD AUDIOOOO!!!!!
     void EndGhostScaredState()
     {
-        GhostIsScared = false;
-        ghostTimerText.gameObject.SetActive(false);
+        ghostIsScared = false; //reset state
+        ghostTimerText.gameObject.SetActive(false); //hide timer
         foreach (var animator in ghostAnimators)
         {
             animator.SetBool("walkingUp", true);
+            animator.ResetTrigger("TriggerScared");
+            animator.ResetTrigger("TriggerRecovering");
         }
+        Debug.Log("Ghosts are in walking state now.");
     }
-
-
-
-
 }
