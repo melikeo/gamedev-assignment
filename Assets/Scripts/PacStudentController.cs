@@ -62,6 +62,8 @@ public class PacStudentController : MonoBehaviour
     [SerializeField] private Vector3 leftTunnelExitPosition; //take teleport position as input
     [SerializeField] private Vector3 rightTunnelExitPosition;
 
+    public Animator pacStudentAnimator; // PacStudent animator
+
 
     private void Awake()
     {
@@ -99,76 +101,82 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TeleportPacstudent();
+        CheckForPacstudentDeath();
 
-        //wallCollisionEffectInstance.Play();
-        checkLastInput();  //always check for input //check for player input for moving with W, A, S, D keys to move pacstudent
-
-        if (!isMoving)
+        if (!pacStudentAnimator.GetBool("isDead"))
         {
-            //setTargetPosition(currentDirection); //continue moving in currentDirection
+            TeleportPacstudent();
 
-            // move to direction of lastInput
-            Vector3Int directionFromLastInput = getDirectionFromInput(lastInput);
+           
+            //wallCollisionEffectInstance.Play();
+            checkLastInput();  //always check for input //check for player input for moving with W, A, S, D keys to move pacstudent
 
-            // check if walkable
-            if (IsWalkable(currentGridPosition + directionFromLastInput))
+            if (!isMoving)
             {
-                currentDirection = directionFromLastInput;
-                currentInput = lastInput;  // set currentInput to lastInput - if is walkable store lastInput in currentInput
-                SetTargetPosition(currentDirection);
+                //setTargetPosition(currentDirection); //continue moving in currentDirection
 
-                if (inputReceived)
+                // move to direction of lastInput
+                Vector3Int directionFromLastInput = getDirectionFromInput(lastInput);
+
+                // check if walkable
+                if (IsWalkable(currentGridPosition + directionFromLastInput))
                 {
-                    PlayDustParticleEffect();
-                }
-                //dustParticleEffect.Play();
-
-                StopWallCollisionEffect(); // stop effect in case it plays
-                hasCollidedWithWall = false;
-
-            }
-            else
-            {
-                Vector3Int directionFromCurrentInput = getDirectionFromInput(currentInput); //if last input is blocked, continue movement
-
-                if (IsWalkable(currentGridPosition + directionFromCurrentInput))
-                {
-                    currentDirection = directionFromCurrentInput;
+                    currentDirection = directionFromLastInput;
+                    currentInput = lastInput;  // set currentInput to lastInput - if is walkable store lastInput in currentInput
                     SetTargetPosition(currentDirection);
 
                     if (inputReceived)
                     {
                         PlayDustParticleEffect();
                     }
+                    //dustParticleEffect.Play();
 
-                    StopWallCollisionEffect();
+                    StopWallCollisionEffect(); // stop effect in case it plays
                     hasCollidedWithWall = false;
 
-                    //dustParticleEffect.Play();
                 }
                 else
                 {
-                    //Debug.Log("PacStudent is blocked in both directions.");
+                    Vector3Int directionFromCurrentInput = getDirectionFromInput(currentInput); //if last input is blocked, continue movement
 
-                    StopDustParticleEffect();
-
-                    //dustParticleEffect.Stop();
-
-                    //wallCollisionEffectInstance.Play();
-                    //Debug.Log("Wall collision effect should be playing");
-
-                    if (!hasCollidedWithWall)
+                    if (IsWalkable(currentGridPosition + directionFromCurrentInput))
                     {
-                        PlayWallCollisionEffect();
-                        hasCollidedWithWall = true;
+                        currentDirection = directionFromCurrentInput;
+                        SetTargetPosition(currentDirection);
+
+                        if (inputReceived)
+                        {
+                            PlayDustParticleEffect();
+                        }
+
+                        StopWallCollisionEffect();
+                        hasCollidedWithWall = false;
+
+                        //dustParticleEffect.Play();
+                    }
+                    else
+                    {
+                        //Debug.Log("PacStudent is blocked in both directions.");
+
+                        StopDustParticleEffect();
+
+                        //dustParticleEffect.Stop();
+
+                        //wallCollisionEffectInstance.Play();
+                        //Debug.Log("Wall collision effect should be playing");
+
+                        if (!hasCollidedWithWall)
+                        {
+                            PlayWallCollisionEffect();
+                            hasCollidedWithWall = true;
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            MoveTowardsTarget(); //continue moving towards target
+            else
+            {
+                MoveTowardsTarget(); //continue moving towards target
+            }
         }
     }
 
@@ -493,6 +501,23 @@ public class PacStudentController : MonoBehaviour
             //Debug.Log("Teleport to left");
             currentGridPosition = Vector3Int.FloorToInt(leftTunnelEntryPosition); //update currentGridPos
             SetTargetPosition(currentDirection);
+        }
+    }
+
+    void CheckForPacstudentDeath()
+    {
+        //Debug.Log("sdfafhhsghsj");
+        if (pacStudentAnimator.GetBool("isDead"))
+        {
+            Debug.Log("should RESPAAWWNNNN");
+            Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
+            //transform.position = restartPos; // respawn at start position
+            currentGridPosition = Vector3Int.FloorToInt(restartPos);
+            isMoving = false;
+            lastInput = KeyCode.None; // stop pacstudent from moving and wait for input
+            currentInput = KeyCode.None;
+            //animator.SetBool("isDead", false);
+            UpdateAnimatorParam(Vector3Int.right);
         }
     }
 

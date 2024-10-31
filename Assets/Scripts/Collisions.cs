@@ -17,6 +17,13 @@ public class Collisions : MonoBehaviour
     private float scaredTimer; //timer for 10 seconds
 
     public Animator[] ghostAnimators; // to include every ghost animator
+    public Animator pacStudentAnimator; // PacStudent animator
+
+    private int currentLives = 3; //inital number of lives 3
+    public GameObject Life1, Life2, Life3; //input 3 life gameobjects (hearts)
+
+    //PacStudent Controller (for movement)
+    public PacStudentController pacStudent;
 
 
     // Start is called before the first frame update
@@ -24,7 +31,12 @@ public class Collisions : MonoBehaviour
     {
         UpdateScoreText();
         ghostTimerText.gameObject.SetActive(false);
-        
+
+        foreach (var animator in ghostAnimators)
+        {
+            animator.SetBool("walkingUp", true); // setting initial state to true
+        }
+
     }
 
     // Update is called once per frame
@@ -49,21 +61,31 @@ public class Collisions : MonoBehaviour
             UpdateScoreText();
         }
 
-        //if (collision.gameObject.CompareTag("BonusCherry")) //Need to fix the error when destroyed
-        //{
-        //    Debug.Log("BonusCherry passed!");
-        //    score += 100;
-        //    Destroy(collision.gameObject);
-        //    UpdateScoreText();
-        //}
+        if (collision.gameObject.CompareTag("BonusCherry"))
+        {
+            //Debug.Log("BonusCherry passed!");
+            score += 100;
+            Destroy(collision.gameObject);
+            UpdateScoreText();
+        }
 
         if (collision.gameObject.CompareTag("PowerPellet"))
         {
             //Debug.Log("PowerPellet passed!");
-            score += 100;
+            //score += 50; //assumption: points should be added, points based on original pacman game
             Destroy(collision.gameObject);
             UpdateScoreText();
             StartScaredState();
+        }
+
+        // Ghosts - walking state
+        // PacStudent collides with a Ghost in walking state
+        if(collision.gameObject.CompareTag("Ghost")) {
+            Animator ghostAnimator = collision.GetComponent<Animator>();
+            if (ghostAnimator != null && IsGhostWalking(ghostAnimator)) //if ghost is in walking state & collision with pacstudent -> pacstudent death
+            {
+                PacStudentDeathReaction();
+            }
         }
 
 
@@ -71,6 +93,71 @@ public class Collisions : MonoBehaviour
         { 
             //Debug.Log("no collision");
         }
+    }
+
+    private void PacStudentDeathReaction()
+    {
+        // TODO:
+        //lose life
+        // particle effect
+        // respawn
+
+        Debug.Log("pacstudent died");
+
+        pacStudentAnimator.SetBool("isDead", true);
+        //particle effekt
+        currentLives -= 1;
+        UpdateHeartsUI(); //reduce number of hearts on Game Screen
+        
+        //animation should play here
+        //respawn should only happen after animation has been played //wait!
+
+
+        Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
+        transform.position = restartPos; // respawn at start position
+        Debug.Log("did dead animation play?");
+        pacStudentAnimator.SetBool("isDead", false);
+
+
+        if (currentLives > 0)
+        {
+            Debug.Log("weiter gehts");
+            
+        }
+
+        else
+        {
+            Debug.Log("game over");
+        }
+
+
+    }
+
+    void UpdateHeartsUI() //reduce number of hearts at collisions
+    {
+        if (currentLives == 2)
+        {
+            Life3.SetActive(false);
+        }
+        else if (currentLives == 1)
+        {
+            Life2.SetActive(false);
+        }
+            
+        else if (currentLives == 0)
+        {
+            Life1.SetActive(false);
+        }
+            
+    }
+
+
+    private bool IsGhostWalking(Animator ghostAnimator)
+    {
+        return ghostAnimator.GetBool("walkingLeft") ||
+               ghostAnimator.GetBool("walkingRight") ||
+               ghostAnimator.GetBool("walkingUp") ||
+               ghostAnimator.GetBool("walkingDown");
     }
 
     void UpdateScoreText() //update high score
@@ -89,8 +176,6 @@ public class Collisions : MonoBehaviour
         {
             animator.SetTrigger("TriggerScared");
         }
-
-
     }
 
     void StartGhostScaredTimer()

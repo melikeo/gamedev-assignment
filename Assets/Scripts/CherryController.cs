@@ -47,6 +47,7 @@ public class CherryController : MonoBehaviour
 
     IEnumerator MoveCherry(GameObject cherry, Vector3 spawnPosition) // Move cherry across the map in 2 parts
     {
+        if (cherry == null) yield break;
         Vector3 startPos = spawnPosition;
         Vector3 targetPos = cameraCenter; //first part: move to center
 
@@ -55,6 +56,8 @@ public class CherryController : MonoBehaviour
         // Move cherry to center
         while( t < 1.0f )
         {
+            if (cherry == null) yield break;
+
             t += Time.deltaTime * (moveSpeed/Vector3.Distance(startPos, targetPos));
             //cherry.transform.position = Vector3.Lerp(cherry.transform.position, cameraCenter, t); //LERP to center
             cherry.transform.position = Vector3.Lerp(startPos, targetPos, t); // LERP to center
@@ -69,6 +72,8 @@ public class CherryController : MonoBehaviour
 
         while ( t < 1.0f )
         {
+            if (cherry == null) yield break;
+
             t += Time.deltaTime * (moveSpeed / Vector3.Distance(startPos, targetPos));
             cherry.transform.position = Vector3.Lerp(startPos, targetPos, t); // LERP to target at diagonal
             yield return null;

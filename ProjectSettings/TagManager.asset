@@ -8,6 +8,8 @@ TagManager:
   - PowerPellet
   - Pellet
   - BonusCherry
+  - Ghost
+  - Life
   layers:
   - Default
   - TransparentFX
