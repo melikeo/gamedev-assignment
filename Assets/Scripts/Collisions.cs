@@ -12,27 +12,28 @@ public class Collisions : MonoBehaviour
     private int score = 0; //init score
     public TMP_Text scoreText; // UI text field for score
 
-    ////for pellet collision
-    //// Tilemaps for each section of the map
-    //[SerializeField] private Tilemap topLeftTilemap; // top-left section of the map
-    //[SerializeField] private Tilemap topRightTilemap; // top-right section of the map
-    //[SerializeField] private Tilemap bottomLeftTilemap; // bottom-left section of the map
-    //[SerializeField] private Tilemap bottomRightTilemap; // bottom-right section of the map
+    private bool GhostIsScared;
+    public TMP_Text ghostTimerText;
+    private float scaredTimer; //timer for 10 seconds
 
-    //public Tile pelletTile;
-
+    public Animator[] ghostAnimators; // to include every ghost animator
 
 
     // Start is called before the first frame update
     void Start()
     {
         UpdateScoreText();
+        ghostTimerText.gameObject.SetActive(false);
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(GhostIsScared)
+        {
+            StartGhostScaredTimer();
+        }
         
     }
 
@@ -62,6 +63,7 @@ public class Collisions : MonoBehaviour
             score += 100;
             Destroy(collision.gameObject);
             UpdateScoreText();
+            StartScaredState();
         }
 
 
@@ -73,8 +75,56 @@ public class Collisions : MonoBehaviour
 
     void UpdateScoreText() //update high score
     {
-        scoreText.text = "Score: " + score;
+        scoreText.text = score.ToString();
     }
+
+    void StartScaredState()
+    {
+        GhostIsScared = true;
+        scaredTimer = 10.0f;
+        ghostTimerText.gameObject.SetActive(true);
+
+        //set ghost animator state to "scared" (all ghosts)
+        foreach (var animator in ghostAnimators)
+        {
+            animator.SetTrigger("TriggerScared");
+        }
+
+
+    }
+
+    void StartGhostScaredTimer()
+    {
+        scaredTimer -= Time.deltaTime;
+        ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();
+
+        //3 seconds left on timer -> ghosts go in recovering state
+        if (scaredTimer <= 3.0f && scaredTimer > 0)
+        {
+            foreach (var animator in ghostAnimators)
+            {
+                animator.SetTrigger("TriggerRecovering");
+            }
+        }
+        //after 10 seconds passed
+        else if (scaredTimer <= 0)
+        {
+            EndGhostScaredState();
+        }
+    }
+
+    // ADD AUDIOOOO!!!!!
+    void EndGhostScaredState()
+    {
+        GhostIsScared = false;
+        ghostTimerText.gameObject.SetActive(false);
+        foreach (var animator in ghostAnimators)
+        {
+            animator.SetBool("walkingUp", true);
+        }
+    }
+
+
 
 
 }
