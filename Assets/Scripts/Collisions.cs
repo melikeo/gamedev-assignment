@@ -25,6 +25,8 @@ public class Collisions : MonoBehaviour
     //PacStudent Controller (for movement)
     public PacStudentController pacStudent;
 
+    private CountdownManager countdownManager;
+    public TMP_Text gameOverText;
 
     // Start is called before the first frame update
     void Start()
@@ -32,10 +34,13 @@ public class Collisions : MonoBehaviour
         UpdateScoreText();
         ghostTimerText.gameObject.SetActive(false);
 
-        //foreach (var animator in ghostAnimators)
-        //{
-        //    animator.SetBool("walkingUp", true); // setting initial state to true
-        //}
+        foreach (var animator in ghostAnimators)
+        {
+            animator.SetBool("walkingUp", true); // setting initial state to true
+        }
+
+        countdownManager = Object.FindFirstObjectByType<CountdownManager>(); // find CountdownManager.cs file
+        gameOverText.gameObject.SetActive(false);
 
     }
 
@@ -45,6 +50,11 @@ public class Collisions : MonoBehaviour
         if(ghostIsScared)
         {
             StartGhostScaredTimer();
+        }
+
+        if(currentLives<=0) //add if all pellets are eaten!
+        {
+            GameOver();
         }
         
     }
@@ -148,6 +158,7 @@ public class Collisions : MonoBehaviour
         else if (currentLives == 0)
         {
             Life1.SetActive(false);
+            //GameOver();
         }            
     }
 
@@ -226,4 +237,49 @@ public class Collisions : MonoBehaviour
         }
         Debug.Log("Ghosts are in walking state now.");
     }
+
+    //saving Highscore after GameOver (all pellets eaten or no lives left)
+    void GameOver()
+    {
+        Debug.Log("Game is over.");
+        // Stop Game
+        pacStudent.GetComponent<PacStudentController>().enabled = false; //stop player movement
+        foreach (var animator in ghostAnimators) // stop ghosts
+        {
+            animator.enabled = false; //TBA
+        }
+
+        //pause Game Timer
+        countdownManager.StopTimer();
+        
+        // Save Highscore
+        SaveHighscore();
+
+        // Show Game Over Text
+        gameOverText.gameObject.SetActive(true);
+
+        // Return to Startscene (with updated Highscore)
+        StartCoroutine(ReturnToStartScene());
+
+    }
+
+    void SaveHighscore()
+    {
+        int highScore = PlayerPrefs.GetInt("HighScore", 0); // load saved highscore (if nothing saved use 0)
+        float bestTime = PlayerPrefs.GetFloat("HighScoreTime", float.MaxValue); // load highscore time (if nothing saved load highscore max)
+
+        if (score > highScore || (score == highScore && countdownManager.elapsedTime < bestTime))
+        {
+            PlayerPrefs.SetInt("HighScore", score); // save new highscore
+            PlayerPrefs.SetFloat("HighScoreTime", countdownManager.elapsedTime); // save new best time
+            Debug.Log("New highscore: " + score + " time: " + countdownManager.elapsedTime);
+        }
+    }
+    IEnumerator ReturnToStartScene()
+    {
+        yield return new WaitForSeconds(3);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("StartScene");
+        gameOverText.gameObject.SetActive(false);
+    }
+
 }

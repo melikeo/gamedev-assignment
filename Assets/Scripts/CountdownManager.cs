@@ -8,6 +8,10 @@ public class CountdownManager : MonoBehaviour
     public GameObject pacStudent; // Pacstudent
     public GameObject[] ghosts; // array for ghost objects
     public AudioManager audioManager; // referring to AudioManager object
+    public TMP_Text gameTimer; //general game timer
+
+    public float elapsedTime = 0f; // overall passed time in seconds
+    private bool isGameActive = false;
 
     private void Start()
     {
@@ -15,7 +19,16 @@ public class CountdownManager : MonoBehaviour
         StartCoroutine(ShowCountdown());
     }
 
-    private IEnumerator ShowCountdown()
+    private void Update()
+    {
+        if (isGameActive)
+        {
+            elapsedTime += Time.deltaTime;
+            UpdateGameTimer(); // update game timer
+        }
+    }
+
+    private IEnumerator ShowCountdown() //Show 3,2,1,GO! countdown
     {        
         DisableMovement(); //disable pacstudent and ghost movement while countdown is shown
 
@@ -39,7 +52,7 @@ public class CountdownManager : MonoBehaviour
 
     private void DisableMovement()
     {
-        pacStudent.GetComponent<PacStudentController>().enabled = false; // deactivate
+        pacStudent.GetComponent<PacStudentController>().enabled = false; // deactivate pacstudent movement
         foreach (var ghost in ghosts)
         {
             //ghost.GetComponent<GhostMovement>().enabled = false; // TBA for ghost movement
@@ -48,11 +61,12 @@ public class CountdownManager : MonoBehaviour
 
     private void EnableMovement()
     {
-        pacStudent.GetComponent<PacStudentController>().enabled = true; // Spielerbewegung aktivieren
+        pacStudent.GetComponent<PacStudentController>().enabled = true; // activate pacstudent movement
         foreach (var ghost in ghosts)
         {
-            //ghost.GetComponent<GhostMovement>().enabled = true; // Geisterbewegung aktivieren
+            //ghost.GetComponent<GhostMovement>().enabled = true; // activate ghost movement
         }
+        isGameActive = true; //set game to active to start the Game Timer
     }
 
     private void PlayBackgroundMusic()
@@ -61,5 +75,19 @@ public class CountdownManager : MonoBehaviour
         {
             audioManager.backgroundMusicSource.Play();
         }
+    }
+
+    private void UpdateGameTimer()
+    {
+        int minutes = Mathf.FloorToInt(elapsedTime / 60); //converting to minutes
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+        int milliseconds = Mathf.FloorToInt((elapsedTime - Mathf.Floor(elapsedTime)) * 100);
+
+        gameTimer.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds); //display time
+    }
+
+    public void StopTimer()
+    {
+        isGameActive = false; //to reference to from collisions.cs to stop the timer
     }
 }
