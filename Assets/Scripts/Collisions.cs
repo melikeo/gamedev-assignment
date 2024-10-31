@@ -52,11 +52,23 @@ public class Collisions : MonoBehaviour
             StartGhostScaredTimer();
         }
 
-        if(currentLives<=0) //add if all pellets are eaten!
+        if(currentLives<=0 || NoRemainingPellets()) //add if all pellets are eaten!
         {
             GameOver();
         }
+
         
+    }
+
+    bool NoRemainingPellets()
+    {
+        GameObject[] pellets = GameObject.FindGameObjectsWithTag("Pellet"); // array with all pellets
+        GameObject[] powerPellets = GameObject.FindGameObjectsWithTag("PowerPellet");
+                
+        //if ( pellets.Length == 1) { Debug.Log($"Last Pellet found: {pellets[0].name} at: {pellets[0].transform.position}"); }
+
+        // true if no pellets (including powerpellets) are left
+        return pellets.Length == 0 && powerPellets.Length == 0;
     }
 
 
@@ -281,5 +293,4 @@ public class Collisions : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("StartScene");
         gameOverText.gameObject.SetActive(false);
     }
-
 }

@@ -32,6 +32,10 @@ public class CountdownManager : MonoBehaviour
     {        
         DisableMovement(); //disable pacstudent and ghost movement while countdown is shown
 
+        //reset timer
+        elapsedTime = 0;
+        UpdateGameTimer();
+
         countdownText.gameObject.SetActive(true); // show countdown text box
 
         // countdown starting from 3 to 1
