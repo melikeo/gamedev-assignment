@@ -15,6 +15,9 @@ public class Collisions : MonoBehaviour
     private bool ghostIsScared;
     public TMP_Text ghostTimerText;
     private float scaredTimer; //timer for 10 seconds
+    private bool ghostIsRecovering;
+
+    private float ghostDiesTimer; // Timer for 5 seconds
 
     public Animator[] ghostAnimators; // to include every ghost animator
     public Animator pacStudentAnimator; // PacStudent animator
@@ -34,10 +37,10 @@ public class Collisions : MonoBehaviour
         UpdateScoreText();
         ghostTimerText.gameObject.SetActive(false);
 
-        foreach (var animator in ghostAnimators)
-        {
-            animator.SetBool("walkingUp", true); // setting initial state to true
-        }
+        //foreach (var animator in ghostAnimators)
+        //{
+        //    animator.SetBool("walkingUp", true); // setting initial state to true
+        //}
 
         countdownManager = Object.FindFirstObjectByType<CountdownManager>(); // find CountdownManager.cs file
         gameOverText.gameObject.SetActive(false);
@@ -47,17 +50,21 @@ public class Collisions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(ghostIsScared)
+        if (ghostIsScared)
         {
             StartGhostScaredTimer();
         }
 
-        if(currentLives<=0 || NoRemainingPellets()) //add if all pellets are eaten!
+        if (currentLives<=0 || NoRemainingPellets()) // Game Over if no lives or pellets left
         {
             GameOver();
         }
 
-        
+        //if (ghostIsRecovering || ghostIsDying) // to keep the state
+        //{            
+        //    return;
+        //}
+
     }
 
     bool NoRemainingPellets()
@@ -100,16 +107,23 @@ public class Collisions : MonoBehaviour
             StartScaredState();
         }
 
-        // Ghosts - walking state
-        // PacStudent collides with a Ghost in walking state
+        // PACSTUDENT & GHOSTS COLLISIONS
         if(collision.gameObject.CompareTag("Ghost")) {
             Animator ghostAnimator = collision.GetComponent<Animator>();
-            if (ghostAnimator != null && IsGhostWalking(ghostAnimator)) //if ghost is in walking state & collision with pacstudent -> pacstudent death
+            if(ghostAnimator != null)
             {
-                PacStudentDeathReaction();
+               if( ghostIsScared || ghostIsRecovering )
+                {
+                    StartCoroutine(GhostDeathReaction(ghostAnimator));
+                    //GhostDeathReaction(ghostAnimator);
+                }
+               
+               else if(IsGhostWalking(ghostAnimator)) // B - if ghost is in walking state & collision with pacstudent -> pacstudent death
+                {
+                    PacStudentDeathReaction();
+                }
             }
         }
-
 
         else 
         { 
@@ -174,6 +188,53 @@ public class Collisions : MonoBehaviour
         }            
     }
 
+    IEnumerator GhostDeathReaction(Animator ghostAnimator)
+    {
+        ghostAnimator.SetTrigger("TriggerDead"); //transition to dead state
+        Debug.Log("Ghosts is in dead state.");
+
+        score += 300; //add 300 points to score
+        UpdateScoreText(); //update highscore
+
+        yield return new WaitForSeconds(5.0f); // wait for 5 seconds
+
+        //transition back to walking state (reset state)
+        ghostAnimator.ResetTrigger("TriggerDead");
+        ghostAnimator.SetBool("walkingUp", true);
+        Debug.Log("Ghosts is in walking state.");
+
+    }
+
+    //void GhostDeathReaction()
+    //{
+    //    foreach (var animator in ghostAnimators)
+    //    {
+    //        animator.SetTrigger("TriggerDead");
+    //        Debug.Log("Ghosts are in Dead State.");
+    //        score += 300; //add 300 points to score
+    //        UpdateScoreText(); //update highscore
+
+    //        StartGhostDiesTimer(); //start 5 second timer then go to walking state
+    //    }
+
+    //}
+
+    //void StartGhostDiesTimer()
+    //{
+    //    ghostDiesTimer = 5.0f;
+    //    //ghostDiesTimer -= Time.deltaTime;
+
+    //    //after 5 seconds passed
+    //    if (scaredTimer <= 0)
+    //    {
+    //        foreach (var animator in ghostAnimators) //transition back to walking state (reset state)
+    //        {
+    //            animator.ResetTrigger("TriggerDead");
+    //            Debug.Log("Ghosts going into walking state.");
+    //        }
+
+    //    }
+    //}
 
     private bool IsGhostWalking(Animator ghostAnimator)
     {
@@ -195,10 +256,10 @@ public class Collisions : MonoBehaviour
         {
             //restart timer if ghost is already scared and new collision
             scaredTimer = 10.0f;
-            ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();
+            ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();            
             return; //exit because ghost is already scared
         }
-            
+
 
         //ghostIsScared = true;
         scaredTimer = 10.0f;
@@ -211,11 +272,14 @@ public class Collisions : MonoBehaviour
             animator.SetTrigger("TriggerScared");
         }
         ghostIsScared = true;
+        ghostIsRecovering = false;
         Debug.Log("Ghosts are scared right now.");
     }
 
     void StartGhostScaredTimer()
     {
+        if (!ghostIsScared) return; //only change state if ghost is in scared
+
         scaredTimer -= Time.deltaTime;
         ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();
 
@@ -227,10 +291,13 @@ public class Collisions : MonoBehaviour
                 animator.SetTrigger("TriggerRecovering");
                 Debug.Log("Ghosts going into recovering state.");
             }
+            ghostIsRecovering = true;
+            Debug.Log("3 seconds if is left");
         }
         //after 10 seconds passed
         if (scaredTimer <= 0)
         {
+            Debug.Log("10 seconds passed is entered");
             EndGhostScaredState();
         }
     }
@@ -240,6 +307,7 @@ public class Collisions : MonoBehaviour
     void EndGhostScaredState()
     {
         ghostIsScared = false; //reset state
+        ghostIsRecovering = false;
         ghostTimerText.gameObject.SetActive(false); //hide timer
         foreach (var animator in ghostAnimators)
         {
