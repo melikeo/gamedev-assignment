@@ -11621,6 +11621,7 @@ MonoBehaviour:
   Life3: {fileID: 135183393}
   pacStudent: {fileID: 1137233645}
   gameOverText: {fileID: 1694350789}
+  pacstudentDeathEffect: {fileID: 3207262169280895671, guid: 696b5077c6d75b644ac633c0ab679300, type: 3}
 --- !u!1001 &1145637890
 PrefabInstance:
   m_ObjectHideFlags: 0

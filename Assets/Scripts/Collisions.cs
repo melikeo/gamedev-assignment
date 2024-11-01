@@ -31,16 +31,27 @@ public class Collisions : MonoBehaviour
     private CountdownManager countdownManager;
     public TMP_Text gameOverText;
 
+    // Pacstudent Death Particle Effect
+    public ParticleSystem pacstudentDeathEffect;
+    private ParticleSystem pacstudentDeathEffectInstance;
+
+    private void Awake()
+    {
+        pacstudentDeathEffectInstance = Instantiate(pacstudentDeathEffect, transform.position, Quaternion.identity); //instantiate wall collision effect
+        pacstudentDeathEffectInstance.transform.SetParent(transform); //set wall collision effect as child of pacstudent to place it at pacstudent
+        pacstudentDeathEffectInstance.Stop(); //stop so it does not play automatically
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         UpdateScoreText();
         ghostTimerText.gameObject.SetActive(false);
 
-        //foreach (var animator in ghostAnimators)
-        //{
-        //    animator.SetBool("walkingUp", true); // setting initial state to true
-        //}
+        foreach (var animator in ghostAnimators)
+        {
+            animator.SetBool("walkingUp", true); // setting initial state to true
+        }
 
         countdownManager = Object.FindFirstObjectByType<CountdownManager>(); // find CountdownManager.cs file
         gameOverText.gameObject.SetActive(false);
@@ -118,9 +129,9 @@ public class Collisions : MonoBehaviour
                     //GhostDeathReaction(ghostAnimator);
                 }
                
-               else if(IsGhostWalking(ghostAnimator)) // B - if ghost is in walking state & collision with pacstudent -> pacstudent death
+               else if(IsGhostWalking(ghostAnimator) && (!ghostIsScared) && (!ghostIsRecovering)) // B - if ghost is in walking state & collision with pacstudent -> pacstudent death
                 {
-                    PacStudentDeathReaction();
+                    StartCoroutine(PacStudentDeathReaction());
                 }
             }
         }
@@ -133,28 +144,34 @@ public class Collisions : MonoBehaviour
 
 
     // Ghost is walking -> Collision -> Pacstudent dies
-    private void PacStudentDeathReaction()
+    IEnumerator PacStudentDeathReaction()
     {
         // TODO:
-        //lose life
+
         // particle effect
-        // respawn
 
         Debug.Log("pacstudent died");
 
         pacStudentAnimator.SetBool("isDead", true);
-        //particle effekt
+
+        pacstudentDeathEffectInstance.Play();
+
+        yield return new WaitForSeconds(2.0f); //wait until animation is played / can change number for longer animation
+
+        pacStudentAnimator.SetBool("isDead", false);
+        pacstudentDeathEffectInstance.Stop();
+
+
         currentLives -= 1;
         UpdateHeartsUI(); //reduce number of hearts on Game Screen
-        
-        //animation should play here
+      
+
         //respawn should only happen after animation has been played //wait!
 
-
-        Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
-        transform.position = restartPos; // respawn at start position
+        //Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
+        //transform.position = restartPos; // respawn at start position
+        
         Debug.Log("did dead animation play?");
-        pacStudentAnimator.SetBool("isDead", false);
 
 
         if (currentLives > 0)
