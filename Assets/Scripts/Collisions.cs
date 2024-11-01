@@ -104,7 +104,7 @@ public class Collisions : MonoBehaviour
             //score += 50; //assumption: points should be added, points based on original pacman game
             Destroy(collision.gameObject);
             UpdateScoreText();
-            StartScaredState();
+            StartScaredState(); // A - Pacstudent eats powerpellet -> Ghost scared & recovering state
         }
 
         // PACSTUDENT & GHOSTS COLLISIONS
@@ -112,7 +112,7 @@ public class Collisions : MonoBehaviour
             Animator ghostAnimator = collision.GetComponent<Animator>();
             if(ghostAnimator != null)
             {
-               if( ghostIsScared || ghostIsRecovering )
+               if( ghostIsScared || ghostIsRecovering ) // C - if ghost is scare/recovering & collision with pacstudent -> ghost death
                 {
                     StartCoroutine(GhostDeathReaction(ghostAnimator));
                     //GhostDeathReaction(ghostAnimator);
@@ -272,7 +272,6 @@ public class Collisions : MonoBehaviour
             animator.SetBool("Scared", true);
         }
         ghostIsScared = true;
-        ghostIsRecovering = false;
         Debug.Log("Ghosts are scared right now.");
     }
 
