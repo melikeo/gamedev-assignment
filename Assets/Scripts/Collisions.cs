@@ -190,7 +190,7 @@ public class Collisions : MonoBehaviour
 
     IEnumerator GhostDeathReaction(Animator ghostAnimator)
     {
-        ghostAnimator.SetTrigger("TriggerDead"); //transition to dead state
+        //ghostAnimator.SetTrigger("TriggerDead"); //transition to dead state
         Debug.Log("Ghosts is in dead state.");
 
         score += 300; //add 300 points to score
@@ -199,7 +199,7 @@ public class Collisions : MonoBehaviour
         yield return new WaitForSeconds(5.0f); // wait for 5 seconds
 
         //transition back to walking state (reset state)
-        ghostAnimator.ResetTrigger("TriggerDead");
+        //ghostAnimator.ResetTrigger("TriggerDead");
         ghostAnimator.SetBool("walkingUp", true);
         Debug.Log("Ghosts is in walking state.");
 
@@ -268,8 +268,8 @@ public class Collisions : MonoBehaviour
 
         //set ghost animator state to "scared" (all ghosts)
         foreach (var animator in ghostAnimators)
-        {
-            animator.SetTrigger("TriggerScared");
+        {            
+            animator.SetBool("Scared", true);
         }
         ghostIsScared = true;
         ghostIsRecovering = false;
@@ -288,7 +288,8 @@ public class Collisions : MonoBehaviour
         {
             foreach (var animator in ghostAnimators)
             {
-                animator.SetTrigger("TriggerRecovering");
+                animator.SetBool("Scared", false);
+                animator.SetBool("Recovering", true);
                 Debug.Log("Ghosts going into recovering state.");
             }
             ghostIsRecovering = true;
@@ -312,8 +313,7 @@ public class Collisions : MonoBehaviour
         foreach (var animator in ghostAnimators)
         {
             animator.SetBool("walkingUp", true);
-            animator.ResetTrigger("TriggerScared");
-            animator.ResetTrigger("TriggerRecovering");
+            animator.SetBool("Recovering", false);
         }
         Debug.Log("Ghosts are in walking state now.");
     }
