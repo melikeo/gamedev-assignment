@@ -119,17 +119,19 @@ public class Collisions : MonoBehaviour
         }
 
         // PACSTUDENT & GHOSTS COLLISIONS
+
         if(collision.gameObject.CompareTag("Ghost")) {
             Animator ghostAnimator = collision.GetComponent<Animator>();
             if(ghostAnimator != null)
             {
-               if( ghostIsScared || ghostIsRecovering ) // C - if ghost is scare/recovering & collision with pacstudent -> ghost death
+                // ------------ C - if ghost is scare/recovering & collision with pacstudent -> ghost death -----------
+                if ( ghostIsScared || ghostIsRecovering ) 
                 {
                     StartCoroutine(GhostDeathReaction(ghostAnimator));
-                    //GhostDeathReaction(ghostAnimator);
                 }
-               
-               else if(IsGhostWalking(ghostAnimator) && (!ghostIsScared) && (!ghostIsRecovering)) // B - if ghost is in walking state & collision with pacstudent -> pacstudent death
+
+                // ------------ B - if ghost is in walking state & collision with pacstudent -> pacstudent death -----------
+                else if (IsGhostWalking(ghostAnimator) && (!ghostIsScared) && (!ghostIsRecovering))
                 {
                     StartCoroutine(PacStudentDeathReaction());
                 }
@@ -210,6 +212,11 @@ public class Collisions : MonoBehaviour
         //ghostAnimator.SetTrigger("TriggerDead"); //transition to dead state
         Debug.Log("Ghosts is in dead state.");
 
+        ghostAnimator.SetBool("Scared", false);
+        ghostAnimator.SetBool("Recovering", false);
+
+        ghostAnimator.SetBool("Dead", true);
+
         score += 300; //add 300 points to score
         UpdateScoreText(); //update highscore
 
@@ -217,24 +224,10 @@ public class Collisions : MonoBehaviour
 
         //transition back to walking state (reset state)
         //ghostAnimator.ResetTrigger("TriggerDead");
-        ghostAnimator.SetBool("walkingUp", true);
+        ghostAnimator.SetBool("Dead", false);
         Debug.Log("Ghosts is in walking state.");
 
     }
-
-    //void GhostDeathReaction()
-    //{
-    //    foreach (var animator in ghostAnimators)
-    //    {
-    //        animator.SetTrigger("TriggerDead");
-    //        Debug.Log("Ghosts are in Dead State.");
-    //        score += 300; //add 300 points to score
-    //        UpdateScoreText(); //update highscore
-
-    //        StartGhostDiesTimer(); //start 5 second timer then go to walking state
-    //    }
-
-    //}
 
     //void StartGhostDiesTimer()
     //{

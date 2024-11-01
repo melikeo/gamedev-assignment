@@ -518,6 +518,9 @@ public class PacStudentController : MonoBehaviour
             currentInput = KeyCode.None;
             //animator.SetBool("isDead", false);
             UpdateAnimatorParam(Vector3Int.right);
+            inputReceived = false; // to stop playing dust particle effect
+            StopDustParticleEffect();
+
         }
     }
 
