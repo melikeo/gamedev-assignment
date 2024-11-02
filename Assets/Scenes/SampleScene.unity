@@ -9347,6 +9347,13 @@ MonoBehaviour:
   backgroundMusicSource: {fileID: 871272078}
   introMusicClip: {fileID: 8300000, guid: 529becd70293a6c4cb4d17ecbd0d4969, type: 3}
   backgroundMusicClip: {fileID: 8300000, guid: 17f90d3e3f2bb7347800ac735193ba4a, type: 3}
+  scaredGhostsBackgroundMusic: {fileID: 8300000, guid: 9d3f82021ef5a8f429c42b4cac9cf1b7, type: 3}
+  deadGhostsBackgroundMusicClip: {fileID: 8300000, guid: 571a19085056d364090af54a42c17106, type: 3}
+  ghostAnimators:
+  - {fileID: 484578740}
+  - {fileID: 489598281}
+  - {fileID: 2077458326}
+  - {fileID: 180149383}
 --- !u!82 &871272076
 AudioSource:
   m_ObjectHideFlags: 0

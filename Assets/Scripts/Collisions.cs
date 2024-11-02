@@ -152,7 +152,7 @@ public class Collisions : MonoBehaviour
 
         // particle effect
 
-        Debug.Log("pacstudent died");
+        //Debug.Log("pacstudent died");
 
         pacStudentAnimator.SetBool("isDead", true);
 
@@ -173,17 +173,17 @@ public class Collisions : MonoBehaviour
         //Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
         //transform.position = restartPos; // respawn at start position
         
-        Debug.Log("did dead animation play?");
+        //Debug.Log("did dead animation play?");
 
 
         if (currentLives > 0)
         {
-            Debug.Log("weiter gehts");            
+            //Debug.Log("weiter gehts");            
         }
 
         else if (currentLives <= 0)
         {
-            Debug.Log("game over");
+            //Debug.Log("game over");
         }
 
 
@@ -210,7 +210,7 @@ public class Collisions : MonoBehaviour
     IEnumerator GhostDeathReaction(Animator ghostAnimator)
     {
         //ghostAnimator.SetTrigger("TriggerDead"); //transition to dead state
-        Debug.Log("Ghosts is in dead state.");
+        //Debug.Log("Ghosts is in dead state.");
 
         ghostAnimator.SetBool("Scared", false);
         ghostAnimator.SetBool("Recovering", false);
@@ -225,7 +225,7 @@ public class Collisions : MonoBehaviour
         //transition back to walking state (reset state)
         //ghostAnimator.ResetTrigger("TriggerDead");
         ghostAnimator.SetBool("Dead", false);
-        Debug.Log("Ghosts is in walking state.");
+        //Debug.Log("Ghosts is in walking state.");
 
     }
 
@@ -282,7 +282,7 @@ public class Collisions : MonoBehaviour
             animator.SetBool("Scared", true);
         }
         ghostIsScared = true;
-        Debug.Log("Ghosts are scared right now.");
+        //Debug.Log("Ghosts are scared right now.");
     }
 
     void StartGhostScaredTimer()
@@ -299,15 +299,15 @@ public class Collisions : MonoBehaviour
             {
                 animator.SetBool("Scared", false);
                 animator.SetBool("Recovering", true);
-                Debug.Log("Ghosts going into recovering state.");
+                //Debug.Log("Ghosts going into recovering state.");
             }
             ghostIsRecovering = true;
-            Debug.Log("3 seconds if is left");
+            //Debug.Log("3 seconds if is left");
         }
         //after 10 seconds passed
         if (scaredTimer <= 0)
         {
-            Debug.Log("10 seconds passed is entered");
+            //Debug.Log("10 seconds passed is entered");
             EndGhostScaredState();
         }
     }
@@ -324,13 +324,13 @@ public class Collisions : MonoBehaviour
             animator.SetBool("walkingUp", true);
             animator.SetBool("Recovering", false);
         }
-        Debug.Log("Ghosts are in walking state now.");
+        //Debug.Log("Ghosts are in walking state now.");
     }
 
     //saving Highscore after GameOver (all pellets eaten or no lives left)
     void GameOver()
     {
-        Debug.Log("Game is over.");
+        //Debug.Log("Game is over.");
         // Stop Game
         pacStudent.GetComponent<PacStudentController>().enabled = false; //stop player movement
         foreach (var animator in ghostAnimators) // stop ghosts
@@ -361,7 +361,7 @@ public class Collisions : MonoBehaviour
         {
             PlayerPrefs.SetInt("HighScore", score); // save new highscore
             PlayerPrefs.SetFloat("HighScoreTime", countdownManager.elapsedTime); // save new best time
-            Debug.Log("New highscore: " + score + " time: " + countdownManager.elapsedTime);
+            //Debug.Log("New highscore: " + score + " time: " + countdownManager.elapsedTime);
         }
     }
     IEnumerator ReturnToStartScene()

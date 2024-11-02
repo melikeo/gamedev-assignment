@@ -26,6 +26,13 @@ public class CountdownManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             UpdateGameTimer(); // update game timer
         }
+
+
+        // if ghost scared -> scared music
+        // if ghost dead -> dead music
+        // else background music
+
+
     }
 
     private IEnumerator ShowCountdown() //Show 3,2,1,GO! countdown
