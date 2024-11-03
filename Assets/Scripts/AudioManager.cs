@@ -107,7 +107,7 @@ public class AudioManager : MonoBehaviour
         {
             if (animator.GetBool(stateName))
             {
-                Debug.Log("is in state: " + stateName);
+                //Debug.Log("is in state: " + stateName);
                 return true; // true if any of the ghosts is in mentioned state
             }
         }

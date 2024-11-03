@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -109,14 +106,15 @@ public class PacStudentController : MonoBehaviour
 
            
             //wallCollisionEffectInstance.Play();
-            checkLastInput();  //always check for input //check for player input for moving with W, A, S, D keys to move pacstudent
 
-            if (!isMoving)
+            checkLastInput();  //always check for input // Check for player input for moving with W, A, S, D keys to move Pacstudent
+
+            if (!isMoving) // Pacstudent is not lerping:
             {
                 //setTargetPosition(currentDirection); //continue moving in currentDirection
 
                 // move to direction of lastInput
-                Vector3Int directionFromLastInput = getDirectionFromInput(lastInput);
+                Vector3Int directionFromLastInput = getDirectionFromInput(lastInput); // check last input and try to move there
 
                 // check if walkable
                 if (IsWalkable(currentGridPosition + directionFromLastInput))
@@ -431,7 +429,7 @@ public class PacStudentController : MonoBehaviour
 
     bool CheckForPellet()
     {
-        //change to gameobjects
+        //changed to gameobjects
         //// get tile at position
         //TileBase tileAtPosition = GetTileAtPosition(position);
 
@@ -509,7 +507,7 @@ public class PacStudentController : MonoBehaviour
         //Debug.Log("sdfafhhsghsj");
         if (pacStudentAnimator.GetBool("isDead"))
         {
-            Debug.Log("should RESPAAWWNNNN");
+            //Debug.Log("should RESPAAWWNNNN");
             Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
             //transform.position = restartPos; // respawn at start position
             currentGridPosition = Vector3Int.FloorToInt(restartPos);

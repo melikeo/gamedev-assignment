@@ -27,11 +27,9 @@ public class CountdownManager : MonoBehaviour
             UpdateGameTimer(); // update game timer
         }
 
-
         // if ghost scared -> scared music
         // if ghost dead -> dead music
         // else background music
-
 
     }
 
@@ -66,7 +64,7 @@ public class CountdownManager : MonoBehaviour
         pacStudent.GetComponent<PacStudentController>().enabled = false; // deactivate pacstudent movement
         foreach (var ghost in ghosts)
         {
-            //ghost.GetComponent<GhostMovement>().enabled = false; // TBA for ghost movement
+            //ghost.GetComponent<GhostMovement>().enabled = false;
         }
     }
 

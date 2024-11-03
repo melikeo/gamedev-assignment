@@ -5,7 +5,7 @@ public class CherryController : MonoBehaviour
 {
     public GameObject cherryPrefab;
 
-    public float spawnDurationTime = 10.0f; // First cherry appears after 10 seconds
+    public float spawnDurationTime = 1f; // First cherry appears after 1 second
     public float repeatRate = 10.0f; // Time between spawns: every 10 seconds a cherry spawns
     public float moveSpeed = 7f; // Default speed, can be changed in inspector
 
@@ -113,8 +113,8 @@ public class CherryController : MonoBehaviour
     }
 
     // Check if cherry has reached the target position
-    bool HasReachedTarget(Vector3 currentPosition, Vector3 targetPosition)
-    {
-        return Vector3.Distance(currentPosition, targetPosition) <= 0.1f;
-    }
+    //bool HasReachedTarget(Vector3 currentPosition, Vector3 targetPosition)
+    //{
+    //    return Vector3.Distance(currentPosition, targetPosition) <= 0.1f;
+    //}
 }

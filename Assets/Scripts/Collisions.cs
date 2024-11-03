@@ -1,11 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 public class Collisions : MonoBehaviour
 {
@@ -147,11 +142,7 @@ public class Collisions : MonoBehaviour
 
     // Ghost is walking -> Collision -> Pacstudent dies
     IEnumerator PacStudentDeathReaction()
-    {
-        // TODO:
-
-        // particle effect
-
+    {       
         //Debug.Log("pacstudent died");
 
         pacStudentAnimator.SetBool("isDead", true);
@@ -312,8 +303,6 @@ public class Collisions : MonoBehaviour
         }
     }
 
-
-    // ADD AUDIOOOO!!!!!
     void EndGhostScaredState()
     {
         ghostIsScared = false; //reset state
