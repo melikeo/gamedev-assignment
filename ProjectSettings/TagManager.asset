@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Pacstudent
   - PowerPellet
+  - Pellet
+  - BonusCherry
+  - Ghost
+  - Life
   layers:
   - Default
   - TransparentFX

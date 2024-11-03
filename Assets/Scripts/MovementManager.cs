@@ -15,16 +15,16 @@ public class MovementManager : MonoBehaviour
         new Vector2(-18.4f, 3.6f)    // bottom left
     };
 
-    private float speed = 1f;
-    private float t = 0f;
+    //private float speed = 1f;
+    //private float t = 0f;
 
     private Animator animator; // to get animator for parameters
-    private bool isDead = false;
+    //private bool isDead = false;
 
     void Start()
     {
         pacStudent.transform.position = positions[0]; // starting point
-        t = 0f; // init t
+        //t = 0f; // init t
 
         audioSource = pacStudent.GetComponent<AudioSource>();
         if (audioSource == null)

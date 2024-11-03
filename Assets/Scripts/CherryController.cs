@@ -5,7 +5,7 @@ public class CherryController : MonoBehaviour
 {
     public GameObject cherryPrefab;
 
-    public float spawnDurationTime = 10.0f; // First cherry appears after 10 seconds
+    public float spawnDurationTime = 1f; // First cherry appears after 1 second
     public float repeatRate = 10.0f; // Time between spawns: every 10 seconds a cherry spawns
     public float moveSpeed = 7f; // Default speed, can be changed in inspector
 
@@ -47,6 +47,7 @@ public class CherryController : MonoBehaviour
 
     IEnumerator MoveCherry(GameObject cherry, Vector3 spawnPosition) // Move cherry across the map in 2 parts
     {
+        if (cherry == null) yield break;
         Vector3 startPos = spawnPosition;
         Vector3 targetPos = cameraCenter; //first part: move to center
 
@@ -55,6 +56,8 @@ public class CherryController : MonoBehaviour
         // Move cherry to center
         while( t < 1.0f )
         {
+            if (cherry == null) yield break;
+
             t += Time.deltaTime * (moveSpeed/Vector3.Distance(startPos, targetPos));
             //cherry.transform.position = Vector3.Lerp(cherry.transform.position, cameraCenter, t); //LERP to center
             cherry.transform.position = Vector3.Lerp(startPos, targetPos, t); // LERP to center
@@ -69,6 +72,8 @@ public class CherryController : MonoBehaviour
 
         while ( t < 1.0f )
         {
+            if (cherry == null) yield break;
+
             t += Time.deltaTime * (moveSpeed / Vector3.Distance(startPos, targetPos));
             cherry.transform.position = Vector3.Lerp(startPos, targetPos, t); // LERP to target at diagonal
             yield return null;
@@ -108,8 +113,8 @@ public class CherryController : MonoBehaviour
     }
 
     // Check if cherry has reached the target position
-    bool HasReachedTarget(Vector3 currentPosition, Vector3 targetPosition)
-    {
-        return Vector3.Distance(currentPosition, targetPosition) <= 0.1f;
-    }
+    //bool HasReachedTarget(Vector3 currentPosition, Vector3 targetPosition)
+    //{
+    //    return Vector3.Distance(currentPosition, targetPosition) <= 0.1f;
+    //}
 }
