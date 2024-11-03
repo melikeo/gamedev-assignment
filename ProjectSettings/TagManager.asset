@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pacstudent
+  - PowerPellet
+  - Pellet
+  - BonusCherry
+  - Ghost
+  - Life
   layers:
   - Default
   - TransparentFX
