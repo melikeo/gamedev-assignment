@@ -217,7 +217,7 @@ public class PacStudentController : MonoBehaviour
     }
 
     // check if given grid position is walkable (no wall)
-    bool IsWalkable(Vector3Int gridPos)
+    public bool IsWalkable(Vector3Int gridPos)
     {
         // getting tile from appropriate tilemap without converting to world position
         TileBase tileAtPosition = GetTileAtPosition(gridPos);

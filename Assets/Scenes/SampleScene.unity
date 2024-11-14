@@ -1746,6 +1746,7 @@ GameObject:
   - component: {fileID: 180149383}
   - component: {fileID: 180149387}
   - component: {fileID: 180149386}
+  - component: {fileID: 180149388}
   m_Layer: 0
   m_Name: Ghost4
   m_TagString: Ghost
@@ -1918,6 +1919,39 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5625, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &180149388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180149382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostMoveSpeed: 5
+  topLeftTilemap: {fileID: 511559288}
+  topRightTilemap: {fileID: 1545486786}
+  bottomLeftTilemap: {fileID: 1378761419}
+  bottomRightTilemap: {fileID: 1802065606}
+  wallTiles:
+  - {fileID: 11400000, guid: 5425fd4644dbad94a8c88ea4d54fa7df, type: 2}
+  - {fileID: 11400000, guid: a16c80633f5192343983d645eede6ec3, type: 2}
+  - {fileID: 11400000, guid: db070929a79cdc94795168168542835b, type: 2}
+  - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
+  - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
+  - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
+  - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
+  ghostID: 4
+  spawnExitRoute:
+  - {x: -6, y: -5, z: 0}
+  - {x: -6, y: -4, z: 0}
+  - {x: -6, y: -3, z: 0}
+  - {x: -6, y: -2, z: 0}
+  leftTunnelExitPosition: {x: -20, y: -6, z: 0}
+  rightTunnelExitPosition: {x: 7, y: -6, z: 0}
 --- !u!1001 &185355060
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23083,6 +23117,7 @@ GameObject:
   - component: {fileID: 2077458326}
   - component: {fileID: 2077458330}
   - component: {fileID: 2077458329}
+  - component: {fileID: 2077458331}
   m_Layer: 0
   m_Name: Ghost3
   m_TagString: Ghost
@@ -23255,6 +23290,35 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5625, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &2077458331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077458325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostMoveSpeed: 5
+  topLeftTilemap: {fileID: 511559288}
+  topRightTilemap: {fileID: 1545486786}
+  bottomLeftTilemap: {fileID: 1378761419}
+  bottomRightTilemap: {fileID: 1802065606}
+  wallTiles:
+  - {fileID: 11400000, guid: 5425fd4644dbad94a8c88ea4d54fa7df, type: 2}
+  - {fileID: 11400000, guid: a16c80633f5192343983d645eede6ec3, type: 2}
+  - {fileID: 11400000, guid: db070929a79cdc94795168168542835b, type: 2}
+  - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
+  - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
+  - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
+  - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
+  ghostID: 3
+  spawnExitRoute: []
+  leftTunnelExitPosition: {x: -20, y: -6, z: 0}
+  rightTunnelExitPosition: {x: 7, y: -6, z: 0}
 --- !u!4 &2078757265 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1767231794151327957, guid: 166bbbfe0b556864291a7764cd941566, type: 3}
