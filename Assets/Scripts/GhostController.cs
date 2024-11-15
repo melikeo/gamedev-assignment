@@ -10,7 +10,7 @@ public class GhostController : MonoBehaviour
     private Vector3 startPos;
     private Vector3 targetPos;
 
-    [SerializeField] private float ghostMoveSpeed = 5f;
+    [SerializeField] private float ghostMoveSpeed = 2f;
 
     private bool isMoving = false;
 
@@ -31,6 +31,10 @@ public class GhostController : MonoBehaviour
 
     private Animator animator;
 
+    //default no ghost is dead
+    private bool isDead = false;
+
+
     Vector3Int newDirection;
 
     // spawn exit route
@@ -40,8 +44,11 @@ public class GhostController : MonoBehaviour
 
 
     // block teleporting of ghosts
-    [SerializeField] private Vector3 leftTunnelExitPosition;
-    [SerializeField] private Vector3 rightTunnelExitPosition;
+    private Vector3 leftTunnelExitPosition;
+    private Vector3 rightTunnelExitPosition;
+
+    // block re-entering spawn area
+    private List<Vector3Int> spawnAreaEntryFields;
 
 
     private void Awake()
@@ -54,32 +61,48 @@ public class GhostController : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
-
+        // waypoints to exit spawn area
         spawnExitRoute = new List<Vector3Int>
     {
         new Vector3Int(-6, -5, 0),
         new Vector3Int(-6, -4, 0),
-        new Vector3Int(-6, -3, 0),
-        new Vector3Int(-6, -2, 0)
+        new Vector3Int(-6, -3, 0)
     };
 
+        //teleporting positions
+        leftTunnelExitPosition = new Vector3Int(-20, -6, 0);
+        rightTunnelExitPosition = new Vector3Int(7, -6, 0);
 
+        
+        // spawn area entry fields
+        spawnAreaEntryFields = new List<Vector3Int>
+        {
+            new Vector3Int(-7, -4, 0),
+            new Vector3Int(-6, -4, 0),
+            new Vector3Int(-7, -8, 0),
+            new Vector3Int(-6, -8, 0)
+        };
     }
 
     private void Update()
     {
         BlockTeleporting();
 
+
         if (!isMoving)
         {
+
             if (!didExitSpawn)
             {
-                TakeSpawnExitRoute(); // if ghost is in spawn direction, move it out
-                SetWalkingDirection(currentDirection);
+                Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
+                TakeSpawnExitRoute();
+
             }
 
             else
             {
+                Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
+                Debug.Log("es sollte eigentlich jetzt laufen, wenn das vorherige true geworden ist.");
                 if (ghostID == 4)
                 {
                     // set new direction
@@ -89,36 +112,21 @@ public class GhostController : MonoBehaviour
                     {
                         currentDirection = newDirection;
                         SetTargetPosition(currentDirection);
+                        SetWalkingDirection(currentDirection);
                     }
-                }
-                else
-                {
-                    //code for OTHER STATES will be added here
-                    //if(currentState == dead)
-                    //{
-                    //returntospawn();
-                    //set state = dead;
-                    //}
                 }
             }
 
-        //else
-        //{
-            // other ghosts to be added!
-            //newDirection = ChooseSpecificDirection();
-        //}
-
-            //if (IsWalkable(currentGridPosition + newDirection))
-            //{
-            //    currentDirection = newDirection;
-            //    SetTargetPosition(currentDirection);
-            //}
         }
+
+       
+
         else
         {
             MoveTowardsTarget();
         }
     }
+
 
         Vector3Int ChooseSpecificDirection()
         {
@@ -176,19 +184,26 @@ public class GhostController : MonoBehaviour
             {
                 SetTargetPosition(nextPosition - currentGridPosition);
                 spawnExitIndex++; // go to next point on route
+                Debug.Log("Moving to spawn exit point: " + nextPosition + " (Index: " + spawnExitIndex + ")");
             }
         }
         else
         {
             didExitSpawn = true; // true if all points on route list are done
+            Debug.Log("Exited spawn route. didExitSpawn set to true.");
         }
-
-        didExitSpawn = true;
     }
 
     bool IsWalkable(Vector3Int gridPos)
     {
         TileBase tileAtPosition = GetTileAtPosition(gridPos);
+
+        if (didExitSpawn && !isDead && spawnAreaEntryFields.Contains(gridPos))
+        {
+            return false; // spawn area fields cannot be accessed
+        }
+
+
         if (tileAtPosition == null) return true;
 
         foreach (var wallTile in wallTiles)
@@ -249,6 +264,8 @@ public class GhostController : MonoBehaviour
             targetPos = new Vector3(targetGridPosition.x + 0.5f, targetGridPosition.y + 0.5f, transform.position.z);
             t = 0;
             isMoving = true;
+
+            SetWalkingDirection(direction);
         }
     }
 

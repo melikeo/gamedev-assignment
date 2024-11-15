@@ -1931,7 +1931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ghostMoveSpeed: 5
+  ghostMoveSpeed: 2
   topLeftTilemap: {fileID: 511559288}
   topRightTilemap: {fileID: 1545486786}
   bottomLeftTilemap: {fileID: 1378761419}
@@ -1945,13 +1945,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
   - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
   ghostID: 4
-  spawnExitRoute:
-  - {x: -6, y: -5, z: 0}
-  - {x: -6, y: -4, z: 0}
-  - {x: -6, y: -3, z: 0}
-  - {x: -6, y: -2, z: 0}
-  leftTunnelExitPosition: {x: -20, y: -6, z: 0}
-  rightTunnelExitPosition: {x: 7, y: -6, z: 0}
 --- !u!1001 &185355060
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12400,7 +12393,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countdownText: {fileID: 218657087}
   pacStudent: {fileID: 1137233640}
-  ghosts: []
+  ghosts:
+  - {fileID: 180149382}
+  - {fileID: 2077458325}
   audioManager: {fileID: 871272075}
   gameTimer: {fileID: 600520274}
   elapsedTime: 0
@@ -23302,7 +23297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ghostMoveSpeed: 5
+  ghostMoveSpeed: 2
   topLeftTilemap: {fileID: 511559288}
   topRightTilemap: {fileID: 1545486786}
   bottomLeftTilemap: {fileID: 1378761419}
@@ -23316,9 +23311,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
   - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
   ghostID: 3
-  spawnExitRoute: []
-  leftTunnelExitPosition: {x: -20, y: -6, z: 0}
-  rightTunnelExitPosition: {x: 7, y: -6, z: 0}
 --- !u!4 &2078757265 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1767231794151327957, guid: 166bbbfe0b556864291a7764cd941566, type: 3}
