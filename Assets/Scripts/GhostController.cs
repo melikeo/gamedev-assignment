@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -50,6 +51,13 @@ public class GhostController : MonoBehaviour
     // block re-entering spawn area
     private List<Vector3Int> spawnAreaEntryFields;
 
+    // ghost 4 clockwise rotation points
+    private List<Vector3Int> clockRotationPoints;
+    private int clockRotationIndex = 0;
+
+    // respawn dead ghost
+    Vector3 targetRespawnPosition = Vector3.zero;
+
 
     private void Awake()
     {
@@ -82,29 +90,64 @@ public class GhostController : MonoBehaviour
             new Vector3Int(-7, -8, 0),
             new Vector3Int(-6, -8, 0)
         };
+
+        // ghost 4 clockwise rotation waypoints
+        clockRotationPoints = new List<Vector3Int>
+        {
+            new Vector3Int(-5, 7, 0),
+            new Vector3Int(6, 7, 0),
+            new Vector3Int(6, 0, 0),
+            new Vector3Int(6, -12, 0),
+            new Vector3Int(6, -19, 0),
+            new Vector3Int(-5, -19, 0),
+            new Vector3Int(-8, -19, 0),
+            new Vector3Int(-19, -19, 0),
+            new Vector3Int(-19, -12, 0),
+            new Vector3Int(-19, 0, 0),
+            new Vector3Int(-19, 7, 0),
+            new Vector3Int(-8, 7, 0),
+        };
+
+
     }
 
     private void Update()
     {
         BlockTeleporting();
 
+        //check for death state for respawn
+        bool isDeadInAnimator = animator.GetBool("Dead");
 
-        if (!isMoving)
+        if (isDeadInAnimator)
+        {
+            isMoving = true; //stop moving
+            isDead = true;
+            Debug.Log("jetzt sollte er eigentlich in spawn area gespawnt werden");
+            //respawnDeadGhost();
+            StartCoroutine(RespawnDeadGhost());
+        }
+
+
+        if (!isMoving && !isDeadInAnimator)
         {
 
             if (!didExitSpawn)
             {
-                Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
+                //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
                 TakeSpawnExitRoute();
 
             }
 
             else
             {
-                Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
-                Debug.Log("es sollte eigentlich jetzt laufen, wenn das vorherige true geworden ist.");
-                if (ghostID == 4)
+                //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
+                //Debug.Log("es sollte eigentlich jetzt laufen, wenn das vorherige true geworden ist.");             
+                
+                //if ghostID == 1 || ghost state = scared or recovering {}
+                
+                if (ghostID == 3)
                 {
+                    // ------ random directions ------
                     // set new direction
                     newDirection = ChooseRandomDirection();
 
@@ -115,11 +158,16 @@ public class GhostController : MonoBehaviour
                         SetWalkingDirection(currentDirection);
                     }
                 }
+
+                if (ghostID == 4)
+                {
+                    // ----- clockwise around the map -----
+
+                    newDirection = ChooseNextClockPoint();
+                    SetTargetPosition(newDirection - currentGridPosition);
+                }
             }
-
         }
-
-       
 
         else
         {
@@ -134,7 +182,87 @@ public class GhostController : MonoBehaviour
             return Vector3Int.right; // change
         }
 
+    IEnumerator RespawnDeadGhost()
+    {
+        Vector3 startPos = transform.position;
+        float duration = 1.0f; // spawn duration
+        float elapsedTime = 0; // time passed
 
+        //Debug.Log("this method should be called!");
+
+        if (ghostID == 1)
+        {
+            targetRespawnPosition = new Vector3(-7.5f, -5, 0);
+        }
+
+        else if (ghostID == 2)
+        {
+            targetRespawnPosition = new Vector3(-6.5f, -5, 0);
+        }
+
+        else if (ghostID == 3)
+        {
+            targetRespawnPosition = new Vector3(-5.5f, -5, 0);
+            //Debug.Log("it's ghost 3");
+        }
+
+        else if (ghostID == 4)
+        {
+            targetRespawnPosition = new Vector3(-4.5f, -5, 0);
+        }
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(startPos, targetRespawnPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null; // wait for next frame
+        }
+
+        transform.position = targetRespawnPosition;
+        currentGridPosition = Vector3Int.FloorToInt(targetRespawnPosition);
+        targetGridPosition = currentGridPosition;
+
+        didExitSpawn = false;
+        spawnExitIndex = 0;
+
+        //reset values after respawn
+        isDead = false;
+        animator.SetBool("Dead", false);
+
+        //if (transform.position != targetRespawnPosition)
+        //{
+        //    //Debug.Log("current != target");
+
+        //    //Debug.Log("animator state" + animator.GetBool("Dead"));
+
+        //    //Debug.Log(isDead);
+
+
+        //    // framerate independent
+        //    t += Time.deltaTime * ghostMoveSpeed;
+
+        //    // LERP to move ghost to target respawn position
+        //    transform.position = Vector3.Lerp(transform.position, targetRespawnPosition, t);
+
+        //    // put ghost on target position when close enough
+        //    if (Vector3.Distance(transform.position, targetRespawnPosition) < 0.01f)
+        //    {
+        //        transform.position = targetRespawnPosition;                
+        //    }
+        //}
+
+        //animator.SetBool("Dead", false);
+        //isDead = false;
+
+    }
+
+
+        Vector3Int ChooseNextClockPoint()
+    {
+        Vector3Int nextPoint = clockRotationPoints[clockRotationIndex];
+        clockRotationIndex = (clockRotationIndex + 1) % clockRotationPoints.Count; // loop list?
+        return nextPoint;
+    }
 
 
         Vector3Int ChooseRandomDirection()
@@ -184,13 +312,13 @@ public class GhostController : MonoBehaviour
             {
                 SetTargetPosition(nextPosition - currentGridPosition);
                 spawnExitIndex++; // go to next point on route
-                Debug.Log("Moving to spawn exit point: " + nextPosition + " (Index: " + spawnExitIndex + ")");
+                //Debug.Log("Moving to spawn exit point: " + nextPosition + " (Index: " + spawnExitIndex + ")");
             }
         }
         else
         {
             didExitSpawn = true; // true if all points on route list are done
-            Debug.Log("Exited spawn route. didExitSpawn set to true.");
+            //Debug.Log("Exited spawn route. didExitSpawn set to true.");
         }
     }
 

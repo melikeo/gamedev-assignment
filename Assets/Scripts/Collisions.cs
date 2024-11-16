@@ -119,7 +119,7 @@ public class Collisions : MonoBehaviour
             Animator ghostAnimator = collision.GetComponent<Animator>();
             if(ghostAnimator != null)
             {
-                // ------------ C - if ghost is scare/recovering & collision with pacstudent -> ghost death -----------
+                // ------------ C - if ghost is scared/recovering & collision with pacstudent -> ghost death -----------
                 if ( ghostIsScared || ghostIsRecovering ) 
                 {
                     StartCoroutine(GhostDeathReaction(ghostAnimator));
