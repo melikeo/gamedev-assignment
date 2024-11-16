@@ -59,6 +59,9 @@ public class GhostController : MonoBehaviour
     // respawn dead ghost
     Vector3 targetRespawnPosition = Vector3.zero;
 
+    // pacstudent reference
+    [SerializeField] private Transform pacStudent;
+
 
     private void Awake()
     {
@@ -146,6 +149,19 @@ public class GhostController : MonoBehaviour
                 
                 //if ghostID == 1 || ghost state = scared or recovering {}
                 
+                if (ghostID == 2)
+                {
+                    newDirection = Ghost2MovementCloserDistance();
+
+                    if (IsWalkable(currentGridPosition + newDirection))
+                    {
+                        currentDirection = newDirection;
+                        SetTargetPosition(currentDirection);
+                        SetWalkingDirection(currentDirection);
+                    }
+                }
+                
+                
                 if (ghostID == 3)
                 {
                     // ------ random directions ------
@@ -185,65 +201,6 @@ public class GhostController : MonoBehaviour
             //other ghosts behaviour
             return Vector3Int.right; // change
         }
-
-    // --- Ghost 4 - clockwise rotation ---
-    void MoveTowardsClockwiseTarget()
-    {
-        if (currentGridPosition == currentClockTarget)
-        {
-            // increase index when target reached
-            clockRotationIndex = (clockRotationIndex + 1) % clockRotationPoints.Count;
-            currentClockTarget = clockRotationPoints[clockRotationIndex];
-        }
-
-        // find next direction towards target
-        Vector3Int directionToTarget = GetDirectionTowards(currentClockTarget);
-
-        if (IsWalkable(currentGridPosition + directionToTarget))
-        {
-            SetTargetPosition(directionToTarget);
-        }
-        //else
-        //{
-        //    Debug.Log("Pathfinding is not working. Fallback else.");
-        //    // fallback: random direction
-        //    newDirection = ChooseRandomDirection();
-        //    SetTargetPosition(newDirection);
-        //}
-    }
-
-    Vector3Int GetDirectionTowards(Vector3Int target)
-    {
-        Vector3Int[] possibleDirections = { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
-
-        Vector3Int bestDirection = Vector3Int.zero;
-        float shortestDistance = float.MaxValue;
-
-        foreach (var direction in possibleDirections)
-        {
-            Vector3Int nextPosition = currentGridPosition + direction;
-
-            // Exclude last direction to avoid going back
-            if (nextPosition == currentGridPosition - lastDirection)
-            {
-                continue;
-            }
-
-            if (IsWalkable(nextPosition))
-            {
-                float distance = Vector3Int.Distance(nextPosition, target);
-                if (distance < shortestDistance)
-                {
-                    shortestDistance = distance;
-                    bestDirection = direction;
-                }
-            }
-        }
-
-        return bestDirection == Vector3Int.zero ? lastDirection : bestDirection;
-    }
-
-
 
     IEnumerator RespawnDeadGhost()
     {
@@ -318,14 +275,57 @@ public class GhostController : MonoBehaviour
         //isDead = false;
 
     }
+    // --- Ghost 1 - further/equal distance ---
+
+
+    // --- Ghost 2 - closer/equal distance ---
+    Vector3Int Ghost2MovementCloserDistance()
+    {
+        Vector3Int[] possibleDirections = { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
+        Vector3Int bestDirection = Vector3Int.zero;
+        float bestDistance = float.MaxValue; // init with high value
+
+        float currentDistance = Vector3.Distance(currentGridPosition, pacStudent.position); // calculate distance between ghost and pacstudent
+
+        foreach (var direction in possibleDirections)
+        {
+            Vector3Int nextPosition = currentGridPosition + direction;
+
+            // Exclude last direction to avoid going back
+            if (nextPosition == currentGridPosition - lastDirection)
+            {
+                continue;
+            }
+
+            if (IsWalkable(nextPosition))
+            {                
+                float newDistance = Vector3.Distance(nextPosition, pacStudent.position);
+
+                if (newDistance < bestDistance)
+                {
+                    bestDistance = newDistance;
+                    bestDirection = direction;
+                }
+            }
+        }
+
+        // if no valid direction?
+        if (bestDirection == Vector3Int.zero)
+        {
+            //Debug.Log("No valid direction found.");
+            bestDirection = lastDirection;
+        }
+
+        return bestDirection;
+    }
 
     // --- Ghost 3 - Random Direction ---
-        Vector3Int ChooseRandomDirection()
+    Vector3Int ChooseRandomDirection()
     {
         // random direction
         Vector3Int[] possibleDirections = { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
 
-        //filter last direction for no backstepping
+        // Exclude last direction to avoid going back
         Vector3Int oppositeDirection = -lastDirection;
 
         List<Vector3Int> filteredDirections = new List<Vector3Int>();
@@ -356,6 +356,66 @@ public class GhostController : MonoBehaviour
         return walkableDirections[Random.Range(0, walkableDirections.Count)];
 
     }
+
+    // --- Ghost 4 - clockwise rotation ---
+    void MoveTowardsClockwiseTarget()
+    {
+        if (currentGridPosition == currentClockTarget)
+        {
+            // increase index when target reached
+            clockRotationIndex = (clockRotationIndex + 1) % clockRotationPoints.Count;
+            currentClockTarget = clockRotationPoints[clockRotationIndex];
+        }
+
+        // find next direction towards target
+        Vector3Int directionToTarget = GetDirectionTowards(currentClockTarget);
+
+        if (IsWalkable(currentGridPosition + directionToTarget))
+        {
+            SetTargetPosition(directionToTarget);
+        }
+        else
+        {
+            //Debug.Log("Pathfinding is not working. Fallback else.");
+            // Fallback: random direction (if ghost cannot move)
+            newDirection = ChooseRandomDirection();
+            SetTargetPosition(newDirection);
+        }
+    }
+
+    Vector3Int GetDirectionTowards(Vector3Int target)
+    {
+        Vector3Int[] possibleDirections = { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
+
+        Vector3Int bestDirection = Vector3Int.zero;
+        float shortestDistance = float.MaxValue;
+
+        foreach (var direction in possibleDirections)
+        {
+            Vector3Int nextPosition = currentGridPosition + direction;
+
+            // Exclude last direction to avoid going back
+            if (nextPosition == currentGridPosition - lastDirection)
+            {
+                continue;
+            }
+
+            if (IsWalkable(nextPosition))
+            {
+                float distance = Vector3Int.Distance(nextPosition, target);
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    bestDirection = direction;
+                }
+            }
+        }
+
+        return bestDirection == Vector3Int.zero ? lastDirection : bestDirection;
+    }
+
+
+
 
     // All Ghosts: Exit Spawn Area
     void TakeSpawnExitRoute()
