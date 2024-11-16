@@ -62,6 +62,9 @@ public class GhostController : MonoBehaviour
     // pacstudent reference
     [SerializeField] private Transform pacStudent;
 
+    // Ghost 1 and 2 direction options
+    Vector3Int[] possibleDirections = { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
+
 
     private void Awake()
     {
@@ -146,9 +149,22 @@ public class GhostController : MonoBehaviour
             {
                 //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
                 //Debug.Log("es sollte eigentlich jetzt laufen, wenn das vorherige true geworden ist.");             
-                
+
                 //if ghostID == 1 || ghost state = scared or recovering {}
-                
+
+                if (ghostID == 1)
+                {
+                    newDirection = Ghost1MovementFurtherDistance();
+
+                    if (IsWalkable(currentGridPosition + newDirection))
+                    {
+                        currentDirection = newDirection;
+                        SetTargetPosition(currentDirection);
+                        SetWalkingDirection(currentDirection);
+                    }
+                }
+
+
                 if (ghostID == 2)
                 {
                     newDirection = Ghost2MovementCloserDistance();
@@ -194,13 +210,6 @@ public class GhostController : MonoBehaviour
             MoveTowardsTarget();
         }
     }
-
-
-        Vector3Int ChooseSpecificDirection()
-        {
-            //other ghosts behaviour
-            return Vector3Int.right; // change
-        }
 
     IEnumerator RespawnDeadGhost()
     {
@@ -275,15 +284,56 @@ public class GhostController : MonoBehaviour
         //isDead = false;
 
     }
-    // --- Ghost 1 - further/equal distance ---
 
+
+    // --- Ghost 1 - further/equal distance ---
+    Vector3Int Ghost1MovementFurtherDistance()
+    {
+        //Vector3Int bestDirection = Vector3Int.zero;
+        //float bestDistance = float.MinValue; // init with low value
+
+        float currentDistance = Vector3.Distance(currentGridPosition, pacStudent.position); // calculate distance between ghost and pacstudent
+
+        List<Vector3Int> validDirections = new List<Vector3Int>(); // list with valid direction options
+
+        foreach (var direction in possibleDirections)
+        {
+            Vector3Int nextPosition = currentGridPosition + direction;
+
+            // Exclude last direction to avoid going back
+            if (nextPosition == currentGridPosition - lastDirection)
+            {
+                continue;
+            }
+
+            if (IsWalkable(nextPosition))
+            {
+                float newDistance = Vector3.Distance(nextPosition, pacStudent.position);
+
+                if (newDistance >= currentDistance)
+                {
+                    validDirections.Add(direction);
+                }
+            }
+        }
+
+        // if no valid direction?
+        if (validDirections.Count == 0)
+        {
+            //Debug.Log("No valid direction found.");
+            return lastDirection;
+        }
+
+        return validDirections[Random.Range(0, validDirections.Count)];
+    }
 
     // --- Ghost 2 - closer/equal distance ---
     Vector3Int Ghost2MovementCloserDistance()
     {
-        Vector3Int[] possibleDirections = { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
-        Vector3Int bestDirection = Vector3Int.zero;
-        float bestDistance = float.MaxValue; // init with high value
+        List<Vector3Int> validDirections = new List<Vector3Int>();
+
+        //Vector3Int bestDirection = Vector3Int.zero;
+        //float bestDistance = float.MaxValue; // init with high value
 
         float currentDistance = Vector3.Distance(currentGridPosition, pacStudent.position); // calculate distance between ghost and pacstudent
 
@@ -301,22 +351,42 @@ public class GhostController : MonoBehaviour
             {                
                 float newDistance = Vector3.Distance(nextPosition, pacStudent.position);
 
-                if (newDistance < bestDistance)
+                //add direction if it keeps PacStudent closer or at equal distance
+                if (newDistance <= currentDistance)
                 {
-                    bestDistance = newDistance;
-                    bestDirection = direction;
+                    validDirections.Add(direction);
                 }
             }
         }
 
         // if no valid direction?
-        if (bestDirection == Vector3Int.zero)
+        //if (bestDirection == Vector3Int.zero)
+        //{
+        //    //Debug.Log("No valid direction found.");
+        //    bestDirection = lastDirection;
+        //}
+
+        //return bestDirection;
+                 
+        
+        // If no valid direction found, keep last direction
+        if (validDirections.Count == 0)
         {
-            //Debug.Log("No valid direction found.");
-            bestDirection = lastDirection;
+            Debug.Log("No walkable positions found!");
+
+            // Fallback: random direction (if ghost cannot move)
+            //newDirection = ChooseRandomDirection();
+            //SetTargetPosition(newDirection);
+
+            return lastDirection;
         }
 
-        return bestDirection;
+        // Choose a random valid direction
+        return validDirections[Random.Range(0, validDirections.Count)];
+
+
+        //if ghost cannot move to any direction it should move to a random direction TBA!! for all ghosts
+
     }
 
     // --- Ghost 3 - Random Direction ---
