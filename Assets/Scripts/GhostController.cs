@@ -39,7 +39,8 @@ public class GhostController : MonoBehaviour
     Vector3Int newDirection;
 
     // spawn exit route
-    private List<Vector3Int> spawnExitRoute;
+    private List<Vector3Int> spawnRightExitRoute;
+    private List<Vector3Int> spawnLeftExitRoute;
     private int spawnExitIndex = 0;
     private bool didExitSpawn = false;
 
@@ -77,11 +78,17 @@ public class GhostController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         // waypoints to exit spawn area
-        spawnExitRoute = new List<Vector3Int>
+        spawnRightExitRoute = new List<Vector3Int>
     {
         new Vector3Int(-6, -5, 0),
         new Vector3Int(-6, -4, 0),
         new Vector3Int(-6, -3, 0)
+    };
+        spawnLeftExitRoute = new List<Vector3Int>
+    {
+        new Vector3Int(-7, -5, 0),
+        new Vector3Int(-7, -4, 0),
+        new Vector3Int(-7, -3, 0)
     };
 
         //teleporting positions
@@ -490,6 +497,8 @@ public class GhostController : MonoBehaviour
     // All Ghosts: Exit Spawn Area
     void TakeSpawnExitRoute()
     {
+        List<Vector3Int> spawnExitRoute = (ghostID == 1 || ghostID == 2) ? spawnLeftExitRoute : spawnRightExitRoute;
+
         if (spawnExitIndex < spawnExitRoute.Count)
         {
             Vector3Int nextPosition = spawnExitRoute[spawnExitIndex];
