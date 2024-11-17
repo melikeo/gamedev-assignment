@@ -38,7 +38,7 @@ public class GhostController : MonoBehaviour
 
     Vector3Int newDirection;
 
-    // spawn exit route
+    // spawn exit routes
     private List<Vector3Int> spawnRightExitRoute;
     private List<Vector3Int> spawnLeftExitRoute;
     private int spawnExitIndex = 0;
@@ -58,7 +58,7 @@ public class GhostController : MonoBehaviour
     private Vector3Int currentClockTarget;
 
     // respawn dead ghost
-    Vector3 targetRespawnPosition = Vector3.zero;
+    Vector3 targetRespawnPosition = Vector3.zero; //initialising
 
     // pacstudent reference
     [SerializeField] private Transform pacStudent;
@@ -121,22 +121,19 @@ public class GhostController : MonoBehaviour
             new Vector3Int(-19, 7, 0),
             new Vector3Int(-8, 7, 0),
         };
-
-
     }
 
     private void Update()
     {
         BlockTeleporting();
 
-        //check for death state for respawn
+        //check death state for respawn
         bool isDeadInAnimator = animator.GetBool("Dead");
 
         if (isDeadInAnimator)
         {
             isMoving = true; //stop moving
             isDead = true;
-            Debug.Log("jetzt sollte er eigentlich in spawn area gespawnt werden");
             //respawnDeadGhost();
             StartCoroutine(RespawnDeadGhost());
         }
@@ -152,14 +149,14 @@ public class GhostController : MonoBehaviour
             {
                 //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
                 TakeSpawnExitRoute();
-
             }
 
             else
             {
+                // ---- Ghost Scared/Recovering -> Ghost 1 behaviour ----
                 if (isScaredInAnimator || isRecoveringInAnimator)
                 {
-                    // ghost 1 behaviour
+                    // Ghost 1 behaviour
                     newDirection = Ghost1MovementFurtherDistance();
 
                     if (IsWalkable(currentGridPosition + newDirection))
@@ -174,7 +171,8 @@ public class GhostController : MonoBehaviour
                 {
                     switch (ghostID)
                     {
-                        case 1: //ghostID=1
+                        // ---- Ghost 1: Further/equal distance ----
+                        case 1:
                             newDirection = Ghost1MovementFurtherDistance();
 
                             if (IsWalkable(currentGridPosition + newDirection))
@@ -185,8 +183,8 @@ public class GhostController : MonoBehaviour
                             }
                             break;
 
-
-                        case 2: //ghostID=2
+                        // ---- Ghost 2: Closer/equal distance ----
+                        case 2:
                             newDirection = Ghost2MovementCloserDistance();
 
                             if (IsWalkable(currentGridPosition + newDirection))
@@ -197,9 +195,8 @@ public class GhostController : MonoBehaviour
                             }
                             break;
 
-
-                        case 3: //ghostID=3
-                                // ------ random directions ------
+                        // ---- Ghost 3: Random directions ----
+                        case 3:                               
                                 // set new direction
                             newDirection = ChooseRandomDirection();
 
@@ -211,82 +208,18 @@ public class GhostController : MonoBehaviour
                             }
                             break;
 
-
-                        case 4: //ghostID=4
-                                // ----- clockwise around the map -----
-
+                        // ---- Ghost 4: Clockwise around the map  ----
+                        case 4:
                             if (currentClockTarget == Vector3Int.zero) // set first target
                             {
                                 currentClockTarget = clockRotationPoints[clockRotationIndex];
                             }
                             MoveTowardsClockwiseTarget();
                             break;
-
-
                     }
                 }
             }
         }
-
-
-                //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
-                //Debug.Log("es sollte eigentlich jetzt laufen, wenn das vorherige true geworden ist.");             
-
-                //if ghostID == 1 || ghost state = scared or recovering {}
-
-        //        if (ghostID == 1 || isScaredInAnimator || isRecoveringInAnimator)
-        //        {
-        //            newDirection = Ghost1MovementFurtherDistance();
-
-        //            if (IsWalkable(currentGridPosition + newDirection))
-        //            {
-        //                currentDirection = newDirection;
-        //                SetTargetPosition(currentDirection);
-        //                SetWalkingDirection(currentDirection);
-        //            }
-        //        }
-
-
-        //        if (ghostID == 2)
-        //        {
-        //            newDirection = Ghost2MovementCloserDistance();
-
-        //            if (IsWalkable(currentGridPosition + newDirection))
-        //            {
-        //                currentDirection = newDirection;
-        //                SetTargetPosition(currentDirection);
-        //                SetWalkingDirection(currentDirection);
-        //            }
-        //        }
-                
-                
-        //        if (ghostID == 3)
-        //        {
-        //            // ------ random directions ------
-        //            // set new direction
-        //            newDirection = ChooseRandomDirection();
-
-        //            if (IsWalkable(currentGridPosition + newDirection))
-        //            {
-        //                currentDirection = newDirection;
-        //                SetTargetPosition(currentDirection);
-        //                SetWalkingDirection(currentDirection);
-        //            }
-        //        }
-
-        //        if (ghostID == 4)
-        //        {
-        //            // ----- clockwise around the map -----
-
-        //            if (currentClockTarget == Vector3Int.zero) // set first target
-        //            {
-        //                currentClockTarget = clockRotationPoints[clockRotationIndex];
-        //            }
-        //            MoveTowardsClockwiseTarget();
-        //        }
-        //    }
-        //}
-
         else
         {
             MoveTowardsTarget();
@@ -299,8 +232,7 @@ public class GhostController : MonoBehaviour
         float duration = 1.0f; // spawn duration
         float elapsedTime = 0; // time passed
 
-        //Debug.Log("this method should be called!");
-
+        // Ghosts respawn positions
         if (ghostID == 1)
         {
             targetRespawnPosition = new Vector3(-7.5f, -5, 0);
@@ -314,7 +246,6 @@ public class GhostController : MonoBehaviour
         else if (ghostID == 3)
         {
             targetRespawnPosition = new Vector3(-5.5f, -5, 0);
-            //Debug.Log("it's ghost 3");
         }
 
         else if (ghostID == 4)
@@ -338,37 +269,11 @@ public class GhostController : MonoBehaviour
 
         //reset values after respawn
         isDead = false;
-        animator.SetBool("Dead", false);
-
-        //if (transform.position != targetRespawnPosition)
-        //{
-        //    //Debug.Log("current != target");
-
-        //    //Debug.Log("animator state" + animator.GetBool("Dead"));
-
-        //    //Debug.Log(isDead);
-
-
-        //    // framerate independent
-        //    t += Time.deltaTime * ghostMoveSpeed;
-
-        //    // LERP to move ghost to target respawn position
-        //    transform.position = Vector3.Lerp(transform.position, targetRespawnPosition, t);
-
-        //    // put ghost on target position when close enough
-        //    if (Vector3.Distance(transform.position, targetRespawnPosition) < 0.01f)
-        //    {
-        //        transform.position = targetRespawnPosition;                
-        //    }
-        //}
-
-        //animator.SetBool("Dead", false);
-        //isDead = false;
-
+        animator.SetBool("Dead", false);      
     }
 
 
-    // --- Ghost 1 - further/equal distance ---
+    // --- Ghost 1 - Further/equal distance ---
     Vector3Int Ghost1MovementFurtherDistance()
     {
         //Vector3Int bestDirection = Vector3Int.zero;
@@ -402,14 +307,14 @@ public class GhostController : MonoBehaviour
         // if no valid direction?
         if (validDirections.Count == 0)
         {
-            //Debug.Log("No valid direction found.");
+            Debug.Log("Ghost 1: No valid direction found.");
             return lastDirection;
         }
 
         return validDirections[Random.Range(0, validDirections.Count)];
     }
 
-    // --- Ghost 2 - closer/equal distance ---
+    // --- Ghost 2 - Closer/equal distance ---
     Vector3Int Ghost2MovementCloserDistance()
     {
         List<Vector3Int> validDirections = new List<Vector3Int>();
@@ -454,7 +359,7 @@ public class GhostController : MonoBehaviour
         // If no valid direction found, keep last direction
         if (validDirections.Count == 0)
         {
-            Debug.Log("No walkable positions found!");
+            Debug.Log("No walkable positions found Ghost 2!");
 
             // Fallback: random direction (if ghost cannot move)
             //newDirection = ChooseRandomDirection();
@@ -502,6 +407,7 @@ public class GhostController : MonoBehaviour
         if (walkableDirections.Count == 0)
         {
             walkableDirections.Add(oppositeDirection);
+            Debug.Log("Ghost 3 no walkable position!");
         }
 
         // choose random direction
@@ -509,7 +415,7 @@ public class GhostController : MonoBehaviour
 
     }
 
-    // --- Ghost 4 - clockwise rotation ---
+    // --- Ghost 4 - Clockwise rotation ---
     void MoveTowardsClockwiseTarget()
     {
         if (currentGridPosition == currentClockTarget)
@@ -528,7 +434,7 @@ public class GhostController : MonoBehaviour
         }
         else
         {
-            //Debug.Log("Pathfinding is not working. Fallback else.");
+            Debug.Log("Ghost 4: Pathfinding is not working. Fallback else.");
             // Fallback: random direction (if ghost cannot move)
             newDirection = ChooseRandomDirection();
             SetTargetPosition(newDirection);
@@ -739,20 +645,16 @@ public class GhostController : MonoBehaviour
     //block teleporting of ghosts
     void BlockTeleporting()
     {
-        //Debug.Log("Current Ghost Position: " + currentGridPosition);
-        //Debug.Log("Left Tunnel Exit Position: " + leftTunnelExitPosition);
-        //Debug.Log("Right Tunnel Exit Position: " + rightTunnelExitPosition);
-
         if (currentGridPosition == leftTunnelExitPosition)
         {
-            //Debug.Log("ghost is on left teleport position");
+            // Ghost is on left teleport position
             // if ghost is on teleport position change direction
             currentDirection = Vector3Int.right; // ghost is in left position -> change to right direction
             SetTargetPosition(currentDirection);
         }
         else if (currentGridPosition == rightTunnelExitPosition)
         {
-            //Debug.Log("ghost is on right teleport position");
+            // Ghost is on right teleport position
             currentDirection = Vector3Int.left;
             SetTargetPosition(currentDirection);
         }
