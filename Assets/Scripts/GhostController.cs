@@ -145,6 +145,9 @@ public class GhostController : MonoBehaviour
         if (!isMoving && !isDeadInAnimator)
         {
 
+            bool isScaredInAnimator = animator.GetBool("Scared");
+            bool isRecoveringInAnimator = animator.GetBool("Recovering");
+
             if (!didExitSpawn)
             {
                 //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
@@ -154,13 +157,9 @@ public class GhostController : MonoBehaviour
 
             else
             {
-                //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
-                //Debug.Log("es sollte eigentlich jetzt laufen, wenn das vorherige true geworden ist.");             
-
-                //if ghostID == 1 || ghost state = scared or recovering {}
-
-                if (ghostID == 1)
+                if (isScaredInAnimator || isRecoveringInAnimator)
                 {
+                    // ghost 1 behaviour
                     newDirection = Ghost1MovementFurtherDistance();
 
                     if (IsWalkable(currentGridPosition + newDirection))
@@ -171,46 +170,122 @@ public class GhostController : MonoBehaviour
                     }
                 }
 
-
-                if (ghostID == 2)
+                else
                 {
-                    newDirection = Ghost2MovementCloserDistance();
-
-                    if (IsWalkable(currentGridPosition + newDirection))
+                    switch (ghostID)
                     {
-                        currentDirection = newDirection;
-                        SetTargetPosition(currentDirection);
-                        SetWalkingDirection(currentDirection);
-                    }
-                }
-                
-                
-                if (ghostID == 3)
-                {
-                    // ------ random directions ------
-                    // set new direction
-                    newDirection = ChooseRandomDirection();
+                        case 1: //ghostID=1
+                            newDirection = Ghost1MovementFurtherDistance();
 
-                    if (IsWalkable(currentGridPosition + newDirection))
-                    {
-                        currentDirection = newDirection;
-                        SetTargetPosition(currentDirection);
-                        SetWalkingDirection(currentDirection);
-                    }
-                }
+                            if (IsWalkable(currentGridPosition + newDirection))
+                            {
+                                currentDirection = newDirection;
+                                SetTargetPosition(currentDirection);
+                                SetWalkingDirection(currentDirection);
+                            }
+                            break;
 
-                if (ghostID == 4)
-                {
-                    // ----- clockwise around the map -----
 
-                    if (currentClockTarget == Vector3Int.zero) // set first target
-                    {
-                        currentClockTarget = clockRotationPoints[clockRotationIndex];
+                        case 2: //ghostID=2
+                            newDirection = Ghost2MovementCloserDistance();
+
+                            if (IsWalkable(currentGridPosition + newDirection))
+                            {
+                                currentDirection = newDirection;
+                                SetTargetPosition(currentDirection);
+                                SetWalkingDirection(currentDirection);
+                            }
+                            break;
+
+
+                        case 3: //ghostID=3
+                                // ------ random directions ------
+                                // set new direction
+                            newDirection = ChooseRandomDirection();
+
+                            if (IsWalkable(currentGridPosition + newDirection))
+                            {
+                                currentDirection = newDirection;
+                                SetTargetPosition(currentDirection);
+                                SetWalkingDirection(currentDirection);
+                            }
+                            break;
+
+
+                        case 4: //ghostID=4
+                                // ----- clockwise around the map -----
+
+                            if (currentClockTarget == Vector3Int.zero) // set first target
+                            {
+                                currentClockTarget = clockRotationPoints[clockRotationIndex];
+                            }
+                            MoveTowardsClockwiseTarget();
+                            break;
+
+
                     }
-                    MoveTowardsClockwiseTarget();
                 }
             }
         }
+
+
+                //Debug.Log("if(!ismoving) didexitspawn:" + didExitSpawn);
+                //Debug.Log("es sollte eigentlich jetzt laufen, wenn das vorherige true geworden ist.");             
+
+                //if ghostID == 1 || ghost state = scared or recovering {}
+
+        //        if (ghostID == 1 || isScaredInAnimator || isRecoveringInAnimator)
+        //        {
+        //            newDirection = Ghost1MovementFurtherDistance();
+
+        //            if (IsWalkable(currentGridPosition + newDirection))
+        //            {
+        //                currentDirection = newDirection;
+        //                SetTargetPosition(currentDirection);
+        //                SetWalkingDirection(currentDirection);
+        //            }
+        //        }
+
+
+        //        if (ghostID == 2)
+        //        {
+        //            newDirection = Ghost2MovementCloserDistance();
+
+        //            if (IsWalkable(currentGridPosition + newDirection))
+        //            {
+        //                currentDirection = newDirection;
+        //                SetTargetPosition(currentDirection);
+        //                SetWalkingDirection(currentDirection);
+        //            }
+        //        }
+                
+                
+        //        if (ghostID == 3)
+        //        {
+        //            // ------ random directions ------
+        //            // set new direction
+        //            newDirection = ChooseRandomDirection();
+
+        //            if (IsWalkable(currentGridPosition + newDirection))
+        //            {
+        //                currentDirection = newDirection;
+        //                SetTargetPosition(currentDirection);
+        //                SetWalkingDirection(currentDirection);
+        //            }
+        //        }
+
+        //        if (ghostID == 4)
+        //        {
+        //            // ----- clockwise around the map -----
+
+        //            if (currentClockTarget == Vector3Int.zero) // set first target
+        //            {
+        //                currentClockTarget = clockRotationPoints[clockRotationIndex];
+        //            }
+        //            MoveTowardsClockwiseTarget();
+        //        }
+        //    }
+        //}
 
         else
         {
