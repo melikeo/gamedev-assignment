@@ -308,6 +308,11 @@ public class GhostController : MonoBehaviour
         if (validDirections.Count == 0)
         {
             Debug.Log("Ghost 1: No valid direction found.");
+
+            // Fallback: random direction (if ghost cannot move)
+            newDirection = ChooseRandomDirection();
+            SetTargetPosition(newDirection);
+
             return lastDirection;
         }
 
@@ -362,8 +367,8 @@ public class GhostController : MonoBehaviour
             Debug.Log("No walkable positions found Ghost 2!");
 
             // Fallback: random direction (if ghost cannot move)
-            //newDirection = ChooseRandomDirection();
-            //SetTargetPosition(newDirection);
+            newDirection = ChooseRandomDirection();
+            SetTargetPosition(newDirection);
 
             return lastDirection;
         }
