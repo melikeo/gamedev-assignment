@@ -59,6 +59,7 @@ public class GhostController : MonoBehaviour
 
     // respawn dead ghost
     Vector3 targetRespawnPosition = Vector3.zero; //initialising
+    private List<GhostController> otherGhosts; // to check for states of other ghosts
 
     // pacstudent reference
     [SerializeField] private Transform pacStudent;
@@ -104,6 +105,10 @@ public class GhostController : MonoBehaviour
             new Vector3Int(-7, -8, 0),
             new Vector3Int(-6, -8, 0)
         };
+
+        // get ghosts states
+        otherGhosts = new List<GhostController>(FindObjectsOfType<GhostController>());
+        otherGhosts.Remove(this); // remove this ghost from list to check states of the others
 
         // ghost 4 clockwise rotation waypoints
         clockRotationPoints = new List<Vector3Int>
@@ -267,9 +272,32 @@ public class GhostController : MonoBehaviour
         didExitSpawn = false;
         spawnExitIndex = 0;
 
+        // set ghosts to state that other ghosts are in (scared/recovering etc.)
+        //check states of other ghosts
+        // set state recovering or scared when other ghosts are in that
+
+        bool anyScared = otherGhosts.Exists(ghost => ghost.animator.GetBool("Scared"));
+        bool anyRecovering = otherGhosts.Exists(ghost => ghost.animator.GetBool("Recovering"));
+
+        //Debug.Log($"Respawned Ghost {ghostID}. Scared: {anyScared}, Recovering: {anyRecovering}");
+
+
+        if (anyScared)
+        {
+            SetScaredState();
+            Debug.Log($"Ghost {ghostID}: Animator Scared State Set to: {animator.GetBool("Scared")}");
+        }
+        else if (anyRecovering)
+        {
+            SetRecoveringState();
+            Debug.Log($"Ghost {ghostID}: Animator Recovering State Set to: {animator.GetBool("Recovering")}");
+        }
+
         //reset values after respawn
         isDead = false;
-        animator.SetBool("Dead", false);      
+        animator.SetBool("Dead", false);
+
+
     }
 
 
@@ -307,7 +335,7 @@ public class GhostController : MonoBehaviour
         // if no valid direction?
         if (validDirections.Count == 0)
         {
-            Debug.Log("Ghost 1: No valid direction found.");
+            //Debug.Log("Ghost 1: No valid direction found.");
 
             // Fallback: random direction (if ghost cannot move)
             newDirection = ChooseRandomDirection();
@@ -364,7 +392,7 @@ public class GhostController : MonoBehaviour
         // If no valid direction found, keep last direction
         if (validDirections.Count == 0)
         {
-            Debug.Log("No walkable positions found Ghost 2!");
+            //Debug.Log("No walkable positions found Ghost 2!");
 
             // Fallback: random direction (if ghost cannot move)
             newDirection = ChooseRandomDirection();
@@ -412,7 +440,7 @@ public class GhostController : MonoBehaviour
         if (walkableDirections.Count == 0)
         {
             walkableDirections.Add(oppositeDirection);
-            Debug.Log("Ghost 3 no walkable position!");
+            //Debug.Log("Ghost 3 no walkable position!");
         }
 
         // choose random direction
@@ -439,7 +467,7 @@ public class GhostController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Ghost 4: Pathfinding is not working. Fallback else.");
+            //Debug.Log("Ghost 4: Pathfinding is not working. Fallback else.");
             // Fallback: random direction (if ghost cannot move)
             newDirection = ChooseRandomDirection();
             SetTargetPosition(newDirection);
