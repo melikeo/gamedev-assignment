@@ -107,7 +107,9 @@ public class GhostController : MonoBehaviour
         };
 
         // get ghosts states
-        otherGhosts = new List<GhostController>(FindObjectsOfType<GhostController>());
+        //otherGhosts = new List<GhostController>(FindObjectsOfType<GhostController>());
+        otherGhosts = new List<GhostController>(FindObjectsByType<GhostController>(FindObjectsSortMode.None));
+
         otherGhosts.Remove(this); // remove this ghost from list to check states of the others
 
         // ghost 4 clockwise rotation waypoints
@@ -233,8 +235,11 @@ public class GhostController : MonoBehaviour
 
     IEnumerator RespawnDeadGhost()
     {
+        //isDead = true;
+        //animator.SetBool("Dead", true); // -- duplicate
+
         Vector3 startPos = transform.position;
-        float duration = 1.0f; // spawn duration
+        float duration = 2.0f; // spawn duration
         float elapsedTime = 0; // time passed
 
         // Ghosts respawn positions
@@ -281,21 +286,20 @@ public class GhostController : MonoBehaviour
 
         //Debug.Log($"Respawned Ghost {ghostID}. Scared: {anyScared}, Recovering: {anyRecovering}");
 
-
-        if (anyScared)
-        {
-            SetScaredState();
-            Debug.Log($"Ghost {ghostID}: Animator Scared State Set to: {animator.GetBool("Scared")}");
-        }
-        else if (anyRecovering)
-        {
-            SetRecoveringState();
-            Debug.Log($"Ghost {ghostID}: Animator Recovering State Set to: {animator.GetBool("Recovering")}");
-        }
+        //if (anyScared)
+        //{
+        //    SetScaredState();
+        //    Debug.Log($"Ghost {ghostID}: Animator Scared State Set to: {animator.GetBool("Scared")}");
+        //}
+        //else if (anyRecovering)
+        //{
+        //    SetRecoveringState();
+        //    Debug.Log($"Ghost {ghostID}: Animator Recovering State Set to: {animator.GetBool("Recovering")}");
+        //}
 
         //reset values after respawn
         isDead = false;
-        animator.SetBool("Dead", false);
+        //animator.SetBool("Dead", false); // --- duplicate - is set in Collisions already
 
 
     }
