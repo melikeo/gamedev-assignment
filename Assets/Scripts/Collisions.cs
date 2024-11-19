@@ -30,6 +30,9 @@ public class Collisions : MonoBehaviour
     public ParticleSystem pacstudentDeathEffect;
     private ParticleSystem pacstudentDeathEffectInstance;
 
+    // Pacstudent avoid multiple deaths
+    private bool pacstudentDyingOrRespawning = false; // so pacstudent does not lose multiple lives at once when immediately multiple ghost collisions happen
+
     private void Awake()
     {
         pacstudentDeathEffectInstance = Instantiate(pacstudentDeathEffect, transform.position, Quaternion.identity); //instantiate wall collision effect
@@ -93,6 +96,10 @@ public class Collisions : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (pacstudentDyingOrRespawning)
+        {
+            return; // pacstudent should not have other collisions while dying/respawing
+        }
 
         if (collision.gameObject.CompareTag("Pellet"))
         {
@@ -158,8 +165,10 @@ public class Collisions : MonoBehaviour
 
     // Ghost is walking -> Collision -> Pacstudent dies
     IEnumerator PacStudentDeathReaction()
-    {       
+    {
         //Debug.Log("pacstudent died");
+
+        pacstudentDyingOrRespawning = true; // pacstudent cannot die during death state when already died
 
         pacStudentAnimator.SetBool("isDead", true);
 
@@ -176,14 +185,16 @@ public class Collisions : MonoBehaviour
 
         currentLives -= 1;
         UpdateHeartsUI(); //reduce number of hearts on Game Screen
-      
+
 
         //respawn should only happen after animation has been played //wait!
 
         //Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
         //transform.position = restartPos; // respawn at start position
-        
+
         //Debug.Log("did dead animation play?");
+
+        pacstudentDyingOrRespawning = false;
 
 
         if (currentLives > 0)
