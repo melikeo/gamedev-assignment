@@ -30,7 +30,9 @@ public class Collisions : MonoBehaviour
     // Pacstudent Death Particle Effect
     public ParticleSystem pacstudentDeathEffect;
     private ParticleSystem pacstudentDeathEffectInstance;
-    public ParticleSystem pacstudentProtectedEffectInstance;
+    // -- Extra -- Pacstudent Protected Particle Effect (collision with bonus cherry)
+    public ParticleSystem pacstudentProtectedEffect;
+    private ParticleSystem pacstudentProtectedEffectInstance;
 
     // Pacstudent Death Sound Effect
     public AudioSource deathSoundEffect;
@@ -50,6 +52,10 @@ public class Collisions : MonoBehaviour
         pacstudentDeathEffectInstance = Instantiate(pacstudentDeathEffect, transform.position, Quaternion.identity); //instantiate wall collision effect
         pacstudentDeathEffectInstance.transform.SetParent(transform); //set wall collision effect as child of pacstudent to place it at pacstudent
         pacstudentDeathEffectInstance.Stop(); //stop so it does not play automatically
+
+        pacstudentProtectedEffectInstance = Instantiate(pacstudentProtectedEffect, transform.position, Quaternion.identity);
+        pacstudentProtectedEffectInstance.transform.SetParent(transform); // set pacstudent as parent
+        pacstudentProtectedEffectInstance.Stop();
     }
 
     // Start is called before the first frame update
