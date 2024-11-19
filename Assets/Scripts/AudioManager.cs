@@ -47,7 +47,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
     private void PlayBackgroundMusic()
     {
         //introMusicSource.Stop();
@@ -62,7 +61,6 @@ public class AudioManager : MonoBehaviour
             DeadMusicIsPlaying = false;
         }
     }
-
 
     private void PlayScaredGhostsMusic()
     {

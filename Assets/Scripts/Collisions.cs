@@ -66,7 +66,7 @@ public class Collisions : MonoBehaviour
     {
         if (ghostIsRecovering)
         {
-            Debug.Log("Ghost is in recovering state");
+            //Debug.Log("Ghost is in recovering state");
         }
 
 
@@ -311,7 +311,7 @@ public class Collisions : MonoBehaviour
         }
         ghostIsScared = true;
         ghostIsRecovering = false;
-        Debug.Log("Ghosts are scared right now.");
+        //Debug.Log("Ghosts are scared right now.");
     }
 
     void StartGhostScaredTimer()

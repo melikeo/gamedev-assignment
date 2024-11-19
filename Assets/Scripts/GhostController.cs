@@ -108,9 +108,7 @@ public class GhostController : MonoBehaviour
         };
 
         // get ghosts states
-        //otherGhosts = new List<GhostController>(FindObjectsOfType<GhostController>());
         otherGhosts = new List<GhostController>(FindObjectsByType<GhostController>(FindObjectsSortMode.None));
-
         otherGhosts.Remove(this); // remove this ghost from list to check states of the others
 
         // ghost 4 clockwise rotation waypoints
@@ -237,9 +235,6 @@ public class GhostController : MonoBehaviour
     IEnumerator RespawnDeadGhost()
     {
         //isDead = true;
-        //animator.SetBool("Dead", true); // -- duplicate
-        //animator.SetBool("Scared", false);
-        //animator.SetBool("Recovering", false);
 
         SetDeadState();
 
@@ -292,11 +287,8 @@ public class GhostController : MonoBehaviour
             TakeSpawnExitRoute();
         }
 
-
         //reset values after respawn
-
         //animator.SetBool("Dead", false); // --- duplicate - is set in Collisions already
-
         //animator.SetBool("Dead", false);
         //isDead = false;
 
@@ -304,9 +296,9 @@ public class GhostController : MonoBehaviour
 
     void AfterRespawnState()
     {
-        // set ghosts to state that other ghosts are in (scared/recovering etc.)
-        //check states of other ghosts
-        // set state recovering or scared when other ghosts are in that
+        // Set ghosts to state that other ghosts are in (scared/recovering etc.)
+        // Check states of other ghosts
+        // Set state to recovering or scared when other ghosts are in that
 
         bool anyScared = otherGhosts.Exists(ghost => ghost.animator.GetBool("Scared"));
         bool anyRecovering = otherGhosts.Exists(ghost => ghost.animator.GetBool("Recovering"));
@@ -316,12 +308,12 @@ public class GhostController : MonoBehaviour
         if (anyScared)
         {
             SetScaredState();
-            Debug.Log($"Ghost {ghostID}: Animator Scared State Set to: {animator.GetBool("Scared")}");
+            //Debug.Log($"Ghost {ghostID}: Animator Scared State Set to: {animator.GetBool("Scared")}");
         }
         else if (anyRecovering)
         {
             SetRecoveringState();
-            Debug.Log($"Ghost {ghostID}: Animator Recovering State Set to: {animator.GetBool("Recovering")}");
+            //Debug.Log($"Ghost {ghostID}: Animator Recovering State Set to: {animator.GetBool("Recovering")}");
         }
 
         else
@@ -369,7 +361,7 @@ public class GhostController : MonoBehaviour
         {
             //Debug.Log("Ghost 1: No valid direction found.");
 
-            // Fallback: random direction (if ghost cannot move)
+            // Fallback: random direction (if ghost cannot move anymore)
             newDirection = ChooseRandomDirection();
             SetTargetPosition(newDirection);
 
@@ -384,7 +376,7 @@ public class GhostController : MonoBehaviour
     {
         List<Vector3Int> validDirections = new List<Vector3Int>();
 
-        //Vector3Int bestDirection = Vector3Int.zero;
+        //Vector3Int bestDirection = Vector3Int.zero; // to choose best path, not randomly
         //float bestDistance = float.MaxValue; // init with high value
 
         float currentDistance = Vector3.Distance(currentGridPosition, pacStudent.position); // calculate distance between ghost and pacstudent
@@ -435,10 +427,6 @@ public class GhostController : MonoBehaviour
 
         // Choose a random valid direction
         return validDirections[Random.Range(0, validDirections.Count)];
-
-
-        //if ghost cannot move to any direction it should move to a random direction TBA!! for all ghosts
-
     }
 
     // --- Ghost 3 - Random Direction ---
@@ -477,7 +465,6 @@ public class GhostController : MonoBehaviour
 
         // choose random direction
         return walkableDirections[Random.Range(0, walkableDirections.Count)];
-
     }
 
     // --- Ghost 4 - Clockwise rotation ---
@@ -533,7 +520,6 @@ public class GhostController : MonoBehaviour
                 }
             }
         }
-
         return bestDirection == Vector3Int.zero ? lastDirection : bestDirection;
     }
 
@@ -543,6 +529,7 @@ public class GhostController : MonoBehaviour
     // All Ghosts: Exit Spawn Area
     void TakeSpawnExitRoute()
     {
+        // Ghost 1 and 2 take left route to exit, Ghost 3 and 4 exit from right way
         List<Vector3Int> spawnExitRoute = (ghostID == 1 || ghostID == 2) ? spawnLeftExitRoute : spawnRightExitRoute;
 
         if (spawnExitIndex < spawnExitRoute.Count)
@@ -655,7 +642,6 @@ public class GhostController : MonoBehaviour
     }
 
 
-
     // Animator management
     void SetWalkingDirection(Vector3Int direction)
     {
@@ -727,6 +713,4 @@ public class GhostController : MonoBehaviour
             MoveTowardsTarget();
         }
     }
-
-
 }
