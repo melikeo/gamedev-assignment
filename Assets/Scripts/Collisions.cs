@@ -141,6 +141,14 @@ public class Collisions : MonoBehaviour
             }
         }
 
+        if (collision.gameObject.CompareTag("BirdCage"))
+        {
+            Debug.Log("Birdcage passed!");
+            StartCoroutine(StopPacstudentCage());
+            Destroy(collision.gameObject); //destroy bird cage after passed?
+        }
+
+
         if (collision.gameObject.CompareTag("PowerPellet"))
         {
             //Debug.Log("PowerPellet passed!");
@@ -241,8 +249,6 @@ public class Collisions : MonoBehaviour
         {
             //Debug.Log("game over");
         }
-
-
     }
 
     void UpdateHeartsUI() //reduce number of hearts at collisions
@@ -345,9 +351,6 @@ public class Collisions : MonoBehaviour
         ghostIsScared = true;
         ghostIsRecovering = false;
         //Debug.Log("Ghosts are scared right now.");
-
-
-
     }
 
     void StartGhostScaredTimer()
@@ -370,7 +373,6 @@ public class Collisions : MonoBehaviour
                 }
                 ghostIsRecovering = true;
                 //Debug.Log("3 seconds if is left");
-
             }
         }
         //after 10 seconds passed
@@ -417,7 +419,6 @@ public class Collisions : MonoBehaviour
 
         // Return to Startscene (with updated Highscore)
         StartCoroutine(ReturnToStartScene());
-
     }
 
     void SaveHighscore()
@@ -454,7 +455,14 @@ public class Collisions : MonoBehaviour
     }
 
 
+    IEnumerator StopPacstudentCage()
+    {
+        pacStudent.GetComponent<PacStudentController>().enabled = false; // stop pacstudent from moving for 5 seconds
 
+        yield return new WaitForSeconds(5);
+
+        pacStudent.GetComponent<PacStudentController>().enabled = true;
+    }
 
 
 }
