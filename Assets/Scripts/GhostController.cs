@@ -48,7 +48,6 @@ public class GhostController : MonoBehaviour
     // block teleporting of ghosts
     private Vector3 leftTunnelExitPosition;
     private Vector3 rightTunnelExitPosition;
-    private float teleportCooldown = 0.1f;
 
     // block re-entering spawn area
     private List<Vector3Int> spawnAreaEntryFields;
