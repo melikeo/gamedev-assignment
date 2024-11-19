@@ -10,7 +10,7 @@ public class PacStudentController : MonoBehaviour
     private Vector3 startPos;
     private Vector3 targetPos;
 
-    [SerializeField] private float pacstudentMoveSpeed = 5f; //default move speed
+    [SerializeField] private float pacstudentMoveSpeed = 8f; //default move speed
 
     private bool isMoving = false;
 

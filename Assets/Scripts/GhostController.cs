@@ -140,9 +140,9 @@ public class GhostController : MonoBehaviour
         if (isDeadInAnimator)
         {
             isMoving = true; //stop moving
-            isDead = true;
-            //respawnDeadGhost();
+            //isDead = true;
             StartCoroutine(RespawnDeadGhost());
+            return;
         }
 
 
@@ -237,9 +237,13 @@ public class GhostController : MonoBehaviour
     {
         //isDead = true;
         //animator.SetBool("Dead", true); // -- duplicate
+        //animator.SetBool("Scared", false);
+        //animator.SetBool("Recovering", false);
+
+        SetDeadState();
 
         Vector3 startPos = transform.position;
-        float duration = 2.0f; // spawn duration
+        float duration = 1.0f; // spawn duration
         float elapsedTime = 0; // time passed
 
         // Ghosts respawn positions
@@ -277,6 +281,26 @@ public class GhostController : MonoBehaviour
         didExitSpawn = false;
         spawnExitIndex = 0;
 
+        //reset positions after respawn
+        startPos = transform.position;
+        targetPos = transform.position;
+
+        TakeSpawnExitRoute();
+
+        //reset values after respawn
+
+        //animator.SetBool("Dead", false); // --- duplicate - is set in Collisions already
+
+        //animator.SetBool("Dead", false);
+        //isDead = false;
+        
+
+        //AfterRespawnState();
+
+    }
+
+    void AfterRespawnState()
+    {
         // set ghosts to state that other ghosts are in (scared/recovering etc.)
         //check states of other ghosts
         // set state recovering or scared when other ghosts are in that
@@ -286,21 +310,22 @@ public class GhostController : MonoBehaviour
 
         //Debug.Log($"Respawned Ghost {ghostID}. Scared: {anyScared}, Recovering: {anyRecovering}");
 
-        //if (anyScared)
-        //{
-        //    SetScaredState();
-        //    Debug.Log($"Ghost {ghostID}: Animator Scared State Set to: {animator.GetBool("Scared")}");
-        //}
-        //else if (anyRecovering)
-        //{
-        //    SetRecoveringState();
-        //    Debug.Log($"Ghost {ghostID}: Animator Recovering State Set to: {animator.GetBool("Recovering")}");
-        //}
+        if (anyScared)
+        {
+            SetScaredState();
+            Debug.Log($"Ghost {ghostID}: Animator Scared State Set to: {animator.GetBool("Scared")}");
+        }
+        else if (anyRecovering)
+        {
+            SetRecoveringState();
+            Debug.Log($"Ghost {ghostID}: Animator Recovering State Set to: {animator.GetBool("Recovering")}");
+        }
 
-        //reset values after respawn
-        isDead = false;
-        //animator.SetBool("Dead", false); // --- duplicate - is set in Collisions already
-
+        else
+        {
+            animator.SetBool("Recovering", false);
+            animator.SetBool("Scared", false);
+        }
 
     }
 

@@ -224,7 +224,6 @@ public class Collisions : MonoBehaviour
 
         ghostAnimator.SetBool("Scared", false);
         ghostAnimator.SetBool("Recovering", false);
-
         ghostAnimator.SetBool("Dead", true);
 
         score += 300; //add 300 points to score
@@ -235,8 +234,6 @@ public class Collisions : MonoBehaviour
         //transition back to walking state (reset state)
         ghostAnimator.SetBool("Dead", false);
         //Debug.Log("Ghosts is in walking state.");
-
-
     }
 
     //void StartGhostDiesTimer()
