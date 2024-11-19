@@ -38,6 +38,9 @@ public class Collisions : MonoBehaviour
     // Pacstudent avoid multiple deaths
     private bool pacstudentDyingOrRespawning = false; // so pacstudent does not lose multiple lives at once when immediately multiple ghost collisions happen
 
+    // Ghosts multiple PowerPelletes
+    bool ghostDead = false;
+
     private void Awake()
     {
         pacstudentDeathEffectInstance = Instantiate(pacstudentDeathEffect, transform.position, Quaternion.identity); //instantiate wall collision effect
@@ -244,6 +247,7 @@ public class Collisions : MonoBehaviour
         ghostAnimator.SetBool("Scared", false);
         ghostAnimator.SetBool("Recovering", false);
         ghostAnimator.SetBool("Dead", true);
+        ghostDead = true;        
 
         score += 300; //add 300 points to score
         UpdateScoreText(); //update highscore
@@ -253,6 +257,7 @@ public class Collisions : MonoBehaviour
         //transition back to walking state (reset state)
         ghostAnimator.SetBool("Dead", false);
         //Debug.Log("Ghosts is in walking state.");
+        ghostDead = false;
     }
 
     //void StartGhostDiesTimer()
@@ -295,16 +300,20 @@ public class Collisions : MonoBehaviour
         //    ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();            
         //    return; //exit because ghost is already scared
         //}
-
-
         //ghostIsScared = true;
+
         scaredTimer = 10.0f;
         ghostTimerText.gameObject.SetActive(true);
         ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();
 
         //set ghost animator state to "scared" (all ghosts)
         foreach (var animator in ghostAnimators)
-        {            
+        {
+            if (animator.GetBool("Dead"))
+            {
+                continue; // keep dead ghosts dead while restarting timer
+            }
+
             animator.SetBool("Scared", true);
             animator.SetBool("Recovering", false);
             animator.SetBool("Dead", false);
@@ -312,6 +321,9 @@ public class Collisions : MonoBehaviour
         ghostIsScared = true;
         ghostIsRecovering = false;
         //Debug.Log("Ghosts are scared right now.");
+
+
+
     }
 
     void StartGhostScaredTimer()
