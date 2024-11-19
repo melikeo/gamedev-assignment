@@ -20,15 +20,7 @@ public class AudioManager : MonoBehaviour
     {
         //introMusicSource.clip = introMusicClip;
 
-
         backgroundMusicSource.clip = backgroundMusicClip;
-        //backgroundMusicSource.Play();
-
-        //introMusicSource.Play(); //start playing intro music
-
-        //Invoke("PlayBackgroundMusic", introMusicSource.clip.length); //switch to background music after intro
-
-
 
     }
 
@@ -48,12 +40,6 @@ public class AudioManager : MonoBehaviour
         {
             PlayScaredGhostsMusic();
         }
-
-        //else if (CheckIfGhostsState("Dead") && (CheckIfGhostsState("Scared") || CheckIfGhostsState("Recovering")))
-        //{
-        //    PlayDeadGhostsMusic();
-        //}
-
 
         else
         {
@@ -102,7 +88,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
     private bool CheckIfGhostsState(string stateName)
     {
         foreach (Animator animator in ghostAnimators)
@@ -115,20 +100,4 @@ public class AudioManager : MonoBehaviour
         }
         return false;
     }
-
-    //bool checkForScared() 
-    //{
-    //    foreach (Animator animator in ghostAnimators)
-    //    {
-    //        if (animator.GetBool("Scared"))
-    //        {
-    //            Debug.Log("is in state: scared");
-    //            return true; // true if any of the ghosts is in mentioned state
-    //        }
-    //    }
-    //    return false;
-    //}
-
-
-
 }
