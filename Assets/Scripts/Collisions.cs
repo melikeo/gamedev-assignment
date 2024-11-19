@@ -30,6 +30,7 @@ public class Collisions : MonoBehaviour
     // Pacstudent Death Particle Effect
     public ParticleSystem pacstudentDeathEffect;
     private ParticleSystem pacstudentDeathEffectInstance;
+    public ParticleSystem pacstudentProtectedEffectInstance;
 
     // Pacstudent Death Sound Effect
     public AudioSource deathSoundEffect;
@@ -40,6 +41,9 @@ public class Collisions : MonoBehaviour
 
     // Ghosts multiple PowerPelletes
     bool ghostDead = false;
+
+    // Pacstudent BonusCherry Protection
+    bool isProtected = false;
 
     private void Awake()
     {
@@ -123,6 +127,8 @@ public class Collisions : MonoBehaviour
             score += 100;
             Destroy(collision.gameObject);
             UpdateScoreText();
+
+            StartCoroutine(ActivatePacstudentProtection());
         }
 
         if (collision.gameObject.CompareTag("PowerPellet"))
@@ -147,6 +153,14 @@ public class Collisions : MonoBehaviour
         // PACSTUDENT & GHOSTS COLLISIONS
 
         if(collision.gameObject.CompareTag("Ghost")) {
+
+            if (isProtected)
+            {
+                Debug.Log("PacStudent is protected. Ignores Ghosts!!! "); //change to only protect and enable collision with scared and recovering?
+                return;
+            }
+
+
             Animator ghostAnimator = collision.GetComponent<Animator>();
             if(ghostAnimator != null)
             {
@@ -414,4 +428,21 @@ public class Collisions : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("StartScene");
         gameOverText.gameObject.SetActive(false);
     }
+
+    IEnumerator ActivatePacstudentProtection()
+    {
+        isProtected = true;
+        pacstudentProtectedEffectInstance.Play();
+
+        yield return new WaitForSeconds(3); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
+
+        isProtected = false;
+        pacstudentProtectedEffectInstance.Stop();
+
+    }
+
+
+
+
+
 }

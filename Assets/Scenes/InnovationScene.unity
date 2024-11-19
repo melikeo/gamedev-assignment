@@ -11713,6 +11713,7 @@ MonoBehaviour:
   pacStudent: {fileID: 1137233645}
   gameOverText: {fileID: 1694350789}
   pacstudentDeathEffect: {fileID: 3207262169280895671, guid: 696b5077c6d75b644ac633c0ab679300, type: 3}
+  pacstudentProtectedEffectInstance: {fileID: 7759315599256557850, guid: 9d817b15d1a9a9f448e77e34419929ca, type: 3}
   deathSoundEffect: {fileID: 871272076}
   pacstudentDeathSoundEffect: {fileID: 8300000, guid: c8e892d235e07f04ab8caf801f2a987b, type: 3}
 --- !u!1001 &1145637890
