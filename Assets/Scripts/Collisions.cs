@@ -143,7 +143,7 @@ public class Collisions : MonoBehaviour
 
         if (collision.gameObject.CompareTag("BirdCage"))
         {
-            Debug.Log("Birdcage passed!");
+            //Debug.Log("Birdcage passed!");
             StartCoroutine(StopPacstudentCage(collision));            
         }
 
@@ -458,11 +458,11 @@ public class Collisions : MonoBehaviour
     {
         yield return new WaitForSeconds(0.15f);
 
-        pacStudent.GetComponent<PacStudentController>().enabled = false; // stop pacstudent from moving for 5 seconds
+        pacStudent.GetComponent<PacStudentController>().enabled = false;
 
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(4); // Stop pacstudent from moving for 4 seconds
 
-        Destroy(collision.gameObject); //destroy bird cage after passed?
+        Destroy(collision.gameObject); // Destroy bird cage after passed
         pacStudent.GetComponent<PacStudentController>().enabled = true;
     }
 
