@@ -1746,6 +1746,7 @@ GameObject:
   - component: {fileID: 180149383}
   - component: {fileID: 180149387}
   - component: {fileID: 180149386}
+  - component: {fileID: 180149388}
   m_Layer: 0
   m_Name: Ghost4
   m_TagString: Ghost
@@ -1918,6 +1919,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5625, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &180149388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180149382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostMoveSpeed: 2
+  topLeftTilemap: {fileID: 511559288}
+  topRightTilemap: {fileID: 1545486786}
+  bottomLeftTilemap: {fileID: 1378761419}
+  bottomRightTilemap: {fileID: 1802065606}
+  wallTiles:
+  - {fileID: 11400000, guid: 5425fd4644dbad94a8c88ea4d54fa7df, type: 2}
+  - {fileID: 11400000, guid: a16c80633f5192343983d645eede6ec3, type: 2}
+  - {fileID: 11400000, guid: db070929a79cdc94795168168542835b, type: 2}
+  - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
+  - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
+  - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
+  - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
+  ghostID: 4
+  pacStudent: {fileID: 1137233643}
 --- !u!1001 &185355060
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2822,7 +2850,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.05, y: -0.6}
+  m_AnchoredPosition: {x: 0, y: 0.7}
   m_SizeDelta: {x: 0.2, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &272375624
@@ -4284,6 +4312,7 @@ GameObject:
   - component: {fileID: 484578740}
   - component: {fileID: 484578744}
   - component: {fileID: 484578743}
+  - component: {fileID: 484578745}
   m_Layer: 0
   m_Name: Ghost1
   m_TagString: Ghost
@@ -4456,6 +4485,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5625, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &484578745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484578739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostMoveSpeed: 2
+  topLeftTilemap: {fileID: 511559288}
+  topRightTilemap: {fileID: 1545486786}
+  bottomLeftTilemap: {fileID: 1378761419}
+  bottomRightTilemap: {fileID: 1802065606}
+  wallTiles:
+  - {fileID: 11400000, guid: 5425fd4644dbad94a8c88ea4d54fa7df, type: 2}
+  - {fileID: 11400000, guid: a16c80633f5192343983d645eede6ec3, type: 2}
+  - {fileID: 11400000, guid: db070929a79cdc94795168168542835b, type: 2}
+  - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
+  - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
+  - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
+  - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
+  ghostID: 1
+  pacStudent: {fileID: 1137233643}
 --- !u!1001 &485389221
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4526,6 +4582,7 @@ GameObject:
   - component: {fileID: 489598281}
   - component: {fileID: 489598285}
   - component: {fileID: 489598284}
+  - component: {fileID: 489598286}
   m_Layer: 0
   m_Name: Ghost2
   m_TagString: Ghost
@@ -4698,6 +4755,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5625, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &489598286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489598280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostMoveSpeed: 2
+  topLeftTilemap: {fileID: 511559288}
+  topRightTilemap: {fileID: 1545486786}
+  bottomLeftTilemap: {fileID: 1378761419}
+  bottomRightTilemap: {fileID: 1802065606}
+  wallTiles:
+  - {fileID: 11400000, guid: 5425fd4644dbad94a8c88ea4d54fa7df, type: 2}
+  - {fileID: 11400000, guid: a16c80633f5192343983d645eede6ec3, type: 2}
+  - {fileID: 11400000, guid: db070929a79cdc94795168168542835b, type: 2}
+  - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
+  - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
+  - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
+  - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
+  ghostID: 2
+  pacStudent: {fileID: 1137233643}
 --- !u!4 &494361465 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1767231794151327957, guid: 166bbbfe0b556864291a7764cd941566, type: 3}
@@ -8739,7 +8823,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.05, y: -0.6}
+  m_AnchoredPosition: {x: -0.05, y: 0.7}
   m_SizeDelta: {x: 0.2, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &806160312
@@ -11629,6 +11713,8 @@ MonoBehaviour:
   pacStudent: {fileID: 1137233645}
   gameOverText: {fileID: 1694350789}
   pacstudentDeathEffect: {fileID: 3207262169280895671, guid: 696b5077c6d75b644ac633c0ab679300, type: 3}
+  deathSoundEffect: {fileID: 871272076}
+  pacstudentDeathSoundEffect: {fileID: 8300000, guid: c8e892d235e07f04ab8caf801f2a987b, type: 3}
 --- !u!1001 &1145637890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12366,7 +12452,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countdownText: {fileID: 218657087}
   pacStudent: {fileID: 1137233640}
-  ghosts: []
+  ghosts:
+  - {fileID: 484578739}
+  - {fileID: 489598280}
+  - {fileID: 2077458325}
+  - {fileID: 180149382}
   audioManager: {fileID: 871272075}
   gameTimer: {fileID: 600520274}
   elapsedTime: 0
@@ -22405,7 +22495,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.05, y: -0.6}
+  m_AnchoredPosition: {x: -0.05, y: 0.7}
   m_SizeDelta: {x: 0.2, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1954486524
@@ -23083,6 +23173,7 @@ GameObject:
   - component: {fileID: 2077458326}
   - component: {fileID: 2077458330}
   - component: {fileID: 2077458329}
+  - component: {fileID: 2077458331}
   m_Layer: 0
   m_Name: Ghost3
   m_TagString: Ghost
@@ -23255,6 +23346,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5625, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &2077458331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077458325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4efe61cd3698ca49b779a94549282ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostMoveSpeed: 2
+  topLeftTilemap: {fileID: 511559288}
+  topRightTilemap: {fileID: 1545486786}
+  bottomLeftTilemap: {fileID: 1378761419}
+  bottomRightTilemap: {fileID: 1802065606}
+  wallTiles:
+  - {fileID: 11400000, guid: 5425fd4644dbad94a8c88ea4d54fa7df, type: 2}
+  - {fileID: 11400000, guid: a16c80633f5192343983d645eede6ec3, type: 2}
+  - {fileID: 11400000, guid: db070929a79cdc94795168168542835b, type: 2}
+  - {fileID: 11400000, guid: 3f39475ff0d77f647b4d2c188d4c4f3d, type: 2}
+  - {fileID: 11400000, guid: ee12118ec7209b1429ce15082ec7f89d, type: 2}
+  - {fileID: 11400000, guid: a59d9f5cab01d7242af9d347121bb1ee, type: 2}
+  - {fileID: 11400000, guid: 19623d4de639a0d4d92fcd2d92305420, type: 2}
+  ghostID: 3
+  pacStudent: {fileID: 1137233643}
 --- !u!4 &2078757265 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1767231794151327957, guid: 166bbbfe0b556864291a7764cd941566, type: 3}
@@ -23557,7 +23675,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.05, y: -0.6}
+  m_AnchoredPosition: {x: -0.05, y: 0.7}
   m_SizeDelta: {x: 0.2, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2120061184

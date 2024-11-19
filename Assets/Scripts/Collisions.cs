@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Collisions : MonoBehaviour
 {
@@ -30,6 +31,16 @@ public class Collisions : MonoBehaviour
     public ParticleSystem pacstudentDeathEffect;
     private ParticleSystem pacstudentDeathEffectInstance;
 
+    // Pacstudent Death Sound Effect
+    public AudioSource deathSoundEffect;
+    [SerializeField] AudioClip pacstudentDeathSoundEffect;
+
+    // Pacstudent avoid multiple deaths
+    private bool pacstudentDyingOrRespawning = false; // so pacstudent does not lose multiple lives at once when immediately multiple ghost collisions happen
+
+    // Ghosts multiple PowerPelletes
+    bool ghostDead = false;
+
     private void Awake()
     {
         pacstudentDeathEffectInstance = Instantiate(pacstudentDeathEffect, transform.position, Quaternion.identity); //instantiate wall collision effect
@@ -56,6 +67,12 @@ public class Collisions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (ghostIsRecovering)
+        {
+            //Debug.Log("Ghost is in recovering state");
+        }
+
+
         if (ghostIsScared)
         {
             StartGhostScaredTimer();
@@ -87,6 +104,10 @@ public class Collisions : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (pacstudentDyingOrRespawning)
+        {
+            return; // pacstudent should not have other collisions while dying/respawing
+        }
 
         if (collision.gameObject.CompareTag("Pellet"))
         {
@@ -110,6 +131,16 @@ public class Collisions : MonoBehaviour
             //score += 50; //assumption: points should be added, points based on original pacman game
             Destroy(collision.gameObject);
             UpdateScoreText();
+
+            //if (ghostIsRecovering) // if ghost is in recovering state because a powerpellet was already eaten before
+            //{
+            //    foreach (var animator in ghostAnimators)
+            //    {
+            //        animator.SetBool("Recovering", false);
+            //    }
+            //    ghostIsRecovering = false;
+            //}
+
             StartScaredState(); // A - Pacstudent eats powerpellet -> Ghost scared & recovering state
         }
 
@@ -119,7 +150,7 @@ public class Collisions : MonoBehaviour
             Animator ghostAnimator = collision.GetComponent<Animator>();
             if(ghostAnimator != null)
             {
-                // ------------ C - if ghost is scare/recovering & collision with pacstudent -> ghost death -----------
+                // ------------ C - if ghost is scared/recovering & collision with pacstudent -> ghost death -----------
                 if ( ghostIsScared || ghostIsRecovering ) 
                 {
                     StartCoroutine(GhostDeathReaction(ghostAnimator));
@@ -142,14 +173,22 @@ public class Collisions : MonoBehaviour
 
     // Ghost is walking -> Collision -> Pacstudent dies
     IEnumerator PacStudentDeathReaction()
-    {       
+    {
         //Debug.Log("pacstudent died");
+
+        pacstudentDyingOrRespawning = true; // pacstudent cannot die during death state when already died
 
         pacStudentAnimator.SetBool("isDead", true);
 
+        deathSoundEffect.clip = pacstudentDeathSoundEffect;
+        deathSoundEffect.Play();
+
         pacstudentDeathEffectInstance.Play();
 
-        yield return new WaitForSeconds(2.0f); //wait until animation is played / can change number for longer animation
+        yield return new WaitForSeconds(1.0f); //wait until animation is played / can change number for longer animation
+
+        Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
+        transform.position = restartPos; // respawn at start position
 
         pacStudentAnimator.SetBool("isDead", false);
         pacstudentDeathEffectInstance.Stop();
@@ -157,14 +196,16 @@ public class Collisions : MonoBehaviour
 
         currentLives -= 1;
         UpdateHeartsUI(); //reduce number of hearts on Game Screen
-      
+
 
         //respawn should only happen after animation has been played //wait!
 
         //Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
         //transform.position = restartPos; // respawn at start position
-        
+
         //Debug.Log("did dead animation play?");
+
+        pacstudentDyingOrRespawning = false;
 
 
         if (currentLives > 0)
@@ -205,8 +246,8 @@ public class Collisions : MonoBehaviour
 
         ghostAnimator.SetBool("Scared", false);
         ghostAnimator.SetBool("Recovering", false);
-
         ghostAnimator.SetBool("Dead", true);
+        ghostDead = true;        
 
         score += 300; //add 300 points to score
         UpdateScoreText(); //update highscore
@@ -214,10 +255,9 @@ public class Collisions : MonoBehaviour
         yield return new WaitForSeconds(5.0f); // wait for 5 seconds
 
         //transition back to walking state (reset state)
-        //ghostAnimator.ResetTrigger("TriggerDead");
         ghostAnimator.SetBool("Dead", false);
         //Debug.Log("Ghosts is in walking state.");
-
+        ghostDead = false;
     }
 
     //void StartGhostDiesTimer()
@@ -253,27 +293,37 @@ public class Collisions : MonoBehaviour
 
     void StartScaredState()
     {
-        if (ghostIsScared)
-        {
-            //restart timer if ghost is already scared and new collision
-            scaredTimer = 10.0f;
-            ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();            
-            return; //exit because ghost is already scared
-        }
-
-
+        //if (ghostIsScared)
+        //{
+        //    //restart timer if ghost is already scared and new collision
+        //    scaredTimer = 10.0f;
+        //    ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();            
+        //    return; //exit because ghost is already scared
+        //}
         //ghostIsScared = true;
+
         scaredTimer = 10.0f;
         ghostTimerText.gameObject.SetActive(true);
         ghostTimerText.text = Mathf.Ceil(scaredTimer).ToString();
 
         //set ghost animator state to "scared" (all ghosts)
         foreach (var animator in ghostAnimators)
-        {            
+        {
+            if (animator.GetBool("Dead"))
+            {
+                continue; // keep dead ghosts dead while restarting timer
+            }
+
             animator.SetBool("Scared", true);
+            animator.SetBool("Recovering", false);
+            animator.SetBool("Dead", false);
         }
         ghostIsScared = true;
+        ghostIsRecovering = false;
         //Debug.Log("Ghosts are scared right now.");
+
+
+
     }
 
     void StartGhostScaredTimer()
@@ -286,17 +336,21 @@ public class Collisions : MonoBehaviour
         //3 seconds left on timer -> ghosts go in recovering state
         if (scaredTimer <= 3.0f && scaredTimer > 0)
         {
-            foreach (var animator in ghostAnimators)
+            if (!ghostIsRecovering)
             {
-                animator.SetBool("Scared", false);
-                animator.SetBool("Recovering", true);
-                //Debug.Log("Ghosts going into recovering state.");
+                foreach (var animator in ghostAnimators)
+                {
+                    animator.SetBool("Scared", false);
+                    animator.SetBool("Recovering", true);
+                    //Debug.Log("Ghosts going into recovering state.");
+                }
+                ghostIsRecovering = true;
+                //Debug.Log("3 seconds if is left");
+
             }
-            ghostIsRecovering = true;
-            //Debug.Log("3 seconds if is left");
         }
         //after 10 seconds passed
-        if (scaredTimer <= 0)
+        else if (scaredTimer <= 0)
         {
             //Debug.Log("10 seconds passed is entered");
             EndGhostScaredState();
@@ -310,8 +364,9 @@ public class Collisions : MonoBehaviour
         ghostTimerText.gameObject.SetActive(false); //hide timer
         foreach (var animator in ghostAnimators)
         {
-            animator.SetBool("walkingUp", true);
+            //animator.SetBool("walkingUp", true);
             animator.SetBool("Recovering", false);
+            animator.SetBool("Scared", false);
         }
         //Debug.Log("Ghosts are in walking state now.");
     }

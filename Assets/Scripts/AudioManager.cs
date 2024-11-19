@@ -1,5 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -22,36 +20,26 @@ public class AudioManager : MonoBehaviour
     {
         //introMusicSource.clip = introMusicClip;
 
-
         backgroundMusicSource.clip = backgroundMusicClip;
-        //backgroundMusicSource.Play();
-
-        //introMusicSource.Play(); //start playing intro music
-
-        //Invoke("PlayBackgroundMusic", introMusicSource.clip.length); //switch to background music after intro
-
-
 
     }
 
     private void Update()
     {
-        if (CheckIfGhostsState("Dead"))
+        // change music according to other (not dead) ghosts
+        bool isAnyGhostDead = CheckIfGhostsState("Dead");
+        bool isAnyGhostScared = CheckIfGhostsState("Scared") || CheckIfGhostsState("Recovering");
+
+        if (isAnyGhostDead)
             {
                 PlayDeadGhostsMusic();
             }
 
 
-        else if (CheckIfGhostsState("Scared") || CheckIfGhostsState("Recovering"))
+        else if (isAnyGhostScared)
         {
             PlayScaredGhostsMusic();
         }
-
-        //else if (CheckIfGhostsState("Dead") && (CheckIfGhostsState("Scared") || CheckIfGhostsState("Recovering")))
-        //{
-        //    PlayDeadGhostsMusic();
-        //}
-
 
         else
         {
@@ -59,13 +47,12 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
     private void PlayBackgroundMusic()
     {
         //introMusicSource.Stop();
         //backgroundMusicSource.Play();
 
-        if (ScaredMusicIsPlaying || DeadMusicIsPlaying)
+        if (ScaredMusicIsPlaying || DeadMusicIsPlaying || backgroundMusicSource.clip != backgroundMusicClip)
         {
             backgroundMusicSource.Stop();
             backgroundMusicSource.clip = backgroundMusicClip;
@@ -75,31 +62,29 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
     private void PlayScaredGhostsMusic()
     {
-        if (!ScaredMusicIsPlaying)
+        if (!ScaredMusicIsPlaying || backgroundMusicSource.clip != scaredGhostsBackgroundMusic)
         {
             backgroundMusicSource.Stop();
             backgroundMusicSource.clip = scaredGhostsBackgroundMusic;
             backgroundMusicSource.Play();
             ScaredMusicIsPlaying = true;
-            //DeadMusicIsPlaying = false;
+            DeadMusicIsPlaying = false;
         }
     }
 
     private void PlayDeadGhostsMusic()
     {
-        if (!DeadMusicIsPlaying)
+        if (!DeadMusicIsPlaying || backgroundMusicSource.clip != deadGhostsBackgroundMusicClip)
         {
             backgroundMusicSource.Stop();
             backgroundMusicSource.clip = deadGhostsBackgroundMusicClip;
             backgroundMusicSource.Play();
             DeadMusicIsPlaying = true;
-            //ScaredMusicIsPlaying = false;
+            ScaredMusicIsPlaying = false;
         }
     }
-
 
     private bool CheckIfGhostsState(string stateName)
     {
@@ -113,20 +98,4 @@ public class AudioManager : MonoBehaviour
         }
         return false;
     }
-
-    //bool checkForScared() 
-    //{
-    //    foreach (Animator animator in ghostAnimators)
-    //    {
-    //        if (animator.GetBool("Scared"))
-    //        {
-    //            Debug.Log("is in state: scared");
-    //            return true; // true if any of the ghosts is in mentioned state
-    //        }
-    //    }
-    //    return false;
-    //}
-
-
-
 }

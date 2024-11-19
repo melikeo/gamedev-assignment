@@ -64,7 +64,7 @@ public class CountdownManager : MonoBehaviour
         pacStudent.GetComponent<PacStudentController>().enabled = false; // deactivate pacstudent movement
         foreach (var ghost in ghosts)
         {
-            //ghost.GetComponent<GhostMovement>().enabled = false;
+           ghost.GetComponent<GhostController>().enabled = false;
         }
     }
 
@@ -73,7 +73,7 @@ public class CountdownManager : MonoBehaviour
         pacStudent.GetComponent<PacStudentController>().enabled = true; // activate pacstudent movement
         foreach (var ghost in ghosts)
         {
-            //ghost.GetComponent<GhostMovement>().enabled = true; // activate ghost movement
+            ghost.GetComponent<GhostController>().enabled = true; // activate ghost movement
         }
         isGameActive = true; //set game to active to start the Game Timer
     }
