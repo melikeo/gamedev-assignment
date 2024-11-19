@@ -285,7 +285,12 @@ public class GhostController : MonoBehaviour
         startPos = transform.position;
         targetPos = transform.position;
 
-        TakeSpawnExitRoute();
+        if(!animator.GetBool("Dead"))
+        {
+            AfterRespawnState();
+            TakeSpawnExitRoute();
+        }
+
 
         //reset values after respawn
 
@@ -295,7 +300,6 @@ public class GhostController : MonoBehaviour
         //isDead = false;
         
 
-        //AfterRespawnState();
 
     }
 
