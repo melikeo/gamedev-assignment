@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class Collisions : MonoBehaviour
 {
@@ -134,7 +135,10 @@ public class Collisions : MonoBehaviour
             Destroy(collision.gameObject);
             UpdateScoreText();
 
-            StartCoroutine(ActivatePacstudentProtection());
+            if (SceneManager.GetActiveScene().name == "InnovationScene")
+            {
+                StartCoroutine(ActivatePacstudentProtection());
+            }
         }
 
         if (collision.gameObject.CompareTag("PowerPellet"))
@@ -437,14 +441,16 @@ public class Collisions : MonoBehaviour
 
     IEnumerator ActivatePacstudentProtection()
     {
-        isProtected = true;
-        pacstudentProtectedEffectInstance.Play();
+        if (SceneManager.GetActiveScene().name == "InnovationScene")
+        {
+            isProtected = true;
+            pacstudentProtectedEffectInstance.Play();
 
-        yield return new WaitForSeconds(10); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
+            yield return new WaitForSeconds(10); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
 
-        isProtected = false;
-        pacstudentProtectedEffectInstance.Stop();
-
+            isProtected = false;
+            pacstudentProtectedEffectInstance.Stop();
+        }       
     }
 
 
