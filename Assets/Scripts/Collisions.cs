@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Collisions : MonoBehaviour
 {
@@ -29,6 +30,10 @@ public class Collisions : MonoBehaviour
     // Pacstudent Death Particle Effect
     public ParticleSystem pacstudentDeathEffect;
     private ParticleSystem pacstudentDeathEffectInstance;
+
+    // Pacstudent Death Sound Effect
+    public AudioSource deathSoundEffect;
+    [SerializeField] AudioClip pacstudentDeathSoundEffect;
 
     // Pacstudent avoid multiple deaths
     private bool pacstudentDyingOrRespawning = false; // so pacstudent does not lose multiple lives at once when immediately multiple ghost collisions happen
@@ -172,9 +177,12 @@ public class Collisions : MonoBehaviour
 
         pacStudentAnimator.SetBool("isDead", true);
 
+        deathSoundEffect.clip = pacstudentDeathSoundEffect;
+        deathSoundEffect.Play();
+
         pacstudentDeathEffectInstance.Play();
 
-        yield return new WaitForSeconds(0.5f); //wait until animation is played / can change number for longer animation
+        yield return new WaitForSeconds(1.0f); //wait until animation is played / can change number for longer animation
 
         Vector3 restartPos = new Vector3(-18.4f, 7.4f, 0);
         transform.position = restartPos; // respawn at start position
