@@ -160,9 +160,9 @@ public class Collisions : MonoBehaviour
 
         if(collision.gameObject.CompareTag("Ghost")) {
 
-            if (isProtected)
+            if (isProtected && !ghostIsScared && !ghostIsRecovering) // PacStudent invisible to normal state ghosts but can collide with scared/recovering ghosts
             {
-                Debug.Log("PacStudent is protected. Ignores Ghosts!!! "); //change to only protect and enable collision with scared and recovering?
+                //Debug.Log("PacStudent is protected. Ignores Ghosts!!!");
                 return;
             }
 
@@ -440,7 +440,7 @@ public class Collisions : MonoBehaviour
         isProtected = true;
         pacstudentProtectedEffectInstance.Play();
 
-        yield return new WaitForSeconds(3); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
+        yield return new WaitForSeconds(10); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
 
         isProtected = false;
         pacstudentProtectedEffectInstance.Stop();
