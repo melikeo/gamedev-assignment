@@ -144,8 +144,7 @@ public class Collisions : MonoBehaviour
         if (collision.gameObject.CompareTag("BirdCage"))
         {
             Debug.Log("Birdcage passed!");
-            StartCoroutine(StopPacstudentCage());
-            Destroy(collision.gameObject); //destroy bird cage after passed?
+            StartCoroutine(StopPacstudentCage(collision));            
         }
 
 
@@ -447,7 +446,7 @@ public class Collisions : MonoBehaviour
             isProtected = true;
             pacstudentProtectedEffectInstance.Play();
 
-            yield return new WaitForSeconds(5); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
+            yield return new WaitForSeconds(5); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with normal ghost collisions
 
             isProtected = false;
             pacstudentProtectedEffectInstance.Stop();
@@ -455,12 +454,15 @@ public class Collisions : MonoBehaviour
     }
 
 
-    IEnumerator StopPacstudentCage()
+    IEnumerator StopPacstudentCage(Collider2D collision)
     {
+        yield return new WaitForSeconds(0.15f);
+
         pacStudent.GetComponent<PacStudentController>().enabled = false; // stop pacstudent from moving for 5 seconds
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(4);
 
+        Destroy(collision.gameObject); //destroy bird cage after passed?
         pacStudent.GetComponent<PacStudentController>().enabled = true;
     }
 
