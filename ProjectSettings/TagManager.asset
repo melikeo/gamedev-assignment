@@ -10,6 +10,7 @@ TagManager:
   - BonusCherry
   - Ghost
   - Life
+  - BirdCage
   layers:
   - Default
   - TransparentFX

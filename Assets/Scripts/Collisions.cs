@@ -446,7 +446,7 @@ public class Collisions : MonoBehaviour
             isProtected = true;
             pacstudentProtectedEffectInstance.Play();
 
-            yield return new WaitForSeconds(10); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
+            yield return new WaitForSeconds(5); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with gost collisions
 
             isProtected = false;
             pacstudentProtectedEffectInstance.Stop();
