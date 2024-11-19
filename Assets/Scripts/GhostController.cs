@@ -48,6 +48,7 @@ public class GhostController : MonoBehaviour
     // block teleporting of ghosts
     private Vector3 leftTunnelExitPosition;
     private Vector3 rightTunnelExitPosition;
+    private float teleportCooldown = 0.1f;
 
     // block re-entering spawn area
     private List<Vector3Int> spawnAreaEntryFields;
@@ -298,8 +299,6 @@ public class GhostController : MonoBehaviour
 
         //animator.SetBool("Dead", false);
         //isDead = false;
-        
-
 
     }
 
@@ -626,7 +625,8 @@ public class GhostController : MonoBehaviour
     void SetTargetPosition(Vector3Int direction)
     {
         Vector3Int newTargetPosition = currentGridPosition + direction;
-        if (IsWalkable(newTargetPosition))
+        //if (IsWalkable(newTargetPosition))
+        if (t >= 1f || Vector3.Distance(transform.position, targetPos) < 0.05f)
         {
             lastDirection = direction;
             targetGridPosition = newTargetPosition;
@@ -717,12 +717,14 @@ public class GhostController : MonoBehaviour
             // if ghost is on teleport position change direction
             currentDirection = Vector3Int.right; // ghost is in left position -> change to right direction
             SetTargetPosition(currentDirection);
+            MoveTowardsTarget();
         }
         else if (currentGridPosition == rightTunnelExitPosition)
         {
             // Ghost is on right teleport position
             currentDirection = Vector3Int.left;
             SetTargetPosition(currentDirection);
+            MoveTowardsTarget();
         }
     }
 
