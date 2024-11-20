@@ -16,7 +16,7 @@ Pacstudent offers 2 levels:
     - Additional Ghosts (Cats): To make the game even more challenging every 20 seconds a new ghost appears.
 
 Ideas to further adjust the game and make it more challenging:
-  - adjust the interval times: hold pacstudent longer in the birdcage trap, shorten the bonus cherry protection effect, make the additional ghosts appear earlier
+  - adjust the interval times: hold pacstudent longer in the birdcage trap, shorten the bonus cherry protection effect, make the additional ghosts appear quicker
   - don't destroy the birdcage gameobjects after pacstudent collided
   - change pacstudent and/or ghosts moving speed
 
