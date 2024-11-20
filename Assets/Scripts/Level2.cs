@@ -6,12 +6,18 @@ using UnityEngine.Tilemaps;
 public class Level2 : MonoBehaviour
 {
     public GameObject ghost3Prefab; //reference to prefab
+    public CountdownManager countdownManager; // reference to CountdownManager
 
 
     // Start is called before the first frame update
     void Start()
     {
         GameObject newGhost = Instantiate(ghost3Prefab, new Vector3(-5.5f, -5, 0), Quaternion.identity); // spawn at Ghost 3 position
+
+        if (countdownManager != null)
+        {
+            countdownManager.newGhost = newGhost;
+        }
 
         GhostController ghostController = newGhost.GetComponent<GhostController>(); // get ghost controller
 
@@ -22,7 +28,7 @@ public class Level2 : MonoBehaviour
             ghostController.bottomLeftTilemap = FindTilemap("BottomLeft");
             ghostController.bottomRightTilemap = FindTilemap("BottomRight");
 
-            Debug.Log("Tilemaps referencing worked!");
+            //Debug.Log("Tilemaps referencing worked!");
         }
 
     }
@@ -40,7 +46,7 @@ public class Level2 : MonoBehaviour
         {
             return tilemapObject.GetComponent<Tilemap>(); // returns Tilemap Object
         }
-        Debug.LogWarning($"Tilemap '{name}' not found!!");
+        //Debug.LogWarning($"Tilemap '{name}' not found!!");
         return null; // found nothing
     }
 
