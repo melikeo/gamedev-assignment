@@ -11086,6 +11086,16 @@ MonoBehaviour:
   - {fileID: 489598281}
   - {fileID: 1892970628}
   - {fileID: 180149383}
+  - {fileID: 1611117743}
+  - {fileID: 1347356487}
+  - {fileID: 718865233}
+  - {fileID: 1585600127}
+  - {fileID: 1112800130}
+  - {fileID: 460055459}
+  - {fileID: 2130010296}
+  - {fileID: 1439084699}
+  - {fileID: 97048388}
+  - {fileID: 1867830375}
 --- !u!82 &871272076
 AudioSource:
   m_ObjectHideFlags: 0
