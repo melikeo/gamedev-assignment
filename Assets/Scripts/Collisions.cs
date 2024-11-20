@@ -187,7 +187,7 @@ public class Collisions : MonoBehaviour
             if (ghostAnimator != null)
             {
                 // ------------ C - if ghost is scared/recovering & collision with pacstudent -> ghost death -----------
-                if (ghostIsScared || ghostIsRecovering)
+                if (!isTrapped && ghostIsScared || !isTrapped && ghostIsRecovering)
                 {
                     StartCoroutine(GhostDeathReaction(ghostAnimator));
                 }
