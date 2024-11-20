@@ -11784,6 +11784,7 @@ MonoBehaviour:
   - {fileID: 489598281}
   - {fileID: 1892970628}
   - {fileID: 180149383}
+  - {fileID: 1611117743}
   pacStudentAnimator: {fileID: 1137233641}
   Life1: {fileID: 1610786734}
   Life2: {fileID: 1921868486}
@@ -18718,7 +18719,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5625, y: 0.8125}
+    oldSize: {x: 0.625, y: 0.875}
     newSize: {x: 0.18, y: 0.26}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -18736,7 +18737,7 @@ Animator:
   m_GameObject: {fileID: 1611117739}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 269ba0b8b254d6a4196b0443d2ba2de4, type: 2}
+  m_Controller: {fileID: 9100000, guid: cc09fcc12c76b314d9b6ca67d8d3f347, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -18791,7 +18792,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -506144637602462908, guid: 784fdb4af0803614b8f00eb2e63280b2, type: 3}
+  m_Sprite: {fileID: 4196075521752426787, guid: fb2bdaa1ee28b9f4eb74fa7c01a751f2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
