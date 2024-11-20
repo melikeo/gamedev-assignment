@@ -18,10 +18,10 @@ public class GhostController : MonoBehaviour
     private Vector3Int currentDirection;
     private float t = 0;
 
-    [SerializeField] private Tilemap topLeftTilemap;
-    [SerializeField] private Tilemap topRightTilemap;
-    [SerializeField] private Tilemap bottomLeftTilemap;
-    [SerializeField] private Tilemap bottomRightTilemap;
+    [SerializeField] public Tilemap topLeftTilemap;
+    [SerializeField] public Tilemap topRightTilemap;
+    [SerializeField] public Tilemap bottomLeftTilemap;
+    [SerializeField] public Tilemap bottomRightTilemap;
 
     //list of wall tiles that will be checked
     [SerializeField] private TileBase[] wallTiles;
