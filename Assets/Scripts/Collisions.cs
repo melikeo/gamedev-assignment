@@ -474,7 +474,7 @@ public class Collisions : MonoBehaviour
 
         isTrapped = true;
 
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.2f);
 
         pacStudent.GetComponent<PacStudentController>().enabled = false;
 
