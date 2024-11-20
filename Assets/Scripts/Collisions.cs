@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class Collisions : MonoBehaviour
 {
@@ -30,6 +31,9 @@ public class Collisions : MonoBehaviour
     // Pacstudent Death Particle Effect
     public ParticleSystem pacstudentDeathEffect;
     private ParticleSystem pacstudentDeathEffectInstance;
+    // -- Extra -- Pacstudent Protected Particle Effect (collision with bonus cherry)
+    public ParticleSystem pacstudentProtectedEffect;
+    private ParticleSystem pacstudentProtectedEffectInstance;
 
     // Pacstudent Death Sound Effect
     public AudioSource deathSoundEffect;
@@ -41,11 +45,21 @@ public class Collisions : MonoBehaviour
     // Ghosts multiple PowerPelletes
     bool ghostDead = false;
 
+    // Pacstudent BonusCherry Protection
+    bool isProtected = false;
+
+    // Pacstudent Birdcage trapped
+    bool isTrapped = false;
+
     private void Awake()
     {
         pacstudentDeathEffectInstance = Instantiate(pacstudentDeathEffect, transform.position, Quaternion.identity); //instantiate wall collision effect
         pacstudentDeathEffectInstance.transform.SetParent(transform); //set wall collision effect as child of pacstudent to place it at pacstudent
         pacstudentDeathEffectInstance.Stop(); //stop so it does not play automatically
+
+        pacstudentProtectedEffectInstance = Instantiate(pacstudentProtectedEffect, transform.position, Quaternion.identity);
+        pacstudentProtectedEffectInstance.transform.SetParent(transform); // set pacstudent as parent
+        pacstudentProtectedEffectInstance.Stop();
     }
 
     // Start is called before the first frame update
@@ -78,7 +92,7 @@ public class Collisions : MonoBehaviour
             StartGhostScaredTimer();
         }
 
-        if (currentLives<=0 || NoRemainingPellets()) // Game Over if no lives or pellets left
+        if (currentLives <= 0 || NoRemainingPellets()) // Game Over if no lives or pellets left
         {
             GameOver();
         }
@@ -94,7 +108,7 @@ public class Collisions : MonoBehaviour
     {
         GameObject[] pellets = GameObject.FindGameObjectsWithTag("Pellet"); // array with all pellets
         GameObject[] powerPellets = GameObject.FindGameObjectsWithTag("PowerPellet");
-                
+
         //if ( pellets.Length == 1) { Debug.Log($"Last Pellet found: {pellets[0].name} at: {pellets[0].transform.position}"); }
 
         // true if no pellets (including powerpellets) are left
@@ -123,7 +137,20 @@ public class Collisions : MonoBehaviour
             score += 100;
             Destroy(collision.gameObject);
             UpdateScoreText();
+
+            if (SceneManager.GetActiveScene().name == "InnovationScene")
+            {
+                StartCoroutine(ActivatePacstudentProtection());
+            }
         }
+
+        if (collision.gameObject.CompareTag("BirdCage"))
+        {
+            //Debug.Log("Birdcage passed!");
+            isTrapped = true;
+            StartCoroutine(StopPacstudentCage(collision));
+        }
+
 
         if (collision.gameObject.CompareTag("PowerPellet"))
         {
@@ -146,12 +173,21 @@ public class Collisions : MonoBehaviour
 
         // PACSTUDENT & GHOSTS COLLISIONS
 
-        if(collision.gameObject.CompareTag("Ghost")) {
+        if (collision.gameObject.CompareTag("Ghost"))
+        {
+
+            if (isProtected && !ghostIsScared && !ghostIsRecovering) // PacStudent invisible to normal state ghosts but can collide with scared/recovering ghosts
+            {
+                //Debug.Log("PacStudent is protected. Ignores Ghosts!!!");
+                return;
+            }
+
+
             Animator ghostAnimator = collision.GetComponent<Animator>();
-            if(ghostAnimator != null)
+            if (ghostAnimator != null)
             {
                 // ------------ C - if ghost is scared/recovering & collision with pacstudent -> ghost death -----------
-                if ( ghostIsScared || ghostIsRecovering ) 
+                if (!isTrapped && ghostIsScared || !isTrapped && ghostIsRecovering)
                 {
                     StartCoroutine(GhostDeathReaction(ghostAnimator));
                 }
@@ -164,8 +200,8 @@ public class Collisions : MonoBehaviour
             }
         }
 
-        else 
-        { 
+        else
+        {
             //Debug.Log("no collision");
         }
     }
@@ -175,6 +211,10 @@ public class Collisions : MonoBehaviour
     IEnumerator PacStudentDeathReaction()
     {
         //Debug.Log("pacstudent died");
+
+        isTrapped = false;
+
+        pacStudent.GetComponent<PacStudentController>().enabled = true;
 
         pacstudentDyingOrRespawning = true; // pacstudent cannot die during death state when already died
 
@@ -218,7 +258,6 @@ public class Collisions : MonoBehaviour
             //Debug.Log("game over");
         }
 
-
     }
 
     void UpdateHeartsUI() //reduce number of hearts at collisions
@@ -231,12 +270,12 @@ public class Collisions : MonoBehaviour
         {
             Life2.SetActive(false);
         }
-            
+
         else if (currentLives == 0)
         {
             Life1.SetActive(false);
             //GameOver();
-        }            
+        }
     }
 
     IEnumerator GhostDeathReaction(Animator ghostAnimator)
@@ -247,7 +286,7 @@ public class Collisions : MonoBehaviour
         ghostAnimator.SetBool("Scared", false);
         ghostAnimator.SetBool("Recovering", false);
         ghostAnimator.SetBool("Dead", true);
-        ghostDead = true;        
+        ghostDead = true;
 
         score += 300; //add 300 points to score
         UpdateScoreText(); //update highscore
@@ -321,9 +360,6 @@ public class Collisions : MonoBehaviour
         ghostIsScared = true;
         ghostIsRecovering = false;
         //Debug.Log("Ghosts are scared right now.");
-
-
-
     }
 
     void StartGhostScaredTimer()
@@ -346,7 +382,6 @@ public class Collisions : MonoBehaviour
                 }
                 ghostIsRecovering = true;
                 //Debug.Log("3 seconds if is left");
-
             }
         }
         //after 10 seconds passed
@@ -384,7 +419,7 @@ public class Collisions : MonoBehaviour
 
         //pause Game Timer
         countdownManager.StopTimer();
-        
+
         // Save Highscore
         SaveHighscore();
 
@@ -393,7 +428,6 @@ public class Collisions : MonoBehaviour
 
         // Return to Startscene (with updated Highscore)
         StartCoroutine(ReturnToStartScene());
-
     }
 
     void SaveHighscore()
@@ -414,4 +448,47 @@ public class Collisions : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("StartScene");
         gameOverText.gameObject.SetActive(false);
     }
+
+    IEnumerator ActivatePacstudentProtection()
+    {
+        if (SceneManager.GetActiveScene().name == "InnovationScene")
+        {
+            isProtected = true;
+            pacstudentProtectedEffectInstance.Play();
+
+            yield return new WaitForSeconds(5); // pacstudent is invisible (like harry potter invisibility cloak) and nothing happens with normal ghost collisions
+
+            isProtected = false;
+            pacstudentProtectedEffectInstance.Stop();
+        }
+    }
+
+
+    IEnumerator StopPacstudentCage(Collider2D collision)
+    {
+        if (pacstudentDyingOrRespawning)
+        {
+            pacStudent.GetComponent<PacStudentController>().enabled = true;
+            yield break; // break if pacstudent is dying or respawning
+        }
+
+        isTrapped = true;
+
+        yield return new WaitForSeconds(0.2f);
+
+        pacStudent.GetComponent<PacStudentController>().enabled = false;
+
+        yield return new WaitForSeconds(4); // Stop pacstudent from moving for 4 seconds
+
+        if (pacstudentDyingOrRespawning)
+        {
+            yield break; // break if pacstudent is dying or respawning
+        }
+
+        Destroy(collision.gameObject); // Destroy bird cage after passed // ------ This can be disabled to have a more difficult game ------
+        pacStudent.GetComponent<PacStudentController>().enabled = true;
+
+        isTrapped = false;       
+    }
+
 }
