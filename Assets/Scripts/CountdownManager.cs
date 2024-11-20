@@ -13,7 +13,7 @@ public class CountdownManager : MonoBehaviour
     public float elapsedTime = 0f; // overall passed time in seconds
     private bool isGameActive = false;
 
-    public GameObject newGhost; // reference for new ghosts
+   /* public GameObject newGhost;*/ // reference for new ghosts
 
     private void Start()
     {
@@ -69,10 +69,11 @@ public class CountdownManager : MonoBehaviour
            ghost.GetComponent<GhostController>().enabled = false;
         }
 
-        if (newGhost != null)
-        {
-            newGhost.GetComponent<GhostController>().enabled = false;
-        }
+        //if (newGhost != null)
+        //{
+        //    newGhost.GetComponent<GhostController>().enabled = false;
+        //}
+        //else { Debug.Log("Problem liegt hier"); }
     }
 
     private void EnableMovement()
@@ -83,10 +84,10 @@ public class CountdownManager : MonoBehaviour
             ghost.GetComponent<GhostController>().enabled = true; // activate ghost movement
         }
 
-        if (newGhost != null)
-        {
-            newGhost.GetComponent<GhostController>().enabled = true;
-        }
+        //if (newGhost != null)
+        //{
+        //    newGhost.GetComponent<GhostController>().enabled = true;
+        //}
 
         isGameActive = true; //set game to active to start the Game Timer
     }

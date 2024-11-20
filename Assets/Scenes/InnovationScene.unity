@@ -12393,16 +12393,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0708897bc538ca04a9571e61ee9add6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownText: {fileID: 218657087}
+  countdownText: {fileID: 0}
   pacStudent: {fileID: 1137233640}
   ghosts:
   - {fileID: 484578739}
   - {fileID: 489598280}
-  - {fileID: 2077458325}
+  - {fileID: 5274571721332568990}
   - {fileID: 180149382}
   audioManager: {fileID: 871272075}
-  gameTimer: {fileID: 600520274}
+  gameTimer: {fileID: 0}
   elapsedTime: 0
+  newGhost: {fileID: 2023474920}
 --- !u!4 &1208555539 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1767231794151327957, guid: 166bbbfe0b556864291a7764cd941566, type: 3}
@@ -22663,7 +22664,7 @@ GameObject:
   - component: {fileID: 2023474921}
   m_Layer: 0
   m_Name: NewGhosts3
-  m_TagString: Untagged
+  m_TagString: Ghost
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22681,6 +22682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ghost3Prefab: {fileID: 6560747970442110025, guid: 91b05ed09eddfff4eb571365da774cf6, type: 3}
+  countdownManager: {fileID: 0}
 --- !u!4 &2023474922
 Transform:
   m_ObjectHideFlags: 0
@@ -23000,11 +23002,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1767231794151327957, guid: 166bbbfe0b556864291a7764cd941566, type: 3}
   m_PrefabInstance: {fileID: 1771542278}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2077458325 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6560747970442110025, guid: 91b05ed09eddfff4eb571365da774cf6, type: 3}
-  m_PrefabInstance: {fileID: 5274571721332568989}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &2077458326 stripped
 Animator:
@@ -23745,6 +23742,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91b05ed09eddfff4eb571365da774cf6, type: 3}
+--- !u!1 &5274571721332568990 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6560747970442110025, guid: 91b05ed09eddfff4eb571365da774cf6, type: 3}
+  m_PrefabInstance: {fileID: 5274571721332568989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
