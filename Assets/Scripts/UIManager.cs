@@ -22,6 +22,12 @@ public class UIManager : MonoBehaviour
     {
         
     }
+
+    public void LoadSecondLevel()
+    {
+        SceneManager.LoadScene("InnovationScene");
+    }
+
     public void LoadFirstLevel()
     {
         SceneManager.LoadScene("SampleScene");

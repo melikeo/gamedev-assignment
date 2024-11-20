@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -61,6 +62,9 @@ public class PacStudentController : MonoBehaviour
 
     public Animator pacStudentAnimator; // PacStudent animator
 
+    // block entering spawn area
+    private List<Vector3Int> spawnAreaEntryFields;
+
 
     private void Awake()
     {
@@ -87,6 +91,16 @@ public class PacStudentController : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
+
+        // spawn area entry fields
+        spawnAreaEntryFields = new List<Vector3Int>
+        {
+            new Vector3Int(-7, -4, 0),
+            new Vector3Int(-6, -4, 0),
+            new Vector3Int(-7, -8, 0),
+            new Vector3Int(-6, -8, 0)
+        };
+
     }
 
     // Start is called before the first frame update
@@ -217,10 +231,15 @@ public class PacStudentController : MonoBehaviour
     }
 
     // check if given grid position is walkable (no wall)
-    bool IsWalkable(Vector3Int gridPos)
+    public bool IsWalkable(Vector3Int gridPos)
     {
         // getting tile from appropriate tilemap without converting to world position
         TileBase tileAtPosition = GetTileAtPosition(gridPos);
+
+        if (spawnAreaEntryFields.Contains(gridPos))
+        {
+            return false; // spawn area fields cannot be accessed
+        }
 
         // if tile is null and is not in wallTiles array, it is walkable
         if (tileAtPosition == null)
