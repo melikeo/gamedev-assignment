@@ -366,7 +366,6 @@ public class GhostController : MonoBehaviour
 
             return lastDirection;
         }
-
         return validDirections[Random.Range(0, validDirections.Count)];
     }
 
@@ -521,7 +520,6 @@ public class GhostController : MonoBehaviour
         }
         return bestDirection == Vector3Int.zero ? lastDirection : bestDirection;
     }
-
 
 
 

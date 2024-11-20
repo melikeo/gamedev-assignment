@@ -24,9 +24,10 @@ public class Level2 : MonoBehaviour
 
     IEnumerator ActivateNewGhost()
     {
-        yield return new WaitForSeconds(timeInterval);
-
+        foreach (GameObject ghost in ghosts)
+        {
+            yield return new WaitForSeconds(timeInterval); // activate every interval seconds (30 default)
+            ghost.SetActive(true); // activate ghost gameobjects of array
+        }
     }
-  
-
 }

@@ -485,13 +485,10 @@ public class Collisions : MonoBehaviour
             yield break; // break if pacstudent is dying or respawning
         }
 
-        Destroy(collision.gameObject); // Destroy bird cage after passed
+        Destroy(collision.gameObject); // Destroy bird cage after passed // ------ This can be disabled to have a more difficult game ------
         pacStudent.GetComponent<PacStudentController>().enabled = true;
 
-        isTrapped = false;
-        
-
-       
+        isTrapped = false;       
     }
 
 }
